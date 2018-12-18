@@ -43,6 +43,7 @@ public class ReflectionHelperTest {
     public void typesForArgs() {
 
         Assert.assertNotEquals(Integer.class, int.class); //just as a reminder
+        Assert.assertNotEquals(Void.class, void.class); //also a reminder
 
         Object[] args = {1,5000000000L,1.5F, 2.345,'a',"text"};
         Class[] actualTypes = h.classesForArgs(args);
@@ -84,6 +85,12 @@ public class ReflectionHelperTest {
         Assert.assertTrue(h.findMethod(Integer.class,"returnsInteger", true).isPresent());
         Assert.assertFalse(h.findMethod(int.class,"returnsInteger", true).isPresent());
         Assert.assertTrue(h.findMethod(int.class,"returnsInteger", false).isPresent());
+
+        Assert.assertTrue(h.findMethod(void.class,"noReturn",true).isPresent());
+        Assert.assertFalse(h.findMethod(Void.class,"noReturn",true).isPresent());
+        Assert.assertTrue(h.findMethod(Void.class,"noReturn",false).isPresent());
+
+
     }
 
     @Test

@@ -4,12 +4,49 @@ import org.junit.Assert;
 
 public class MethodTester {
 
+
+    public interface MethodTestEventHandler {
+        /**
+         *
+         * @param methodName the name of the method as it should be
+         */
+        void notFound(String methodName);
+
+        /**
+         * A method has been found but the return type is wrong
+         * @param methodName the name of the method
+         * @param requiredReturnType the type the methods is expected to return
+         */
+        void incorrectReturnType(String methodName, Class requiredReturnType);
+
+        /**
+         * A method has been found, but the parameters are not as required
+         * @param methodName the name of the method
+         */
+        void incorrectParameters(String methodName);
+
+        /**
+         * Correct parameters exist for the method, but not in the required order
+         * @param methodName the name of the method
+         * @param requiredParamOrder the order the parameters should be in
+         */
+        void incorrectParamOrder(String methodName, String requiredParamOrder);
+    }
+
     private ReflectionHelper helper;
     private String methodName;
+
+    private MethodTestEventHandler handler;
+
 
     public MethodTester(Class searchClass, String methodName){
         this.helper = new ReflectionHelper(searchClass);
         this.methodName = methodName;
+    }
+
+    public MethodTester(Class searchClass, String methodName, MethodTestEventHandler handler){
+        this(searchClass, methodName);
+        this.handler = handler;
     }
 
     private boolean methodMatchingNameFound(){
@@ -53,11 +90,21 @@ public class MethodTester {
     private void testExistence(Class<?> returnType,  Object[] args, boolean strict) {
 
         if (!methodMatchingNameFound()){
-            Assert.fail("No method with the name: "+ methodName + " was found");
+
+            if (handler != null){
+                handler.notFound(methodName);
+            } else {
+                Assert.fail("No method with the name: "+ methodName + " was found");
+            }
         }
 
         if (!methodMatchingNameAndReturnTypeFound(returnType, strict)) {
-            Assert.fail("A method with the correct name was found, but it does not return the correct type: " + returnType.getName());
+
+            if (handler != null){
+                handler.incorrectReturnType(methodName,returnType);
+            } else {
+                Assert.fail("A method with the correct name was found, but it does not return the correct type: " + returnType.getName());
+            }
         }
 
         //final Class[] argTypes = paramTypesFromParams(args);
@@ -65,8 +112,16 @@ public class MethodTester {
 
         if (!methodFound(returnType,argTypes)){
             if (!helper.methodsWithSignature(returnType,false, strict, argTypes).isEmpty()){
+                if (handler != null){
+                    handler.incorrectParamOrder(methodName,paramNames(argTypes));
+                } else {
                 Assert.fail("One or more method with the correct name, return type and parameters were found, but none of the method(s) have the parameters in the correct order");
-            } else {
+                }
+            }else {
+                if (handler != null){
+                    handler.incorrectParameters(methodName);
+                }
+
                 String paramTypeNames = paramNames(argTypes);
                 Assert.fail("One or more methods with the correct name and return type were found, but none have the correct parameters: " + paramTypeNames);
             }

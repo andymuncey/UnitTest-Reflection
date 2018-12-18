@@ -13,6 +13,11 @@ public class TestClass {
         return 1;
     }
 
+    void noReturn(){ }
+
+    void oneParam(int p0) {}
+
+    void twoParams(int p0, int p1){}
 
 
 

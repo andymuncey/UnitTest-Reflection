@@ -30,7 +30,7 @@ public class ReflectionHelper {
      * @param strict setting 'true' considers primitives and their object equivalents to be different when considering return type. False matches primitive return types with their object counterparts
      * @param methodName the name of the method to invoke (excluding return type, parameters and parentheses), e.g. "myMethod"
      * @param args a list of arguments (any primitives will be converted to non-primitive types)
-     *             If the arguments is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
+     *             If the argument is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
      * @param <T> type of data returned will match the return type specified
      * @return the result of invoking the method
      */
@@ -53,7 +53,7 @@ public class ReflectionHelper {
                 if (matchedParams){
                     try {
                         Object classInstance = searchClass.getDeclaredConstructor().newInstance();
-                        m.setAccessible(true); //allows testing of private methods
+                        m.setAccessible(true); //allows testing of private method
                         Object result = m.invoke(classInstance, args);
                         return (T)result;
 
@@ -241,8 +241,8 @@ public class ReflectionHelper {
      */
     private Class classEquivalent(Class primitiveClass){
 
-        final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class};
-        final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class};
+        final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
+        final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
         for (int i = 0; i < primitives.length; i++) {
             if (primitiveClass == primitives[i]){
