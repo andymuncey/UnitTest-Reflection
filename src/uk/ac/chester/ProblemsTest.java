@@ -1,5 +1,7 @@
 package uk.ac.chester;
 import org.junit.*;
+import uk.ac.chester.Testing.MethodTester;
+import uk.ac.chester.Testing.ReflectionHelper;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,8 +13,6 @@ public class ProblemsTest {
 
     Problems tools;
     ReflectionHelper helper;
-
-    final static String CLASS_NAME = "uk.ac.chester.Problems";
 
     @Before
     public void setUp() throws Exception {
@@ -30,6 +30,8 @@ public class ProblemsTest {
     @Test
     public void isPalendrome() throws Exception {
 
+        MethodTester tester = new MethodTester(Problems.class, "isPalindrome");
+        tester.testExecution("racecar is palindrome", true,"racecar");
 
         Assert.assertTrue("racecar is palindrome",tools.isPalindrome("racecar"));
         Assert.assertTrue("Noon is palindrome",tools.isPalindrome("noon"));
@@ -52,6 +54,9 @@ public class ProblemsTest {
 
     @org.junit.Test
     public void reversedSentence() throws Exception {
+
+
+
         Assert.assertEquals("the cat sat mat",tools.reversedSentence("mat sat cat the"));
         Assert.assertEquals("reversed words",tools.reversedSentence("words reversed"));
     }

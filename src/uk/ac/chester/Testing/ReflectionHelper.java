@@ -1,10 +1,8 @@
-package uk.ac.chester;
-
+package uk.ac.chester.Testing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ReflectionHelper {
 
@@ -20,17 +18,25 @@ public class ReflectionHelper {
     //region method invocation
 
     /**
-     * Attempts to invoke a method matching the specified returnType and name, with the supplied values
-     * @param returnType the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
-     * @param methodName the name of the method to invoke (excluding return type, parameters and parentheses), e.g. "myMethod"
-     * @param args a list of arguments (these will be converted to non-primitive types)
-     *             If the arguments is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
-     * @param <T> type of data returned will match the return type specified
-     * @return the result of invoking
+     * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with strict set to false
      */
     <T> T invokeMethod(Class<T> returnType, String methodName,Object... args){
+        return invokeMethod(false,returnType,methodName,args);
+    }
 
-        final Set<Method> possibleMethods = findMethods(methodName,returnType);
+    /**
+     * Attempts to invoke a method matching the specified returnType and name, with the supplied values
+     * @param returnType the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
+     * @param strict setting 'true' considers primitives and their object equivalents to be different when considering return type. False matches primitive return types with their object counterparts
+     * @param methodName the name of the method to invoke (excluding return type, parameters and parentheses), e.g. "myMethod"
+     * @param args a list of arguments (any primitives will be converted to non-primitive types)
+     *             If the arguments is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
+     * @param <T> type of data returned will match the return type specified
+     * @return the result of invoking the method
+     */
+    <T> T invokeMethod(boolean strict, Class<T> returnType, String methodName, Object... args){
+
+        final Set<Method> possibleMethods = findMethods(returnType,methodName,strict);
 
         for (Method m : possibleMethods){
 
@@ -38,7 +44,7 @@ public class ReflectionHelper {
             if (args.length == paramTypes.length){
                 boolean matchedParams = true;
                 for (int i = 0; i < args.length; i++) {
-                    Class<?> paramClass = classEquivalent(paramTypes[i]);
+                    Class<?> paramClass = strict ? paramTypes[i] : classEquivalent(paramTypes[i]);
                     Class<?> argClass = args[i].getClass();
                     if (paramClass != argClass){
                         matchedParams = false;
@@ -47,6 +53,7 @@ public class ReflectionHelper {
                 if (matchedParams){
                     try {
                         Object classInstance = searchClass.getDeclaredConstructor().newInstance();
+                        m.setAccessible(true); //allows testing of private methods
                         Object result = m.invoke(classInstance, args);
                         return (T)result;
 
@@ -66,58 +73,6 @@ public class ReflectionHelper {
         }
         return null;
     }
-
-
-    //simple version of above method, no primitive -> non primitive type conversion in place
-//    <T> T invokeMethod(Class<T> returnType, String methodName,Object... args){
-//
-//        ArrayList<Class> params = new ArrayList<>();
-//        Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
-//
-//        Optional<Method> m = findMethod(returnType,methodName,params.toArray(new Class[args.length]));
-//
-//        if (m.isPresent()){
-//            try{
-//                Object classInstance = searchClass.getDeclaredConstructor().newInstance();
-//                Object result = m.get().invoke(classInstance, args);
-//                return (T)result;
-//            }
-//            catch (Exception e){
-//                System.err.println("an error has occurred");
-//            }
-//        }
-//        return null;
-//    }
-
-
-    /**
-     * given an array of arguments (values) returns an array of the same size representing the types (as classes) of each argument
-     * @param args an array of values of any type
-     * @return an array of Class&lt;Object&gt;
-     */
-    Class[] typesForArgs(Object[] args){
-        List<Class> params = new ArrayList<>();
-        Arrays.asList(args).forEach((arg) -> params.add(classEquivalent(arg.getClass())));
-        return params.toArray(new Class[args.length]);
-    }
-
-
-    //only for inclusion with writing, not in use
-    public Object invoke(Method method, Class<Object> aClass, Object... args) throws Exception {
-        try {
-            Object classInstance = aClass.getDeclaredConstructor().newInstance();
-            return method.invoke(classInstance, args);
-        }
-        catch (Exception e){
-            throw new Exception("Cannot invoke method with supplied arguments and/or on supplied class");
-        }
-    }
-
-
-
-
-
-
 
     //endregion
 
@@ -139,16 +94,14 @@ public class ReflectionHelper {
     }
 
 
-
     /**
      * Returns methods where the name and return type match.
-     * Primitive types will be matched to their class equivalents
-     * @param name
-     * @param returnType
-     * @param strict
-     * @return
+     * @param name the name of the method
+     * @param returnType the 'class' type returned by the method
+     * @param strict setting 'true' considers primitives and their object equivalents to be different. False matches primitive return types with their object counterparts
+     * @return a set of methods matching the search criteria
      */
-    public Set<Method> findMethods(String name, Class<?> returnType, boolean strict){
+    Set<Method> findMethods(Class<?> returnType, String name,  boolean strict){
         final Set<Method> methods = findMethods(name);
         if (strict){
             methods.removeIf(m -> (!m.getReturnType().equals(returnType)));
@@ -161,51 +114,19 @@ public class ReflectionHelper {
 
     /**
      * Returns methods where the name and return type match.
-     * @param name
-     * @param returnType
-     * @return
+     * Primitive types will be matched to their class equivalents
+     * @param name the name of the method
+     * @param returnType the 'class' type returned by the method
+     * @return a set of methods matching the search criteria
      */
-    public Set<Method> findMethods(String name, Class<?> returnType){
-        return findMethods(name,returnType,true);
+    Set<Method> findMethods(Class<?> returnType, String name ){
+        return findMethods(returnType,name,true);
     }
 
 
-    Optional<Method> findMethod(Class returnType, String name, Class... paramTypes){
-        Set<Method> methods = findMethods(name,returnType,false);
-        for (Method m : methods) {
-            Class<?>[] methodParamTypes = m.getParameterTypes();
-            if (paramTypes.length == methodParamTypes.length) {
-                boolean matchedParams = true;
-                for (int i = 0; i < paramTypes.length; i++) {
-                    if (classEquivalent(methodParamTypes[i]) != paramTypes[i]) {
-                        matchedParams = false;
-                    }
-                }
-                if (matchedParams) {
-                    return Optional.of(m);
-                }
-            }
-        }
-        return Optional.empty();
+    Set<Method> methodsWithSignature(Class<?> desiredReturnType, Class<?>... desiredParamTypes){
+        return methodsWithSignature(desiredReturnType,true,false,desiredParamTypes);
     }
-
-
-
-
-//    public Optional<Method>findMethod(Class desiredReturnType, String name, Class... desiredParamTypes){
-//        final Collection<Method> methods = methodsWithSignature(desiredReturnType, desiredParamTypes);
-//        for (Method method: methods){
-//            String mName = method.getName();
-//            if (mName.equals(name)){
-//                return Optional.of(method);
-//            }
-//        }
-//        return Optional.empty();
-//    }
-
-//    public Set<Method> methodsWithSignature(Class<?> desiredReturnType, Class<?>... desiredParamTypes){
-//        return methodsWithSignature(desiredReturnType,true,desiredParamTypes);
-//    }
 
 
     /**
@@ -215,14 +136,14 @@ public class ReflectionHelper {
      * @param desiredParamTypes the types for each parameter in the methods parameters. if the only item is an Array, it must be cast as an object
      * @return An arrayList of {@code Method} objects that match the required signature
      */
-    public Set<Method> methodsWithSignature(Class<?> desiredReturnType, boolean matchParamOrder, boolean strict, Class<?>... desiredParamTypes){
+    Set<Method> methodsWithSignature(Class<?> desiredReturnType, boolean matchParamOrder, boolean strict, Class<?>... desiredParamTypes){
 
         HashSet<Method> methods = new HashSet<>();
 
         for (Method method: searchClass.getDeclaredMethods()){
 
             desiredReturnType = strict ? desiredReturnType : classEquivalent(desiredReturnType);
-            //desiredParamTypes = strict ? desiredParamTypes : classEquivalents(desiredParamTypes);
+            if (!strict) {desiredParamTypes = classEquivalents(desiredParamTypes);}
 
             Class<?> actualReturnType = strict ? method.getReturnType() : classEquivalent(method.getReturnType());
 
@@ -249,12 +170,75 @@ public class ReflectionHelper {
         return methods;
     }
 
+
+    Optional<Method> findMethod(Class returnType, String name, Class... paramTypes){
+        Set<Method> methods = findMethods(returnType, name,false);
+        for (Method m : methods) {
+            Class<?>[] methodParamTypes = m.getParameterTypes();
+            if (paramTypes.length == methodParamTypes.length) {
+                boolean matchedParams = true;
+                for (int i = 0; i < paramTypes.length; i++) {
+                    if (classEquivalent(methodParamTypes[i]) != paramTypes[i]) {
+                        matchedParams = false;
+                    }
+                }
+                if (matchedParams) {
+                    return Optional.of(m);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    Optional<Method> findMethod(Class returnType, String name, boolean strict, Class... paramTypes){
+        Set<Method> methods = findMethods(returnType, name,strict);
+        if (!strict) {classEquivalents(paramTypes);}
+        for (Method m : methods) {
+            Class<?>[] methodParamTypes = m.getParameterTypes();
+            if (paramTypes.length == methodParamTypes.length) {
+                boolean matchedParams = true;
+                for (int i = 0; i < paramTypes.length; i++) {
+
+                   if (paramTypes[i] != (strict ? methodParamTypes[i] : classEquivalent(methodParamTypes[i]))){
+                       matchedParams = false;
+                   }
+
+
+                }
+                if (matchedParams) {
+                    return Optional.of(m);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+
     //endregion
 
 
     //region conversions
 
     //converts primitive representation of class to object
+
+    /**
+     * given an array of arguments (values) returns an array of the same size representing the types (as classes) of each argument
+     * @param args an array of values of any type
+     * @return an array of Class&lt;Object&gt;
+     */
+    Class[] classesForArgs(Object[] args){
+        List<Class> params = new ArrayList<>();
+        Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
+        return params.toArray(new Class[args.length]);
+    }
+
+    /**
+     * Given the 'class' of a primitive type (e.g. int.class) returns the class of the corresponding boxed type, e.g. Integer.class
+     * Classes that do not belong to primitive types will remain unmodified
+     * @param primitiveClass a primitive 'class' such as double.class
+     * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
+     */
     private Class classEquivalent(Class primitiveClass){
 
         final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class};
@@ -268,6 +252,11 @@ public class ReflectionHelper {
         return primitiveClass; //not actually a primitive
     }
 
+    /**
+     * Returns an array with the results of calling {@link #classEquivalent} on each item
+     * @param primitiveClasses an array of Class object, which should include the class for some Primitive types
+     * @return an array of Class, each corresponding to an object type
+     */
     private Class[] classEquivalents(Class[] primitiveClasses){
         for (int i = 0; i < primitiveClasses.length; i++) {
             primitiveClasses[i] = classEquivalent(primitiveClasses[i]);

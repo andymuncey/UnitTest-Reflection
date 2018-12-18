@@ -243,7 +243,7 @@ public class Problems {
         return total;
     }
 
-    int arrayAverage(int[] integers) {
+    public int arrayAverage(int[] integers) {
 
         //determine and return the average of all the numbers in arrayOfIntegers
         int sum = 0;
