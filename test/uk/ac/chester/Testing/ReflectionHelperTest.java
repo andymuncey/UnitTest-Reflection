@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class ReflectionHelperTest {
 
-    ReflectionHelper h;
+    private ReflectionHelper h;
 
     @Before
     public void setUp() throws Exception {
@@ -22,6 +22,16 @@ public class ReflectionHelperTest {
     }
 
     @Test
+    public void createFromString() {
+
+        ReflectionHelper helper = ReflectionHelper.forClassName("java.lang.String");
+        Assert.assertNotNull(helper);
+
+        ReflectionHelper ownClassHelper = ReflectionHelper.forClassName("uk.ac.chester.Testing.TestClass");
+        Assert.assertNotNull(ownClassHelper);
+    }
+
+    @Test
     public void invokeMethod() {
         Assert.assertEquals(1,(int)h.invokeMethod(int.class,"returnsPrimitiveInt"));
         Assert.assertEquals(Integer.valueOf(1),(Integer)h.invokeMethod(Integer.class,"returnsInteger"));
@@ -29,14 +39,11 @@ public class ReflectionHelperTest {
 
     @Test
     public void invokeMethodStrict() {
-
         Assert.assertEquals(1,(int)h.invokeMethod(true, int.class,"returnsPrimitiveInt"));
 
         //should not find method returning int
         Assert.assertNull(h.invokeMethod(true, int.class, "returnsInteger"));
         Assert.assertNull(h.invokeMethod(true, Integer.class, "returnsPrimitiveInt"));
-
-
     }
 
     @Test
@@ -52,11 +59,11 @@ public class ReflectionHelperTest {
 
         Class[] primitiveTypes = {int.class, long.class, float.class, double.class, char.class, String.class};
         Assert.assertThat(primitiveTypes, IsNot.not(IsEqual.equalTo(actualTypes)));
-
     }
 
     @Test
     public void invoke() {
+
     }
 
     @Test
@@ -77,7 +84,6 @@ public class ReflectionHelperTest {
 
     @Test
     public void findMethod() {
-
         Assert.assertTrue(h.findMethod(int.class,"returnsPrimitiveInt", true).isPresent());
         Assert.assertFalse(h.findMethod(Integer.class,"returnsPrimitiveInt", true).isPresent());
         Assert.assertTrue(h.findMethod(Integer.class,"returnsPrimitiveInt", false).isPresent());
@@ -90,14 +96,11 @@ public class ReflectionHelperTest {
         Assert.assertFalse(h.findMethod(Void.class,"noReturn",true).isPresent());
         Assert.assertTrue(h.findMethod(Void.class,"noReturn",false).isPresent());
 
-
     }
 
     @Test
     public void methodsWithSignature() {
     }
 
-    @Test
-    public void methodsWithSignature1() {
-    }
+
 }

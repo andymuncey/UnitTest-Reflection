@@ -5,35 +5,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.chester.Testing.MethodTester;
+import uk.ac.chester.Testing.TestEventHandlerEN;
 
 import java.util.Arrays;
 
 public class TasksTest {
-
-
-    class GenericHandler implements MethodTester.MethodTestEventHandler {
-
-        @Override
-        public void notFound(String methodName) {
-            Assert.fail("No method with the name \""+ methodName + "\" was found");
-        }
-
-        @Override
-        public void incorrectReturnType(String methodName, Class requiredReturnType) {
-            Assert.fail("A method named \"" + methodName + "\" was found, but it does not return the correct type: " + requiredReturnType.getName());
-        }
-
-        @Override
-        public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
-            Assert.fail("Method \"" + methodName + "\" found, but parameters are incorrect: " + Arrays.toString(requiredParamTypes));
-        }
-
-        @Override
-        public void incorrectParamOrder(String methodName, Class[] requiredParams){
-            Assert.fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
-        }
-    }
-
 
     private Tasks tasks;
 
@@ -47,7 +23,7 @@ public class TasksTest {
         tasks = null;
     }
 
-
+    //region example standard unit test
 
     @Test
     public void arraySum() {
@@ -69,19 +45,19 @@ public class TasksTest {
         Assert.assertEquals("larger values",62198, resultLarger);
     }
 
-    //Generic handler
+    //endregion
 
     @Test
     public void arraySumReflection() {
 
-        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new GenericHandler() );
+        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new TestEventHandlerEN() );
 
         int[] emptyArray = {};
-        int resultWithEmpty = tester.test(emptyArray);
+        int resultWithEmpty = tester.test((Object)emptyArray);
         Assert.assertEquals("empty array",resultWithEmpty,0);
 
         int[] singleItemArray = {4};
-        int resultSingleItem = tester.test(singleItemArray);
+        int resultSingleItem = tester.test(singleItemArray); //Casting to object will avoid warning
         Assert.assertEquals("single item array", 4,resultSingleItem);
 
         int[]multiItemArray = {3,6,8};
@@ -95,25 +71,28 @@ public class TasksTest {
 
 
     @Test
-    public void testNonExistentMethod() {
-        MethodTester<Void> tester = new MethodTester<>(Tasks.class, void.class, "nonExistentMethod", new GenericHandler());
-        Assert.assertNull(tester.test());
+    public void tempConversion(){
+        MethodTester<Double> tester = new MethodTester<>(Tasks.class, double.class, "fahrenheitToKelvin", new TestEventHandlerEN());
+        Assert.assertEquals(285.372,tester.test(54.0),0.001);
     }
 
     @Test
-    public void testWrongReturnType() {
-        MethodTester<Double> tester = new MethodTester<>(Tasks.class, double.class, "arraySum", new GenericHandler());
-        tester.test();
+    public void addTen(){
+        MethodTester<Integer> tester = new MethodTester<>(Tasks.class, int.class, "addTen", new TestEventHandlerEN());
+        int result = tester.test(13); //needs to be stored or cast to int to avoid ambiguous overloads for the assertion
+        Assert.assertEquals(23,result);
+
+        //below is not valid as tester can only return an object
+        //Assert.assertEquals(23,tester.test(13));
     }
+
 
     @Test
-    public void testStrictReturnTyoe() {
-        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,Integer.class,"arraySum",new GenericHandler());
-        int[] multiItemArray = {3,6,8};
-        int resultMultiItem = tester.testStrict((Object)multiItemArray);
-        Assert.assertEquals("multi item array",17,resultMultiItem);
-
+    public void reversedSentence(){
+        MethodTester<String> tester = new MethodTester<>(Tasks.class, String.class, "reversedSentence", new TestEventHandlerEN());
+        Assert.assertEquals("mat the on sat cat the", tester.test("the cat sat on the mat"));
     }
+
 
 
 }

@@ -5,18 +5,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /* DO NOT MODIFY THIS FILE - all code should be written in Problems.java */
 
-        System.out.println("Do not run the programme, instead, run the unit tests in ProblemsTest.java");
+        System.out.println("Project is designed to aid unit testing - this is not the designated entry point for the application");
 
-
-
-        Main.findType(true);
 
     }
 
 
-    public static void findType(Object o){
-        System.out.println(o.getClass().getTypeName());
-    }
+
 }

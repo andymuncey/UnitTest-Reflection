@@ -19,5 +19,27 @@ public class Tasks {
         return total;
     }
 
+    /**
+     * Converts a temperature in Fahrenheit to Kelvin
+     * @param temp temperature (F)
+     * @return temperature (K)
+     */
+    double fahrenheitToKelvin(double temp){
+        return (temp - 32) * 5/9 + 273.15;
+    }
+
+    int addTen(int number){
+        return number + 10;
+    }
+
+    String reversedSentence(String sentence){
+        String[] words = sentence.split(" ");
+        StringBuilder result = new StringBuilder();
+        for (int i = words.length-1; i>=0; i--){
+            result.append(words[i] + " ");
+        }
+        return result.toString().trim();
+    }
+
 
 }
