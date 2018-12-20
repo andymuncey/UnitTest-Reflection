@@ -17,17 +17,19 @@ public class MethodTester<T> {
 
     /**
      * The type parameter should correlate to the class type of the methods return type (e.g. for a return type of int, specify Integer)
-     * @param searchClass the class in which the method should be written
+     *
+     * @param searchClass     the class in which the method should be written
      * @param returnTypeClass the class of the return type use primitive type if testing will be strict and method should return a primitive
-     * @param methodName the name of the method to be tested, as a string, with no parentheses or parameter types
-     * @param handler a {@link MethodTestEventHandler} for handling non-existent methods
+     * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
+     * @param handler         a {@link MethodTestEventHandler} for handling non-existent methods
      */
-    public MethodTester(Class searchClass, Class<T> returnTypeClass, String methodName, MethodTestEventHandler handler){
+    public MethodTester(Class searchClass, Class<T> returnTypeClass, String methodName, MethodTestEventHandler handler) {
         this.helper = new ReflectionHelper(searchClass);
         this.methodName = methodName;
         this.handler = handler;
         this.returnTypeClass = returnTypeClass;
     }
+
 
     /**
      * Indicates if a method exists with the name corresponding to the one supplied when the class was initialised
@@ -35,6 +37,11 @@ public class MethodTester<T> {
      */
     private boolean methodMatchingNameFound(){
         return !helper.findMethods(methodName).isEmpty();
+    }
+
+
+    private boolean methodMatchingNameButWrongCasingFound(){
+        return !helper.findMethodsIgnoreCase(methodName).isEmpty();
     }
 
     /**
@@ -84,29 +91,31 @@ public class MethodTester<T> {
      */
     private boolean testExistence(Class<?> returnType,  Object[] args, boolean strict) {
 
-        boolean exists = true;
-
         if (!methodMatchingNameFound()){
-            handler.notFound(methodName);
-            exists = false;
+            if (methodMatchingNameButWrongCasingFound()){
+                handler.wrongCaseName(methodName);
+            } else {
+                handler.notFound(methodName);
+            }
+            return false;
         }
 
         if (!methodMatchingNameAndReturnTypeFound(returnType, strict)) {
             handler.incorrectReturnType(methodName,returnType);
-            exists = false;
+            return false;
         }
 
         final Class[] argTypes = helper.classesForArgs(args);
 
         if (!methodFound(returnType,argTypes)){
-            exists = false;
             if (!helper.methodsWithSignature(returnType,false, strict, argTypes).isEmpty()){
                 handler.incorrectParamOrder(methodName,argTypes);
             }else {
                 handler.incorrectParameters(methodName, argTypes);
             }
+            return false;
         }
-        return exists;
+        return true;
     }
 
     /**
@@ -115,10 +124,18 @@ public class MethodTester<T> {
      */
     public interface MethodTestEventHandler {
         /**
-         *
+         * Cannot find a method with the correct name
          * @param methodName the name of the method as it should be
          */
         void notFound(String methodName);
+
+
+        /**
+         * A method with the correct name is found, but the case is wrong e.g. MyMethod instead of myMethod
+         * @param methodName the name of the method as it should be
+         */
+        void wrongCaseName(String methodName);
+
 
         /**
          * A method has been found but the return type is wrong
@@ -139,6 +156,7 @@ public class MethodTester<T> {
          * @param requiredParams the order the parameters should be in
          */
         void incorrectParamOrder(String methodName, Class[] requiredParams);
+
     }
 
 }

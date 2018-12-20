@@ -115,6 +115,16 @@ public class ReflectionHelper {
         return methods;
     }
 
+    Set<Method> findMethodsIgnoreCase(String name) {
+        final HashSet<Method> methods = new HashSet<>();
+        for (Method method : searchClass.getDeclaredMethods()) {
+            if (method.getName().toUpperCase().equals(name.toUpperCase())) {
+                methods.add(method);
+            }
+        }
+        return methods;
+    }
+
     /**
      * Returns methods where the name and return type match.
      *

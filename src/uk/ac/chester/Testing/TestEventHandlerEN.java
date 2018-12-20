@@ -13,6 +13,12 @@ public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler {
     }
 
     @Override
+    public void wrongCaseName(String methodName) {
+        Assert.fail("The case required for the method is not as required - check which letters should be uppercase, and which should be lower. " +
+                "Method names in java use lowerCamelCase");
+    }
+
+    @Override
     public void incorrectReturnType(String methodName, Class requiredReturnType) {
         Assert.fail("A method named \"" + methodName + "\" was found, but it does not return the expected type of: " + requiredReturnType.getSimpleName());
     }
@@ -39,5 +45,4 @@ public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler {
         }
         return sb.toString();
     }
-
 }

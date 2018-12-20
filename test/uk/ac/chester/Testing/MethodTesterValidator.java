@@ -30,6 +30,14 @@ public class MethodTesterValidator {
         Assert.assertNull(tester.test());
     }
 
+
+    @Test
+    public void wrongCaseForMethodName() {
+        MethodTester<Void> tester = new MethodTester<>(TestClass.class, void.class, "RETURNSINTEGER", new TestEventHandlerEN());
+        tester.test();
+    }
+
+
     @Test
     public void wrongReturnType() {
         MethodTester<String> tester = new MethodTester<>(TestClass.class, String.class, "returnsInteger", new TestEventHandlerEN());

@@ -72,7 +72,13 @@ public class TasksTest {
 
     @Test
     public void tempConversion(){
-        MethodTester<Double> tester = new MethodTester<>(Tasks.class, double.class, "fahrenheitToKelvin", new TestEventHandlerEN());
+
+        //Standard assertion
+        Tasks tasks = new Tasks();
+        Assert.assertEquals(285.372, tasks.fahrenheitToKelvin(54.0),0.001);
+
+        //Reflection based assertion with method helper class
+        MethodTester<Double> tester = new MethodTester<>(tasks.getClass(), double.class, "fahrenheitToKelvin", new TestEventHandlerEN());
         Assert.assertEquals(285.372,tester.test(54.0),0.001);
     }
 
