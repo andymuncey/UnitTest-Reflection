@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ReflectionHelper {
 
-    final private Class<Object> searchClass;
+    final private Class<?> searchClass;
     //private boolean matchParamOrder = true;
 
     //region constructors
@@ -56,14 +56,18 @@ public class ReflectionHelper {
                         m.setAccessible(true); //allows testing of private method
                         Object result = m.invoke(classInstance, args);
                         return (T)result;
-
                     }
                     catch (IllegalAccessException e){
-                        //method is not accessible (i.e. private etc.)
+                        //method is not accessible (i.e. private etc.) - should not occur
                         System.err.println(e.getMessage());
                     }
-                    catch (InvocationTargetException | InstantiationException e){
-                        System.err.println(e.getMessage());
+                    catch (InvocationTargetException e){
+                        //invocationTarget exception: the method itself has thrown an exception - error in student code
+                        //throw unchecked exception, like the original method would
+                        throw new RuntimeException(e.getCause());
+                    }
+                    catch (InstantiationException e){
+                        //failed while attempting to instantiate something (e.g. call constructor)
                     }
                     catch (NoSuchMethodException e){
                         System.err.println("can't find constructor: " + e.getMessage());
@@ -93,7 +97,6 @@ public class ReflectionHelper {
         return methods;
     }
 
-
     /**
      * Returns methods where the name and return type match.
      * @param name the name of the method
@@ -111,7 +114,6 @@ public class ReflectionHelper {
         return methods;
     }
 
-
     /**
      * Returns methods where the name and return type match.
      * Primitive types will be matched to their class equivalents
@@ -128,22 +130,22 @@ public class ReflectionHelper {
         return methodsWithSignature(desiredReturnType,true,false,desiredParamTypes);
     }
 
-
     /**
      * Returns a list of methods which match the return type and parameters
-     * @param desiredReturnType class representing the type of data returned by the method
+     * @param returnType class representing the type of data returned by the method
      * @param matchParamOrder whether the parameters must appear in the order supplied
-     * @param desiredParamTypes the types for each parameter in the methods parameters. if the only item is an Array, it must be cast as an object
+     * @param argTypes the types for each parameter in the methods parameters. if the only item is an Array, it must be cast as an object
      * @return An arrayList of {@code Method} objects that match the required signature
      */
-    Set<Method> methodsWithSignature(Class<?> desiredReturnType, boolean matchParamOrder, boolean strict, Class<?>... desiredParamTypes){
+    Set<Method> methodsWithSignature(Class<?> returnType, boolean matchParamOrder, boolean strict,  Class<?>...argTypes){
+
+         //must copy to avoid argTypes being reordered
+        Class<?>[] desiredParamTypes = strict? argTypes.clone() : classEquivalents(argTypes);
+        Class desiredReturnType = strict ? returnType : classEquivalent(returnType);
 
         HashSet<Method> methods = new HashSet<>();
 
         for (Method method: searchClass.getDeclaredMethods()){
-
-            desiredReturnType = strict ? desiredReturnType : classEquivalent(desiredReturnType);
-            if (!strict) {desiredParamTypes = classEquivalents(desiredParamTypes);}
 
             Class<?> actualReturnType = strict ? method.getReturnType() : classEquivalent(method.getReturnType());
 
@@ -157,8 +159,10 @@ public class ReflectionHelper {
                     }
                 };
 
+                Class[] possiblySortedDesiredParamTypes = desiredParamTypes.clone();
                 if (!matchParamOrder) {
                     Arrays.sort(actualParamTypes, comparator);
+
                     Arrays.sort(desiredParamTypes, comparator);
                 }
 
@@ -171,6 +175,13 @@ public class ReflectionHelper {
     }
 
 
+    /**
+     * Finds a method with a given return type, name and
+     * @param returnType The return type of the method
+     * @param name the method name
+     * @param paramTypes the types of the parameters the method should have
+     * @return An Optional, containing the method if found, or empty if not found
+     */
     Optional<Method> findMethod(Class returnType, String name, Class... paramTypes){
         Set<Method> methods = findMethods(returnType, name,false);
         for (Method m : methods) {
@@ -190,21 +201,19 @@ public class ReflectionHelper {
         return Optional.empty();
     }
 
-
     Optional<Method> findMethod(Class returnType, String name, boolean strict, Class... paramTypes){
         Set<Method> methods = findMethods(returnType, name,strict);
-        if (!strict) {classEquivalents(paramTypes);}
+        Class[] desiredParamTypes = strict ? paramTypes : classEquivalents(paramTypes);
+
         for (Method m : methods) {
             Class<?>[] methodParamTypes = m.getParameterTypes();
-            if (paramTypes.length == methodParamTypes.length) {
+            if (desiredParamTypes.length == methodParamTypes.length) {
                 boolean matchedParams = true;
-                for (int i = 0; i < paramTypes.length; i++) {
+                for (int i = 0; i < desiredParamTypes.length; i++) {
 
-                   if (paramTypes[i] != (strict ? methodParamTypes[i] : classEquivalent(methodParamTypes[i]))){
+                   if (desiredParamTypes[i] != (strict ? methodParamTypes[i] : classEquivalent(methodParamTypes[i]))){
                        matchedParams = false;
                    }
-
-
                 }
                 if (matchedParams) {
                     return Optional.of(m);
@@ -220,18 +229,17 @@ public class ReflectionHelper {
 
     //region conversions
 
-    //converts primitive representation of class to object
-
     /**
      * given an array of arguments (values) returns an array of the same size representing the types (as classes) of each argument
      * @param args an array of values of any type
-     * @return an array of Class&lt;Object&gt;
+     * @return an array of Class objects
      */
     Class[] classesForArgs(Object[] args){
         List<Class> params = new ArrayList<>();
         Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
         return params.toArray(new Class[args.length]);
     }
+
 
     /**
      * Given the 'class' of a primitive type (e.g. int.class) returns the class of the corresponding boxed type, e.g. Integer.class
@@ -240,7 +248,6 @@ public class ReflectionHelper {
      * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
      */
     private Class classEquivalent(Class primitiveClass){
-
         final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
         final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
@@ -252,18 +259,19 @@ public class ReflectionHelper {
         return primitiveClass; //not actually a primitive
     }
 
+
     /**
      * Returns an array with the results of calling {@link #classEquivalent} on each item
      * @param primitiveClasses an array of Class object, which should include the class for some Primitive types
      * @return an array of Class, each corresponding to an object type
      */
     private Class[] classEquivalents(Class[] primitiveClasses){
+        Class[] classClasses = new Class[primitiveClasses.length];
         for (int i = 0; i < primitiveClasses.length; i++) {
-            primitiveClasses[i] = classEquivalent(primitiveClasses[i]);
+            classClasses[i] = classEquivalent(primitiveClasses[i]);
         }
-        return primitiveClasses;
+        return classClasses;
     }
-
 
     //endregion
 

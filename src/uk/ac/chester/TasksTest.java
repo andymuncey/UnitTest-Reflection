@@ -6,11 +6,36 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.ac.chester.Testing.MethodTester;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
 
 public class TasksTest {
 
-    Tasks tasks;
+
+    class GenericHandler implements MethodTester.MethodTestEventHandler {
+
+        @Override
+        public void notFound(String methodName) {
+            Assert.fail("No method with the name \""+ methodName + "\" was found");
+        }
+
+        @Override
+        public void incorrectReturnType(String methodName, Class requiredReturnType) {
+            Assert.fail("A method named \"" + methodName + "\" was found, but it does not return the correct type: " + requiredReturnType.getName());
+        }
+
+        @Override
+        public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
+            Assert.fail("Method \"" + methodName + "\" found, but parameters are incorrect: " + Arrays.toString(requiredParamTypes));
+        }
+
+        @Override
+        public void incorrectParamOrder(String methodName, Class[] requiredParams){
+            Assert.fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
+        }
+    }
+
+
+    private Tasks tasks;
 
     @Before
     public void setUp() throws Exception {
@@ -46,37 +71,47 @@ public class TasksTest {
 
     //Generic handler
 
-    class GenericHandler implements MethodTester.MethodTestEventHandler {
+    @Test
+    public void arraySumReflection() {
 
-        @Override
-        public void notFound(String methodName) {
-            Assert.fail("No method with the name: "+ methodName + " was found");
-        }
+        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new GenericHandler() );
 
-        @Override
-        public void incorrectReturnType(String methodName, Class requiredReturnType) {
-            Assert.fail("A method with the correct name was found, but it does not return the correct type: " + requiredReturnType.getName());
-        }
+        int[] emptyArray = {};
+        int resultWithEmpty = tester.test(emptyArray);
+        Assert.assertEquals("empty array",resultWithEmpty,0);
 
-        @Override
-        public void incorrectParameters(String methodName) {
+        int[] singleItemArray = {4};
+        int resultSingleItem = tester.test(singleItemArray);
+        Assert.assertEquals("single item array", 4,resultSingleItem);
 
-        }
+        int[]multiItemArray = {3,6,8};
+        int resultMultiItem = tester.test(multiItemArray);
+        Assert.assertEquals("multi item array",17,resultMultiItem);
 
-        @Override
-        public void incorrectParamOrder(String methodName, String requiredParamOrder) {
-
-        }
+        int[]largerValuesArray = {951, 762, 60485};
+        int resultLarger = tester.test(largerValuesArray);
+        Assert.assertEquals("larger values",62198, resultLarger);
     }
 
 
     @Test
-    public void arraySumReflection() {
+    public void testNonExistentMethod() {
+        MethodTester<Void> tester = new MethodTester<>(Tasks.class, void.class, "nonExistentMethod", new GenericHandler());
+        Assert.assertNull(tester.test());
+    }
 
-        MethodTester tester = new MethodTester(Tasks.class, "arraySum", new GenericHandler());
+    @Test
+    public void testWrongReturnType() {
+        MethodTester<Double> tester = new MethodTester<>(Tasks.class, double.class, "arraySum", new GenericHandler());
+        tester.test();
+    }
 
-        int[] args = {1,3};
-        tester.testExecution(4,(Object)args);
+    @Test
+    public void testStrictReturnTyoe() {
+        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,Integer.class,"arraySum",new GenericHandler());
+        int[] multiItemArray = {3,6,8};
+        int resultMultiItem = tester.testStrict((Object)multiItemArray);
+        Assert.assertEquals("multi item array",17,resultMultiItem);
 
     }
 

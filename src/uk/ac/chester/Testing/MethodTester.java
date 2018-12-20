@@ -1,8 +1,9 @@
 package uk.ac.chester.Testing;
 
-import org.junit.Assert;
 
-public class MethodTester {
+
+
+public class MethodTester<T> {
 
 
     public interface MethodTestEventHandler {
@@ -23,30 +24,35 @@ public class MethodTester {
          * A method has been found, but the parameters are not as required
          * @param methodName the name of the method
          */
-        void incorrectParameters(String methodName);
+        void incorrectParameters(String methodName, Class[] requiredParamTypes);
 
         /**
          * Correct parameters exist for the method, but not in the required order
          * @param methodName the name of the method
-         * @param requiredParamOrder the order the parameters should be in
+         * @param requiredParams the order the parameters should be in
          */
-        void incorrectParamOrder(String methodName, String requiredParamOrder);
+        void incorrectParamOrder(String methodName, Class[] requiredParams);
+
     }
 
     private ReflectionHelper helper;
     private String methodName;
-
     private MethodTestEventHandler handler;
+    private Class<T> returnTypeClass;
 
 
-    public MethodTester(Class searchClass, String methodName){
+    /**
+     * The type parameter should correlate to the class type of the methods return type (e.g. for a return type of int, specify Integer)
+     * @param searchClass the class in which the method should be written
+     * @param returnTypeClass the class of the return type use primitive type if testing will be strict and method should return a primitive
+     * @param methodName the name of the method to be tested, as a string, with no parentheses or parameter types
+     * @param handler a {@link MethodTestEventHandler} for handling non-existent methods
+     */
+    public MethodTester(Class searchClass, Class<T> returnTypeClass, String methodName, MethodTestEventHandler handler){
         this.helper = new ReflectionHelper(searchClass);
         this.methodName = methodName;
-    }
-
-    public MethodTester(Class searchClass, String methodName, MethodTestEventHandler handler){
-        this(searchClass, methodName);
         this.handler = handler;
+        this.returnTypeClass = returnTypeClass;
     }
 
     private boolean methodMatchingNameFound(){
@@ -61,24 +67,24 @@ public class MethodTester {
         return helper.findMethod(returnType, methodName,paramTypes).isPresent();
     }
 
-    public void testExecution(Object expected, Object... args ){
-        testExecution("",expected,args);
+
+    /**
+     * If the method exists, method is invoked, and the value returned
+     * If the method is not found, an appropriate {@link MethodTestEventHandler} event will fire and null is returned
+     * @param strict whether the return type must be an exact match (Integer and int would not be considered an exact match)
+     * @param args arguments to invoke the method with
+     * @return the result of invoking the method (or null)
+     */
+    private T test(boolean strict, Object[] args){
+        return testExistence(returnTypeClass, args, strict) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
     }
 
-    public void testExecution(String message, Object expected, Object... args){
+    public T test(Object... args){
+        return test(false,args);
+    }
 
-        final Class returnType = expected.getClass();
-
-        testExistence(returnType, args, false);
-        //must have matched name, return type, and args by now
-
-        final Object result = helper.invokeMethod(returnType, methodName, args);
-
-        if (message != null && !message.isEmpty()){
-            Assert.assertEquals(message,expected,result);
-        } else {
-            Assert.assertEquals(expected,result);
-        }
+    public T testStrict(Object... args){
+        return test(true, args);
     }
 
     /**
@@ -87,45 +93,31 @@ public class MethodTester {
      * @param args example arguments for the methods (actual values, not types)
      * @param strict setting 'true' considers primitives and their object equivalents to be different. False matches primitive return types with their object counterparts
      */
-    private void testExistence(Class<?> returnType,  Object[] args, boolean strict) {
+    private boolean testExistence(Class<?> returnType,  Object[] args, boolean strict) {
+
+        boolean exists = true;
 
         if (!methodMatchingNameFound()){
-
-            if (handler != null){
-                handler.notFound(methodName);
-            } else {
-                Assert.fail("No method with the name: "+ methodName + " was found");
-            }
+            handler.notFound(methodName);
+            exists = false;
         }
 
         if (!methodMatchingNameAndReturnTypeFound(returnType, strict)) {
-
-            if (handler != null){
-                handler.incorrectReturnType(methodName,returnType);
-            } else {
-                Assert.fail("A method with the correct name was found, but it does not return the correct type: " + returnType.getName());
-            }
+            handler.incorrectReturnType(methodName,returnType);
+            exists = false;
         }
 
-        //final Class[] argTypes = paramTypesFromParams(args);
         final Class[] argTypes = helper.classesForArgs(args);
 
         if (!methodFound(returnType,argTypes)){
+            exists = false;
             if (!helper.methodsWithSignature(returnType,false, strict, argTypes).isEmpty()){
-                if (handler != null){
-                    handler.incorrectParamOrder(methodName,paramNames(argTypes));
-                } else {
-                Assert.fail("One or more method with the correct name, return type and parameters were found, but none of the method(s) have the parameters in the correct order");
-                }
+                handler.incorrectParamOrder(methodName,argTypes);
             }else {
-                if (handler != null){
-                    handler.incorrectParameters(methodName);
-                }
-
-                String paramTypeNames = paramNames(argTypes);
-                Assert.fail("One or more methods with the correct name and return type were found, but none have the correct parameters: " + paramTypeNames);
+                handler.incorrectParameters(methodName, argTypes);
             }
         }
+        return exists;
     }
 
     static String paramNames(Class[] argTypes){
@@ -139,40 +131,6 @@ public class MethodTester {
         }
         return paramTypeNames.toString();
     }
-
-
-    //todo: add tests with deltas for floats
-
-    /**
-     * tests the existence and execution of a method
-     * @param expected the expected return value
-     * @param delta the acceptable difference between values
-     * @param args arguments to invoke the method with
-     */
-    void testWithTolerance(Double expected, double delta, Object... args){
-        testWithTolerance((String)null,expected,delta,args);
-    }
-
-
-    /**
-     * tests the existence and execution of a method
-     * @param message the assertion failure message
-     * @param expected the expected return value
-     * @param delta the acceptable difference between values
-     * @param args arguments to invoke the method with
-     */
-    public void testWithTolerance(String message, Double expected, double delta, Object... args){
-        final Class<?> returnType = expected.getClass();
-        testExistence(returnType,args, false);
-
-        final Double result = helper.invokeMethod(expected.getClass(),methodName,args);
-        if (message != null && !message.isEmpty()){
-            Assert.assertEquals(message,expected,result, delta);
-        } else {
-            Assert.assertEquals(expected, result, delta);
-        }
-    }
-
 
 
 }

@@ -15,10 +15,32 @@ public class TestClass {
 
     void noReturn(){ }
 
-    void oneParam(int p0) {}
+    void oneIntParam(int p0) {}
 
-    void twoParams(int p0, int p1){}
+    void twoIntParams(int p0, int p1){}
+
+    void intParamStringParam(int p0, String p1){}
 
 
+    void exceptionThrower(){
+        int i = 0;
+        int fail = 4/i;
+    }
+
+
+
+    /**
+     * sums the values of all integers in an array
+     * @param numbers
+     * @return the sum of all integers in the array
+     */
+    int arraySum(int[] numbers){
+        int total = 0;
+        for (double number: numbers)
+        {
+            total += number;
+        }
+        return total;
+    }
 
 }

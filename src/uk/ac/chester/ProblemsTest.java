@@ -14,10 +14,38 @@ public class ProblemsTest {
     Problems tools;
     ReflectionHelper helper;
 
+
+    MethodTester.MethodTestEventHandler testEventHandler;
+
+    class TestEventHandler implements MethodTester.MethodTestEventHandler {
+
+        @Override
+        public void notFound(String methodName) {
+            Assert.fail("No method with the name \""+ methodName + "\" was found");
+        }
+
+        @Override
+        public void incorrectReturnType(String methodName, Class requiredReturnType) {
+            Assert.fail("A method named \"" + methodName + "\" was found, but it does not return the correct type: " + requiredReturnType.getName());
+        }
+
+        @Override
+        public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
+            Assert.fail("Method \"" + methodName + "\" found, but parameters are incorrect: " + Arrays.toString(requiredParamTypes));
+        }
+
+         @Override
+        public void incorrectParamOrder(String methodName, Class[] requiredParams) {
+            Assert.fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
+        }
+    }
+
     @Before
     public void setUp() throws Exception {
         tools = new Problems();
         helper = new ReflectionHelper(tools);
+
+        testEventHandler = new TestEventHandler();
     }
 
     @After
@@ -30,8 +58,9 @@ public class ProblemsTest {
     @Test
     public void isPalendrome() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class, "isPalindrome");
-        tester.testExecution("racecar is palindrome", true,"racecar");
+        MethodTester<Boolean> tester = new MethodTester(Problems.class, boolean.class, "isPalindrome", testEventHandler);
+
+        Assert.assertTrue("racecar is palindrome", tester.test("racecar"));
 
         Assert.assertTrue("racecar is palindrome",tools.isPalindrome("racecar"));
         Assert.assertTrue("Noon is palindrome",tools.isPalindrome("noon"));
@@ -66,13 +95,13 @@ public class ProblemsTest {
 
     //create a method called numberFromBinaryString which will take a String parameter and return an int
     //convert the values in the parameter (which will be a string of 1 and 0 characters) into an int
-    //once you have written the method uncomment the testExecution below to testExecution it (the same applies to later tasks)
+    //once you have written the method uncomment the test below to test it (the same applies to later tasks)
     @org.junit.Test
     public void numberFromBinaryString() throws Exception {
-        Assert.assertEquals("testExecution with 1",1,tools.numberFromBinaryString("1"));
-        Assert.assertEquals("testExecution with 15",15,tools.numberFromBinaryString("1111"));
-        Assert.assertEquals("testExecution with 139485",139485,tools.numberFromBinaryString("100010000011011101"));
-        Assert.assertEquals("testExecution with max int value",2147483647,tools.numberFromBinaryString("1111111111111111111111111111111"));
+        Assert.assertEquals("test with 1",1,tools.numberFromBinaryString("1"));
+        Assert.assertEquals("test with 15",15,tools.numberFromBinaryString("1111"));
+        Assert.assertEquals("test with 139485",139485,tools.numberFromBinaryString("100010000011011101"));
+        Assert.assertEquals("test with max int value",2147483647,tools.numberFromBinaryString("1111111111111111111111111111111"));
     }
 
     @Test
@@ -85,15 +114,23 @@ public class ProblemsTest {
     //endregion
 
     //region boolean
-    
+
+
     @Test
     public void _1a_isTooCold() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class,"isTooCold");
-        tester.testExecution("25 is not too cold", false, 25.0);
-        tester.testExecution("18 is not too cold", false,  18.0);
-        tester.testExecution("17.5 is too cold", true,17.5);
-        tester.testExecution("-28 is too cold", true,-28.0);
+        MethodTester<Boolean> tester = new MethodTester(Problems.class, Boolean.class, "isTooCold", testEventHandler);
+
+        boolean tooCold = tester.test(25.0);
+
+        Assert.assertFalse("25 is not too cold", tester.test(25.0));
+
+        Assert.assertFalse("18 is not too cold", tester.test(18.0));
+        Assert.assertTrue("17.5 is too cold", tester.test(17.5));
+        Assert.assertTrue("-28 is too cold", tester.test(-28.0));
+
+        //todo: figure out how to
+
 
 //        Assert.assertFalse("25 is not too cold", tools.isTooCold(25.0));
 //        Assert.assertFalse("18 is not too cold", tools.isTooCold(18.0));
@@ -106,10 +143,9 @@ public class ProblemsTest {
     @Test
     public void isTooLongForTweet() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class, "over140chars");
-        tester.testExecution("Short tweet",false,"Hello world");
-        tester.testExecution("Max length tweet", false,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim");
-        
+        MethodTester<Boolean> tester = new MethodTester<>(Problems.class, boolean.class, "over140chars", testEventHandler);
+        Assert.assertFalse("Short tweet", tester.test("Hello world"));
+        Assert.assertFalse("Max length tweet ", tester.test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim"));
 
         //Assert.assertFalse("Short tweet", tools.over140chars("Hello world"));
         //Assert.assertFalse("Max length tweet ", tools.over140chars("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim"));
@@ -213,7 +249,7 @@ public class ProblemsTest {
         Assert.assertFalse(tools.stringsMatch(items,2,5));
     }
 
-    //could add ints match to testExecution alternate form of equality check
+    //could add ints match to test alternate form of equality check
 
     //endregion
 
@@ -222,10 +258,10 @@ public class ProblemsTest {
     @Test
     public void temperatureInKelvin() throws Exception {
 
-        //todo: renaming the testWithTolerance method to simply 'testExecution' fails as it cannot disambiguate between methods (due to varargs), need to figure out fix for this
-        MethodTester tester = new MethodTester(Problems.class, "temperatureInKelvin");
-        tester.testWithTolerance("15.0 in Fahrenheit is 263.7 in Kelvin",263.7,0.01,15.0);
-        tester.testWithTolerance("-452.2 in Fahrenheit is 4.15 in Kelvin",4.15,0.01, -452.2);
+        //todo: renaming the testWithTolerance method to simply 'test' fails as it cannot disambiguate between methods (due to varargs), need to figure out fix for this
+        MethodTester<Double> tester = new MethodTester(Problems.class, Double.class, "temperatureInKelvin", testEventHandler);
+//        tester.testWithTolerance("15.0 in Fahrenheit is 263.7 in Kelvin",263.7,0.01,15.0);
+//        tester.testWithTolerance("-452.2 in Fahrenheit is 4.15 in Kelvin",4.15,0.01, -452.2);
 
 //        Assert.assertEquals("15.0 in Fahrenheit is 263.7 in Kelvin",263.7,tools.temperatureInKelvin(15.0),0.01);
 //        Assert.assertEquals("-452.2 in Fahrenheit is 4.15 in Kelvin",4.15,tools.temperatureInKelvin(-452.2),0.01);
@@ -303,13 +339,13 @@ public class ProblemsTest {
     @Test
     public void arrayAverage() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class,"arrayAverage");
+        MethodTester<Integer> tester = new MethodTester(Problems.class, int.class,"arrayAverage", testEventHandler);
 
         int[] numbers = {1, 4, 6, 2, 45, 7};
-        tester.testExecution("average of 1,4,6,2,45,7 should be 10",10,(Object)numbers);
-
         int[] moreNumbers = {321, 523, 855, 275, 834, 276, 275, 231, 845, 264};
-        tester.testExecution("average should be 469", 469, (Object)moreNumbers);
+
+        Assert.assertEquals("average of 1,4,6,2,45,7 should be 10", 10, (int)tester.test((Object)(numbers)));
+        Assert.assertEquals("average should be 469", 469, (int)tester.test((Object)moreNumbers));
 
         //Assert.assertEquals("average of 1,4,6,2,45,7 should be 10", 10, tools.arrayAverage(numbers));
         //Assert.assertEquals("average should be 469", 469, tools.arrayAverage(moreNumbers));
@@ -332,18 +368,18 @@ public class ProblemsTest {
     @Test
     public void lastIndexOfMultipleInArray() throws Exception {
         int[] intArray = {1,2,3,4,5,6,7,8,9};
-        MethodTester tester = new MethodTester(Problems.class,"lastIndexOfMultipleInArray");
-        tester.testExecution(7,4,intArray);
-        tester.testExecution(8,3,intArray);
-        tester.testExecution(4,5,intArray);
+//        MethodTester<> tester = new MethodTester(Problems.class,"lastIndexOfMultipleInArray", testEventHandler);
+//        tester.test(7,4,intArray);
+//        tester.test(8,3,intArray);
+//        tester.test(4,5,intArray);
 
 //        Assert.assertEquals(7,tools.lastIndexOfMultipleInArray(4,intArray));
 //        Assert.assertEquals(8,tools.lastIndexOfMultipleInArray(3,intArray));
 //        Assert.assertEquals(4,tools.lastIndexOfMultipleInArray(5,intArray));
 
         int[] intArray2 = {23, 17, 9, 225, 9767};
-        tester.testExecution(-1,2,intArray2);
-        tester.testExecution(3,5,intArray2);
+//        tester.test(-1,2,intArray2);
+//        tester.test(3,5,intArray2);
 //
 //        Assert.assertEquals(-1,tools.lastIndexOfMultipleInArray(2,intArray2));
 //        Assert.assertEquals(3,tools.lastIndexOfMultipleInArray(5,intArray2));
@@ -495,9 +531,9 @@ public class ProblemsTest {
     //region type conversions
     @Test
     public void numberInWords() throws Exception {
-        Assert.assertEquals("testExecution with 23","two three",tools.numberInWords(23));
-        Assert.assertEquals("testExecution with 8","eight",tools.numberInWords(8));
-        Assert.assertEquals("testExecution with 1244511000","one two four four five one one zero zero zero",tools.numberInWords(1244511000));
+        Assert.assertEquals("test with 23","two three",tools.numberInWords(23));
+        Assert.assertEquals("test with 8","eight",tools.numberInWords(8));
+        Assert.assertEquals("test with 1244511000","one two four four five one one zero zero zero",tools.numberInWords(1244511000));
     }
     //endregion
 
@@ -716,16 +752,16 @@ public class ProblemsTest {
     @Test
     public void oneLetterOut() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class, "oneLetterOut");
-        tester.testExecution("abc and abd are one character out from anagrams",true,"abc","abd");
-        tester.testExecution("abbbbc and bbbccd are one character out from anagrams",false,"abbbbc","bbbccd");
-        tester.testExecution("abc and bcd are one character out from anagrams",true,"abc","bcd");
-        tester.testExecution("fast and star are one character out from anagrams",true,"fast","star");
-        tester.testExecution("fast and staf are exact anagrams (not 1 character out)",false,"fast","staf");
-        tester.testExecution("this and car are not one character out",false,"this","car");
-        tester.testExecution("this and thesis are not one character out", false,"this","thesis");
-        tester.testExecution("abcd and efgh are not one character out",false,"abcd","efgh");
-        tester.testExecution("ijkl and look are not one character out",false,"ijkl","look");
+//        MethodTester tester = new MethodTester(Problems.class, "oneLetterOut", testEventHandler);
+//        tester.test("abc and abd are one character out from anagrams",true,"abc","abd");
+//        tester.test("abbbbc and bbbccd are one character out from anagrams",false,"abbbbc","bbbccd");
+//        tester.test("abc and bcd are one character out from anagrams",true,"abc","bcd");
+//        tester.test("fast and star are one character out from anagrams",true,"fast","star");
+//        tester.test("fast and staf are exact anagrams (not 1 character out)",false,"fast","staf");
+//        tester.test("this and car are not one character out",false,"this","car");
+//        tester.test("this and thesis are not one character out", false,"this","thesis");
+//        tester.test("abcd and efgh are not one character out",false,"abcd","efgh");
+//        tester.test("ijkl and look are not one character out",false,"ijkl","look");
 
 
 //        Assert.assertTrue("abc and abd are one character out from anagrams",tools.oneLetterOut("abc","abd"));
@@ -746,19 +782,19 @@ public class ProblemsTest {
     @Test
     public void validKingMove() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class,"validKingMove");
-        tester.testExecution("b7 to a8", true,'b',7,'a',8);
-        tester.testExecution("h8 to g7",true,'h',8,'g',7);
-        tester.testExecution("h8 to h9",false,'h',8,'h',9);
-        tester.testExecution("e5 to e6",true,'e',5,'e',6);
-        tester.testExecution("e5 to e5",false,'e',5,'e',5);
-        tester.testExecution("e5 to e7",false,'e',5,'e',7);
-
-
-        int[][] validLocationsFromD4 = {{'c',3},{'c',4},{'c',5},{'d',3},{'d',5},{'e',3},{'e',4},{'e',5}};
-        for (int[] position : validLocationsFromD4) {
-            tester.testExecution("Can go to " + (char)position[0] + position[1] + "from d4",true,'d',4,(char)position[0],position[1]);
-        }
+//        MethodTester tester = new MethodTester(Problems.class,"validKingMove", testEventHandler);
+//        tester.test("b7 to a8", true,'b',7,'a',8);
+//        tester.test("h8 to g7",true,'h',8,'g',7);
+//        tester.test("h8 to h9",false,'h',8,'h',9);
+//        tester.test("e5 to e6",true,'e',5,'e',6);
+//        tester.test("e5 to e5",false,'e',5,'e',5);
+//        tester.test("e5 to e7",false,'e',5,'e',7);
+//
+//
+//        int[][] validLocationsFromD4 = {{'c',3},{'c',4},{'c',5},{'d',3},{'d',5},{'e',3},{'e',4},{'e',5}};
+//        for (int[] position : validLocationsFromD4) {
+//            tester.test("Can go to " + (char)position[0] + position[1] + "from d4",true,'d',4,(char)position[0],position[1]);
+//        }
 
 
         //        int[][] validLocationsFromD4 = {{'c',3},{'c',4},{'c',5},{'d',3},{'d',5},{'e',3},{'e',4},{'e',5}};
@@ -784,17 +820,17 @@ public class ProblemsTest {
 
     @Test
     public void validQueenMove() throws Exception {
-        MethodTester tester = new MethodTester(Problems.class, "validQueenMove");
-
-        tester.testExecution("c3 to e4",false,'c',3,'e',4);
-        tester.testExecution(true,'h',8,'g',7);
-        tester.testExecution(true,'d',4,'e',3);
-        tester.testExecution(true,'b',7,'a',8);
-        tester.testExecution(true,'h',8,'a',1);
-        tester.testExecution(true,'c',7,'c',8);
-        tester.testExecution(true,'c',7,'c',5);
-        tester.testExecution(true,'c',7,'a',7);
-        tester.testExecution(true,'c',7,'f',7);
+//        MethodTester tester = new MethodTester(Problems.class, "validQueenMove", testEventHandler);
+//
+//        tester.test("c3 to e4",false,'c',3,'e',4);
+//        tester.test(true,'h',8,'g',7);
+//        tester.test(true,'d',4,'e',3);
+//        tester.test(true,'b',7,'a',8);
+//        tester.test(true,'h',8,'a',1);
+//        tester.test(true,'c',7,'c',8);
+//        tester.test(true,'c',7,'c',5);
+//        tester.test(true,'c',7,'a',7);
+//        tester.test(true,'c',7,'f',7);
 
 
 //        Assert.assertFalse("On c3 can't go e4 (col and row move not same)",tools.validQueenMove('c',3,'e',4));
@@ -819,16 +855,16 @@ public class ProblemsTest {
     @Test
     public void validMoveBishopMove() throws Exception {
 
-        MethodTester tester = new MethodTester(Problems.class, "validBishopMove");
-        tester.testExecution("Can't stay still (not a move)", false,'c',3,'c',3);
-        tester.testExecution("On h8 can go g7",true,'h',8,'g',7);
-        tester.testExecution("On d4 can go e3",true,'d',4,'e',3);
-        tester.testExecution("On b7 can go a8",true,'b',7,'a',8);
-        tester.testExecution("On h8 can't go h9 (doesn't exist)",false,'h',8,'h',9);
-        tester.testExecution("On h8 can go a1",true,'h',8,'a',1);
-        tester.testExecution("On c3 can't go e4 (not diagonal)",false,'c',3,'e',4);
-        tester.testExecution("On e3 can't go b0 (doesn't exist)",false,'e',3,'b',0);
-        tester.testExecution("On h3 can't go k6 (doesn't exist)",false,'h',3,'k',0);
+//        MethodTester tester = new MethodTester(Problems.class, "validBishopMove", testEventHandler);
+//        tester.test("Can't stay still (not a move)", false,'c',3,'c',3);
+//        tester.test("On h8 can go g7",true,'h',8,'g',7);
+//        tester.test("On d4 can go e3",true,'d',4,'e',3);
+//        tester.test("On b7 can go a8",true,'b',7,'a',8);
+//        tester.test("On h8 can't go h9 (doesn't exist)",false,'h',8,'h',9);
+//        tester.test("On h8 can go a1",true,'h',8,'a',1);
+//        tester.test("On c3 can't go e4 (not diagonal)",false,'c',3,'e',4);
+//        tester.test("On e3 can't go b0 (doesn't exist)",false,'e',3,'b',0);
+//        tester.test("On h3 can't go k6 (doesn't exist)",false,'h',3,'k',0);
 
 
 //        Assert.assertFalse("Can't stay still (not a move)", tools.validBishopMove('c',3,'c',3));
