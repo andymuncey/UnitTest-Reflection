@@ -33,6 +33,11 @@ public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler {
         Assert.fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
     }
 
+    @Override
+    public void paramNameUnconventional(String methodName, String paramName) {
+        Assert.fail("Method \"" + methodName + "\" found, but the parameter: \""+ paramName+ "\" does not meet the convention for naming Java parameters (e.g. lowerCamelCase, and longer than a single character in most cases)");
+    }
+
     private String parametersDescription(Class[] params){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < params.length; i++) {

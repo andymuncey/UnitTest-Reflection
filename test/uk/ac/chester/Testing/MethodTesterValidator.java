@@ -75,4 +75,13 @@ public class MethodTesterValidator {
         tester.test(); //should throw the exception from the method being tested
     }
 
+    @Test
+    public void paramConvention(){
+        MethodTester<Void> tester = new MethodTester<>(TestClass.class, void.class, "paramNameNotLowerCamelCase", new TestEventHandlerEN());
+        tester.test(3); //should indicate the the parameter doesn't follow convention
+    }
+
+
+
+
 }

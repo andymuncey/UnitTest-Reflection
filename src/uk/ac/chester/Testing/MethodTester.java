@@ -1,5 +1,8 @@
 package uk.ac.chester.Testing;
 
+
+import java.util.Arrays;
+
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
@@ -115,8 +118,40 @@ public class MethodTester<T> {
             }
             return false;
         }
+
+        //found method
+        String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
+        for (String paramName: paramNames){
+            if (!validParamName(paramName)){
+                handler.paramNameUnconventional(methodName, paramName);
+            }
+        }
+
         return true;
     }
+
+
+    private boolean validParamName(String name){
+        //as per conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
+        String[] throwAwayVarNames = {"c", "d", "e", "i", "j", "k", "m", "n" }; //keep in order or sort before using binary search
+        boolean atLeastTwoChars = name.length() >= 2;
+        boolean validThrowAwayVarName = Arrays.binarySearch(throwAwayVarNames,name) >= 0;
+        return validThrowAwayVarName || (atLeastTwoChars && startsWithLowerChar(name));
+
+    }
+
+    private boolean startsWithLowerChar(String text){
+        if (!text.isEmpty()){
+            char firstLetter = text.charAt(0);
+            return firstLetter >= 'a' && firstLetter <= 'z';
+        }
+        return false;
+    }
+
+
+
+
+
 
     /**
      * Allows callbacks to indicate problems when attempting to test methods that do not exist
@@ -157,6 +192,15 @@ public class MethodTester<T> {
          */
         void incorrectParamOrder(String methodName, Class[] requiredParams);
 
+
+        /**
+         * Correct parameters exist for the method, but don't match the naming convention for Java parameters
+         * @param methodName the name of the method
+         * @param paramName the parameter that doesn't meet the convention
+         */
+        void paramNameUnconventional(String methodName, String paramName);
+
     }
+
 
 }

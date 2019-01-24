@@ -16,6 +16,10 @@ public class TestClass {
 
     void intParamStringParam(int p0, String p1){}
 
+    void paramNameNotLowerCamelCase(int Number){}
+
+    void paramNameTooShort(int x){}
+
     @SuppressWarnings("divzero")
     void exceptionThrower(){
         int i = 0;

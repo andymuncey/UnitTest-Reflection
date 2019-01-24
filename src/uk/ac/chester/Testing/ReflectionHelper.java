@@ -2,6 +2,7 @@ package uk.ac.chester.Testing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 public class ReflectionHelper {
@@ -218,6 +219,29 @@ public class ReflectionHelper {
 
         return findMethod(returnType, name, false, paramTypes);
 
+    }
+
+
+    /**
+     * Finds the parameter names for a method
+     * @param returnType The return type of the method
+     * @param name       the method name
+     * @param paramTypes the types of the parameters the method should have
+     * @return an array of Strings with the names of the parameters
+     */
+    String[] methodParamNames(Class returnType, String name, Class... paramTypes){
+
+        Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
+
+        if (possibleMethod.isPresent()){
+           Parameter[] params = possibleMethod.get().getParameters();
+           String[] paramNames = new String[params.length];
+            for (int i = 0; i < params.length; i++) {
+                paramNames[i] = params[i].getName();
+            }
+            return paramNames;
+        }
+        return new String[0];
     }
 
 
