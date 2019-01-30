@@ -1,8 +1,6 @@
 package uk.ac.chester.Testing;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class ReflectionHelper {
@@ -175,6 +173,9 @@ public class ReflectionHelper {
         Class<?>[] desiredParamTypes = strict ? argTypes.clone() : classEquivalents(argTypes);
         Class desiredReturnType = strict ? returnType : classEquivalent(returnType);
 
+        if (!matchParamOrder){
+            sortParamsTypesByName(desiredParamTypes);
+        }
         HashSet<Method> methods = new HashSet<>();
 
         for (Method method : searchClass.getDeclaredMethods()) {
@@ -184,18 +185,8 @@ public class ReflectionHelper {
             if (actualReturnType.equals(desiredReturnType)) {
                 Class<?>[] actualParamTypes = strict ? method.getParameterTypes() : classEquivalents(method.getParameterTypes());
 
-                Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
-                    @Override
-                    public int compare(Class<?> o1, Class<?> o2) {
-                        return o1.getCanonicalName().compareTo(o2.getCanonicalName());
-                    }
-                };
-
-                Class[] possiblySortedDesiredParamTypes = desiredParamTypes.clone();
                 if (!matchParamOrder) {
-                    Arrays.sort(actualParamTypes, comparator);
-
-                    Arrays.sort(desiredParamTypes, comparator);
+                    sortParamsTypesByName(actualParamTypes);
                 }
 
                 if (Arrays.equals(actualParamTypes, desiredParamTypes)) {
@@ -204,6 +195,19 @@ public class ReflectionHelper {
             }
         }
         return methods;
+    }
+
+
+    private void sortParamsTypesByName(Class<?>[] paramTypes){
+
+        Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
+            @Override
+            public int compare(Class<?> o1, Class<?> o2) {
+                return o1.getCanonicalName().compareTo(o2.getCanonicalName());
+            }
+        };
+
+        Arrays.sort(paramTypes, comparator);
     }
 
 
@@ -270,6 +274,41 @@ public class ReflectionHelper {
 
     //endregion
 
+    //region constructorLocation
+
+
+    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean strict, boolean matchParamOrder, Object... args ){
+
+        Class[] desiredParamTypes = classesForArgs(args);
+        Constructor[] constructors = includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors();
+
+        if (!matchParamOrder){
+            sortParamsTypesByName(desiredParamTypes);
+        }
+
+        for (Constructor c: constructors) {
+            if (desiredParamTypes.length == c.getParameterCount()){
+                boolean matchedParams = true;
+                Class[] actualParamTypes = c.getParameterTypes();
+                if (!matchParamOrder){
+                    sortParamsTypesByName(actualParamTypes);
+                }
+                for (int i = 0; i < desiredParamTypes.length; i++) {
+                    if (desiredParamTypes[i] != (strict ? actualParamTypes[i] : classEquivalents(actualParamTypes)[i] )){
+                        return Optional.of(c);
+                    }
+                }
+            }
+        }
+        return Optional.empty();
+
+    }
+
+
+
+    //endregion
+
+
 
     //region conversions
 
@@ -318,6 +357,23 @@ public class ReflectionHelper {
             classClasses[i] = classEquivalent(primitiveClasses[i]);
         }
         return classClasses;
+    }
+
+    //endregion
+
+
+    //region helpers
+
+    static boolean isPrivate (Executable executable){
+        return Modifier.isPrivate(executable.getModifiers());
+    }
+
+    static boolean isProtected (Executable  executable) {
+        return Modifier.isProtected(executable.getModifiers());
+    }
+
+    static boolean isPublic (Executable  executable) {
+        return Modifier.isPublic(executable.getModifiers());
     }
 
     //endregion

@@ -87,9 +87,17 @@ public class MethodTester<T> {
     }
 
     /**
-     * Tests the existence of a method and provides assertions where the name, return type or parameter types do not match a method in the class
+     * Tests the following, in relation to the method, returning null soon as any condition is not met:
+     * -That a method with a matching name, but not necessarily with the correct case exists
+     * -That a method with an exact match to the name exists
+     * -That the method returns the correct type
+     * -That the method has the correct parameters, though not necessarily in the correct order
+     * -That the method has the correct parameters, in the correct order
+     *
+     * Finally, if the method is correctly declared, it returns the result of executing the method
+     *
      * @param returnType the type of data returned by the class
-     * @param args example arguments for the methods (actual values, not types)
+     * @param args arguments for passing to the method (actual values, not types)
      * @param strict setting 'true' considers primitives and their object equivalents to be different. False matches primitive return types with their object counterparts
      */
     private boolean testExistence(Class<?> returnType,  Object[] args, boolean strict) {
