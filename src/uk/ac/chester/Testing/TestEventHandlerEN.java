@@ -5,7 +5,7 @@ import org.junit.Assert;
 /**
  * An English language implementation of the MethodTester.MethodTestEventHandler interface
  */
-public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler {
+public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler, ParameterDescriberEN {
 
     @Override
     public void notFound(String methodName) {
@@ -38,16 +38,5 @@ public class TestEventHandlerEN implements MethodTester.MethodTestEventHandler {
         Assert.fail("Method \"" + methodName + "\" found, but the parameter: \""+ paramName+ "\" does not meet the convention for naming Java parameters (e.g. lowerCamelCase, and longer than a single character in most cases)");
     }
 
-    private String parametersDescription(Class[] params){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < params.length; i++) {
-            sb.append(params[i].getSimpleName());
-            if (params.length > 1 && i == params.length - 2){
-                sb.append(" and ");
-            } else if (i < params.length - 1){
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
-    }
+
 }

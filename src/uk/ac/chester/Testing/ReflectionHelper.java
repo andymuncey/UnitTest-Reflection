@@ -228,24 +228,34 @@ public class ReflectionHelper {
 
     /**
      * Finds the parameter names for a method
+     * <important>Requires the compiler -parameters switch to be set</important>
      * @param returnType The return type of the method
      * @param name       the method name
      * @param paramTypes the types of the parameters the method should have
      * @return an array of Strings with the names of the parameters
      */
     String[] methodParamNames(Class returnType, String name, Class... paramTypes){
-
         Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
-
         if (possibleMethod.isPresent()){
-           Parameter[] params = possibleMethod.get().getParameters();
-           String[] paramNames = new String[params.length];
-            for (int i = 0; i < params.length; i++) {
-                paramNames[i] = params[i].getName();
-            }
-            return paramNames;
+           return parameterNames(possibleMethod.get());
         }
         return new String[0];
+    }
+
+
+    /**
+     * Returns the parameter names for an executable, such as a method or constructor
+     * <important>Requires the compiler -parameters switch to be set</important>
+     * @param executable e.g. a method or constructor
+     * @return an array of Strings with the parameter names
+     */
+    String[] parameterNames (Executable executable){
+        Parameter[] params = executable.getParameters();
+        String[] paramNames = new String[params.length];
+        for (int i = 0; i < params.length; i++) {
+            paramNames[i] = params[i].getName();
+        }
+        return paramNames;
     }
 
 
@@ -288,15 +298,19 @@ public class ReflectionHelper {
 
         for (Constructor c: constructors) {
             if (desiredParamTypes.length == c.getParameterCount()){
-                boolean matchedParams = true;
+
                 Class[] actualParamTypes = c.getParameterTypes();
                 if (!matchParamOrder){
                     sortParamsTypesByName(actualParamTypes);
                 }
+                boolean matchedParams = true;
                 for (int i = 0; i < desiredParamTypes.length; i++) {
                     if (desiredParamTypes[i] != (strict ? actualParamTypes[i] : classEquivalents(actualParamTypes)[i] )){
-                        return Optional.of(c);
+                        matchedParams = false;
                     }
+                }
+                if (matchedParams) {
+                    return Optional.of(c);
                 }
             }
         }
@@ -361,21 +375,5 @@ public class ReflectionHelper {
 
     //endregion
 
-
-    //region helpers
-
-    static boolean isPrivate (Executable executable){
-        return Modifier.isPrivate(executable.getModifiers());
-    }
-
-    static boolean isProtected (Executable  executable) {
-        return Modifier.isProtected(executable.getModifiers());
-    }
-
-    static boolean isPublic (Executable  executable) {
-        return Modifier.isPublic(executable.getModifiers());
-    }
-
-    //endregion
 
 }

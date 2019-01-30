@@ -1,27 +1,13 @@
 package uk.ac.chester.Testing;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 
 /**
- * The tests in the class should FAIL - it's designed to verify expected
+ * The tests in the class should FAIL - it's designed to verify expected failures
  */
 public class MethodTesterValidator {
-
-    private TestClass tasks;
-
-    @Before
-    public void setUp() throws Exception {
-        tasks = new TestClass();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        tasks = null;
-    }
 
 
     @Test

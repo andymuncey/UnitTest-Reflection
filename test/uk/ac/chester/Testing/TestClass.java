@@ -2,6 +2,24 @@ package uk.ac.chester.Testing;
 
 public class TestClass {
 
+    public TestClass(){
+
+    }
+
+    public TestClass(int intParam){}
+
+    public TestClass(int anInt, String aString){}
+
+    private TestClass(char myChar, String myString, char myChar2){}
+
+    public TestClass(float xyz){
+        throw new RuntimeException("Failing constructor");
+    }
+
+    //bad param name
+    public TestClass(double A){}
+
+
     //do not change these - they are used by unit tests
 
     int returnsPrimitiveInt(){ return 1; }

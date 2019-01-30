@@ -1,8 +1,6 @@
 package uk.ac.chester.Testing;
 
 
-import java.util.Arrays;
-
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
@@ -11,7 +9,7 @@ import java.util.Arrays;
  *    returned which has to be cast as a primitive in order to be used in an assertion
  * @param <T> return type of the method that is being tested
  */
-public class MethodTester<T> {
+public class MethodTester<T> implements ExecutableTester {
 
     private ReflectionHelper helper;
     private String methodName;
@@ -139,22 +137,7 @@ public class MethodTester<T> {
     }
 
 
-    private boolean validParamName(String name){
-        //as per conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
-        String[] throwAwayVarNames = {"c", "d", "e", "i", "j", "k", "m", "n" }; //keep in order or sort before using binary search
-        boolean atLeastTwoChars = name.length() >= 2;
-        boolean validThrowAwayVarName = Arrays.binarySearch(throwAwayVarNames,name) >= 0;
-        return validThrowAwayVarName || (atLeastTwoChars && startsWithLowerChar(name));
 
-    }
-
-    private boolean startsWithLowerChar(String text){
-        if (!text.isEmpty()){
-            char firstLetter = text.charAt(0);
-            return firstLetter >= 'a' && firstLetter <= 'z';
-        }
-        return false;
-    }
 
 
 
