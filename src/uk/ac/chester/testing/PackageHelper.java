@@ -1,4 +1,4 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,11 +1,10 @@
-package uk.ac.chester.Testing;
-
+package uk.ac.chester.testing;
 
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
- *  * Passing an array as the only argument to the test method is ambiguous as it could be inferred as an array object or varargs
- *  * When using the test() method to test a method that returns a primitive type will result in a object type being
+ *  * Passing an array as the only argument to the testConstructor method is ambiguous as it could be inferred as an array object or varargs
+ *  * When using the testConstructor() method to testConstructor a method that returns a primitive type will result in a object type being
  *    returned which has to be cast as a primitive in order to be used in an assertion
  * @param <T> return type of the method that is being tested
  */
@@ -128,7 +127,7 @@ public class MethodTester<T> implements ExecutableTester {
         //found method
         String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
         for (String paramName: paramNames){
-            if (!validParamName(paramName)){
+            if (!validVariableName(paramName)){
                 handler.paramNameUnconventional(methodName, paramName);
             }
         }
@@ -145,8 +144,8 @@ public class MethodTester<T> implements ExecutableTester {
 
 
     /**
-     * Allows callbacks to indicate problems when attempting to test methods that do not exist
-     * It is anticipated that Assert.fail will be used in the implementation of each method to provide a description
+     * Allows callbacks to indicate problems when attempting to testConstructor methods that do not exist
+     * It is anticipated that Assert.fail will be used in the implementation of each method to provide a describe
      */
     public interface MethodTestEventHandler {
         /**

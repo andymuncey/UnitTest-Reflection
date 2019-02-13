@@ -1,11 +1,9 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
-
-import static org.junit.Assert.*;
 
 public class PackageHelperTest {
 
@@ -15,10 +13,6 @@ public class PackageHelperTest {
         Set<Class> classes = PackageHelper.findClasses("TestClass");
 
         Assert.assertFalse(classes.isEmpty());
-
-
-
-
 
     }
 }

@@ -1,35 +1,28 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.InvocationTargetException;
-
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Optional;
 
-public class ClassTester<T> implements ExecutableTester {
+public class ConstructorTester<T> implements ExecutableTester {
 
     private ReflectionHelper helper;
-    private ClassTestEventHandler handler;
+    private ConstructorTestEventHandler constructorHandler;
 
-    public ClassTester(Class<T> theClass, ClassTestEventHandler handler){
-
+    public ConstructorTester(Class<T> theClass, ConstructorTestEventHandler constructorHandler){
         helper = new ReflectionHelper(theClass);
-        this.handler = handler;
+        this.constructorHandler = constructorHandler;
     }
 
-
-    public T testStrict(AccessModifier modifier, Object... constructorArgs){
-        return test(modifier,true,constructorArgs);
+    public T testConstructorStrict(AccessModifier modifier, Object... constructorArgs){
+        return testConstructor(modifier,true,constructorArgs);
     }
 
-    public T test(AccessModifier modifier, Object... constructorArgs){
-        return test(modifier, false, constructorArgs);
+    public T testConstructor(AccessModifier modifier, Object... constructorArgs){
+        return testConstructor(modifier, false, constructorArgs);
     }
 
     /**
-     *
+     *  Tests the following:
      * -That the constructor has the correct parameters, though not necessarily in the correct order
      * -That the constructor has the correct parameters, in the correct order
      * -That the constructor has the correct access modifier (if specified)
@@ -39,18 +32,19 @@ public class ClassTester<T> implements ExecutableTester {
      * @param constructorArgs arguments to be passed to the constructor
      * @return an object instantiated using the arguments, or null if this is not possible
      */
-    private T test(AccessModifier modifier, boolean strict, Object... constructorArgs) {
+    private T testConstructor(AccessModifier modifier, boolean strict, Object... constructorArgs) {
 
 
         if (!constructorWithArgsExists(false,strict,constructorArgs)){
             //doesn't exist with the parameters in any order
-            handler.incorrectParameters(helper.classesForArgs(constructorArgs));
+
+            constructorHandler.incorrectParameters(helper.classesForArgs(constructorArgs));
         }
 
         //exists with the params, order may or may not be correct
         if (!constructorWithArgsExists(true,strict, constructorArgs)){
             //not in correct order
-            handler.incorrectParamOrder(helper.classesForArgs(constructorArgs));
+            constructorHandler.incorrectParamOrder(helper.classesForArgs(constructorArgs));
         } else {
             try {
                 Optional<Constructor> possibleCtor = helper.constructorForArgTypes(true, strict, true, constructorArgs);
@@ -62,14 +56,14 @@ public class ClassTester<T> implements ExecutableTester {
                     if (modifier != null) {
                         AccessModifier actualModifier = accessModifier(c);
                         if (!modifier.equals(actualModifier)) {
-                            handler.wrongAccessModifier(actualModifier, modifier);
+                            constructorHandler.wrongAccessModifier(actualModifier, modifier);
                         }
                     }
 
                     String[] paramNames = helper.parameterNames(c);
                     for (String name:paramNames){
-                        if (!validParamName(name)){
-                            handler.paramNameUnconventional(name);
+                        if (!validVariableName(name)){
+                            constructorHandler.paramNameUnconventional(name);
                         }
                     }
 
@@ -78,39 +72,28 @@ public class ClassTester<T> implements ExecutableTester {
 
             } catch (InstantiationException e){
                 //could not instantiate - abstract class?
-                handler.constructionFails(e, constructorArgs);
+                constructorHandler.constructionFails(e, constructorArgs);
 
             } catch (IllegalAccessException e){
                 //unable to access constructor, maybe private
-                handler.constructionFails(e, constructorArgs);
+                constructorHandler.constructionFails(e, constructorArgs);
             }
             catch (InvocationTargetException e){
                 //underlying constructor threw an exception
-                handler.constructionFails(e.getCause(), constructorArgs);
+                constructorHandler.constructionFails(e.getCause(), constructorArgs);
             }
         }
         return null;
     }
 
 
-    private AccessModifier accessModifier(Executable executable){
-        if (Modifier.isPublic(executable.getModifiers())){
-            return AccessModifier.PUBLIC;
-        }
-        if (Modifier.isPrivate(executable.getModifiers())){
-            return AccessModifier.PRIVATE;
-        }
-        if (Modifier.isProtected(executable.getModifiers())){
-            return AccessModifier.PROTECTED;
-        }
-        return AccessModifier.PACKAGE_PRIVATE;
-    }
+
 
     public boolean constructorWithArgsExists(boolean matchParamOrder, boolean strict, Object... args){
         return helper.constructorForArgTypes(true, strict,matchParamOrder, args).isPresent();
     }
 
-    public interface ClassTestEventHandler {
+    public interface ConstructorTestEventHandler {
 
         /**
          * A constructor has been found, but the parameters are not as required

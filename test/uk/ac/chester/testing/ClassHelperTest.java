@@ -1,4 +1,4 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -11,11 +11,12 @@ public class ClassHelperTest {
 
     @Before
     public void setUp() throws Exception {
-        c = new ClassHelper("uk.ac.chester.Testing");
+        c = new ClassHelper("uk.ac.chester.testing");
     }
 
     @After
     public void tearDown() throws Exception {
+        c = null;
     }
 
     @Test
@@ -23,7 +24,6 @@ public class ClassHelperTest {
 
         Assert.assertTrue(c.findClass("TestClass").isPresent());
         Assert.assertFalse(c.findClass("NonExistentClass").isPresent());
-
 
     }
 }

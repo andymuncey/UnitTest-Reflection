@@ -1,16 +1,17 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import org.junit.Assert;
 
-public class ClassTestEventHandlerEN implements ClassTester.ClassTestEventHandler, ParameterDescriberEN {
+public class ConstructorTestEventHandlerEN implements ConstructorTester.ConstructorTestEventHandler, ClassDescriber {
+
     @Override
     public void incorrectParameters(Class[] requiredParamTypes) {
-        Assert.fail("A constructor was found, but it has the wrong parameters, expected parameters are " + parametersDescription(requiredParamTypes));
+        Assert.fail("A constructor was found, but it has the wrong parameters, expected parameters are " + describe(requiredParamTypes));
     }
 
     @Override
     public void incorrectParamOrder(Class[] requiredParams) {
-        Assert.fail("Constructor found, but parameters are not in the correct order: "+ parametersDescription(requiredParams));
+        Assert.fail("Constructor found, but parameters are not in the correct order: "+ describe(requiredParams));
     }
 
     @Override
@@ -31,7 +32,7 @@ public class ClassTestEventHandlerEN implements ClassTester.ClassTestEventHandle
             messageBuilder.append(" ");
         }
         String message = messageBuilder.toString().trim()+".";
-
         Assert.fail(message + " Error details: " + e.getMessage());
     }
+
 }

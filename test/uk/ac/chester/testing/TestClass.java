@@ -1,6 +1,9 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 public class TestClass {
+
+
+    public static String nonFinal;
 
     public TestClass(){
 

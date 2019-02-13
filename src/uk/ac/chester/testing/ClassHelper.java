@@ -1,4 +1,4 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import java.util.Optional;
 
@@ -22,10 +22,5 @@ public class ClassHelper {
             return Optional.empty();
         }
     }
-
-
-
-
-
 
 }

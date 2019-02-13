@@ -1,4 +1,4 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -31,6 +31,24 @@ public class ReflectionHelper {
         }
     }
     //endregion
+
+
+    //region fields
+
+    Set<Field> fields(){
+        Set<Field> fields = new HashSet<Field>();
+
+        Collections.addAll(fields,searchClass.getDeclaredFields());
+
+        return fields;
+    }
+
+
+    //endregion
+
+
+
+
 
     //region method invocation
 

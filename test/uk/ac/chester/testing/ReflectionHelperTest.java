@@ -1,4 +1,4 @@
-package uk.ac.chester.Testing;
+package uk.ac.chester.testing;
 
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
@@ -27,7 +27,7 @@ public class ReflectionHelperTest {
         ReflectionHelper helper = ReflectionHelper.forClassName("java.lang.String");
         Assert.assertNotNull(helper);
 
-        ReflectionHelper ownClassHelper = ReflectionHelper.forClassName("uk.ac.chester.Testing.TestClass");
+        ReflectionHelper ownClassHelper = ReflectionHelper.forClassName("uk.ac.chester.testing.TestClass");
         Assert.assertNotNull(ownClassHelper);
     }
 
