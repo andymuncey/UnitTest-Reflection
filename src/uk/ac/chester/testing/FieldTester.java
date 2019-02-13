@@ -25,7 +25,7 @@ public class FieldTester<T> implements ExecutableTester {
     }
 
     /**
-     * Tests that fields that are not static are private
+     * Tests that fields that are not static and are private
      */
     private void testFieldsArePrivate() {
         Set<Field> fields = helper.fields();

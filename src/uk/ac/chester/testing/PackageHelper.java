@@ -19,7 +19,8 @@ class PackageHelper {
 
     private static boolean isIgnoredPackage(String name){
         for (String ignoredPackage: ignoredPackages) {
-            if (name.startsWith(ignoredPackage + ".") || name.equals(ignoredPackage)){
+            if (name.startsWith(ignoredPackage + ".") ||
+                    name.equals(ignoredPackage)){
                 return true;
             }
         }
@@ -37,12 +38,12 @@ class PackageHelper {
         Set<Class> classes = new HashSet<Class>();
 
         for (Package p : Package.getPackages()) {
-            String packageName = p.getName();
+            final String packageName = p.getName();
             if (!isIgnoredPackage(packageName)) {
-                String fullyQualifiedClassName = packageName + "." + name;
-                Optional<Class> foundclass = classForName(fullyQualifiedClassName);
-                if (foundclass.isPresent()){
-                    classes.add(foundclass.get());
+                final String fullyQualifiedClassName = packageName + "." + name;
+                final Optional<Class> foundClass = classForName(fullyQualifiedClassName);
+                if (foundClass.isPresent()){
+                    classes.add(foundClass.get());
                 }
             }
         }
