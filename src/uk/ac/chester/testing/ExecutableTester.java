@@ -37,10 +37,20 @@ public interface ExecutableTester {
         return name.charAt(0) != '_' && name.charAt(name.length() - 1) != '_';
     }
 
+    /**
+     * Determines if the first character of a String is lowercase
+     * @param text a string to check
+     * @return true if the first letter is lowercase
+     */
     default boolean startsWithLowerChar(String text){
         return !text.isEmpty() && Character.isLowerCase(text.charAt(0));
     }
 
+    /**
+     * Returns our own type of access modifier so dependent classes don't need to import the reflection package
+     * @param member a class member such as a field, method or constructor
+     * @return An AccessModifier enum value
+     */
     default AccessModifier accessModifier(Member member){
         if (Modifier.isPublic(member.getModifiers())){
             return AccessModifier.PUBLIC;
@@ -54,8 +64,8 @@ public interface ExecutableTester {
         return AccessModifier.PACKAGE_PRIVATE;
     }
 
-
     /**
+     * Our own enum to represent access modifiers (prevents dependent classes having to import reflection package)
      * Note: PACKAGE_PRIVATE is represented by the absence of a modifier in code
      */
     enum AccessModifier {

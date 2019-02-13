@@ -2,12 +2,7 @@ package uk.ac.chester.testing;
 
 public class TestClass {
 
-
-    public static String nonFinal;
-
-    public TestClass(){
-
-    }
+    public TestClass(){ }
 
     public TestClass(int intParam){}
 
@@ -18,6 +13,10 @@ public class TestClass {
     public TestClass(float xyz){
         throw new RuntimeException("Failing constructor");
     }
+
+
+    public static String nonFinal;
+
 
     //bad param name
     public TestClass(double A){}

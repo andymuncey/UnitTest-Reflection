@@ -13,41 +13,33 @@ public class ConstructorTester<T> implements ExecutableTester {
         this.constructorHandler = constructorHandler;
     }
 
-    public T testConstructorStrict(AccessModifier modifier, Object... constructorArgs){
-        return testConstructor(modifier,true,constructorArgs);
-    }
-
-    public T testConstructor(AccessModifier modifier, Object... constructorArgs){
-        return testConstructor(modifier, false, constructorArgs);
-    }
-
     /**
      *  Tests the following:
      * -That the constructor has the correct parameters, though not necessarily in the correct order
      * -That the constructor has the correct parameters, in the correct order
      * -That the constructor has the correct access modifier (if specified)
      * -That the constructor parameter names match the Java convention
+     * -That the object can be instantiated using the constructor
      *
      * @param modifier an AccessModifier, or null to skip testing this
+     * @param allowAutoboxing whether the return type can be autoboxed / unboxed
      * @param constructorArgs arguments to be passed to the constructor
      * @return an object instantiated using the arguments, or null if this is not possible
      */
-    private T testConstructor(AccessModifier modifier, boolean strict, Object... constructorArgs) {
+    public T testConstructor(AccessModifier modifier, boolean allowAutoboxing, Object... constructorArgs) {
 
-
-        if (!constructorWithArgsExists(false,strict,constructorArgs)){
+        if (!constructorWithArgsExists(false, allowAutoboxing,constructorArgs)){
             //doesn't exist with the parameters in any order
-
-            constructorHandler.incorrectParameters(helper.classesForArgs(constructorArgs));
+            constructorHandler.incorrectParameters(ReflectionHelper.classesForArgs(constructorArgs));
         }
 
         //exists with the params, order may or may not be correct
-        if (!constructorWithArgsExists(true,strict, constructorArgs)){
+        if (!constructorWithArgsExists(true, allowAutoboxing, constructorArgs)){
             //not in correct order
-            constructorHandler.incorrectParamOrder(helper.classesForArgs(constructorArgs));
+            constructorHandler.incorrectParamOrder(ReflectionHelper.classesForArgs(constructorArgs));
         } else {
             try {
-                Optional<Constructor> possibleCtor = helper.constructorForArgTypes(true, strict, true, constructorArgs);
+                Optional<Constructor> possibleCtor = helper.constructorForArgTypes(true, allowAutoboxing, true, constructorArgs);
 
                 if (possibleCtor.isPresent()) {
                     Constructor<T> c = possibleCtor.get();
@@ -60,7 +52,7 @@ public class ConstructorTester<T> implements ExecutableTester {
                         }
                     }
 
-                    String[] paramNames = helper.parameterNames(c);
+                    String[] paramNames = ReflectionHelper.parameterNames(c);
                     for (String name:paramNames){
                         if (!validVariableName(name)){
                             constructorHandler.paramNameUnconventional(name);
@@ -87,10 +79,8 @@ public class ConstructorTester<T> implements ExecutableTester {
     }
 
 
-
-
-    public boolean constructorWithArgsExists(boolean matchParamOrder, boolean strict, Object... args){
-        return helper.constructorForArgTypes(true, strict,matchParamOrder, args).isPresent();
+    private boolean constructorWithArgsExists(boolean matchParamOrder, boolean allowAutoboxing, Object... args){
+        return helper.constructorForArgTypes(true, allowAutoboxing,matchParamOrder, args).isPresent();
     }
 
     public interface ConstructorTestEventHandler {

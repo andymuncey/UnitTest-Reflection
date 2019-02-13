@@ -2,6 +2,9 @@ package uk.ac.chester.testing;
 
 import org.junit.Assert;
 
+/**
+ * English language implementation of ConstructorTester.ConstructorTestEventHandler
+ */
 public class ConstructorTestEventHandlerEN implements ConstructorTester.ConstructorTestEventHandler, ClassDescriber {
 
     @Override

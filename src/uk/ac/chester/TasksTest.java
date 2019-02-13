@@ -21,7 +21,7 @@ public class TasksTest {
         tasks = null;
     }
 
-    //region example standard unit testConstructor
+    //region example standard unit test
 
     @Test
     public void arraySum() {
@@ -87,7 +87,7 @@ public class TasksTest {
         Assert.assertEquals(23,result);
 
         //below is not valid as tester can only return an object
-        //Assert.assertEquals(23,tester.testConstructor(13));
+        //Assert.assertEquals(23,tester.test(13));
     }
 
 

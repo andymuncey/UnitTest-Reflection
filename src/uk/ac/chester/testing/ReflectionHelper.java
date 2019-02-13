@@ -7,7 +7,7 @@ public class ReflectionHelper {
 
     final private Class<?> searchClass;
 
-    //region constructors
+    //region constructors (for this class)
     public ReflectionHelper(Object o) {
         this(o.getClass());
     }
@@ -26,7 +26,7 @@ public class ReflectionHelper {
         try {
             Class c = Class.forName(name);
             return new ReflectionHelper(c);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             return null;
         }
     }
@@ -35,44 +35,41 @@ public class ReflectionHelper {
 
     //region fields
 
+    /**
+     * Gets all fields within the class
+     * @return a Set of Field objects
+     */
     Set<Field> fields(){
-        Set<Field> fields = new HashSet<Field>();
-
+        Set<Field> fields = new HashSet<>();
         Collections.addAll(fields,searchClass.getDeclaredFields());
-
         return fields;
     }
-
-
     //endregion
-
-
-
 
 
     //region method invocation
 
     /**
-     * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with strict set to false
+     * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with allowAutoboxing set to true
      */
     <T> T invokeMethod(Class<T> returnType, String methodName, Object... args) {
-        return invokeMethod(false, returnType, methodName, args);
+        return invokeMethod(true, returnType, methodName, args);
     }
 
     /**
      * Attempts to invoke a method matching the specified returnType and name, with the supplied values
      *
      * @param returnType the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
-     * @param strict     setting 'true' considers primitives and their object equivalents to be different when considering return type. False matches primitive return types with their object counterparts
+     * @param allowAutoboxing     setting 'false' considers primitives and their object equivalents to be different when considering return type. True matches primitive return types with their object counterparts
      * @param methodName the name of the method to invoke (excluding return type, parameters and parentheses), e.g. "myMethod"
      * @param args       a list of arguments (any primitives will be converted to non-primitive types)
      *                   If the argument is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
      * @param <T>        type of data returned will match the return type specified
      * @return the result of invoking the method
      */
-    <T> T invokeMethod(boolean strict, Class<T> returnType, String methodName, Object... args) {
+    <T> T invokeMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) {
 
-        final Set<Method> possibleMethods = findMethods(returnType, methodName, strict);
+        final Set<Method> possibleMethods = findMethods(returnType, methodName, allowAutoboxing);
 
         for (Method m : possibleMethods) {
 
@@ -80,7 +77,7 @@ public class ReflectionHelper {
             if (args.length == paramTypes.length) {
                 boolean matchedParams = true;
                 for (int i = 0; i < args.length; i++) {
-                    Class<?> paramClass = strict ? paramTypes[i] : classEquivalent(paramTypes[i]);
+                    Class<?> paramClass = !allowAutoboxing ? paramTypes[i] : classEquivalent(paramTypes[i]);
                     Class<?> argClass = args[i].getClass();
                     if (paramClass != argClass) {
                         matchedParams = false;
@@ -120,22 +117,15 @@ public class ReflectionHelper {
      * Finds methods matching a particular name
      *
      * @param name method name (case sensitive), no brackets e.g. "myMethod"
+     * @param ignoreCase whether to ignore the case of the method name
      * @return Set of methods matching that name
      */
-    Set<Method> findMethods(String name) {
-        final HashSet<Method> methods = new HashSet<>();
+    Set<Method> findMethods(String name, boolean ignoreCase) {
+        final Set<Method> methods = new HashSet<>();
         for (Method method : searchClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)) {
-                methods.add(method);
-            }
-        }
-        return methods;
-    }
-
-    Set<Method> findMethodsIgnoreCase(String name) {
-        final HashSet<Method> methods = new HashSet<>();
-        for (Method method : searchClass.getDeclaredMethods()) {
-            if (method.getName().toUpperCase().equals(name.toUpperCase())) {
+            String searchMethodName = ignoreCase ? name.toUpperCase() : name;
+            String actualMethodName = ignoreCase ? method.getName().toUpperCase() : method.getName();
+            if (searchMethodName.equals(actualMethodName)) {
                 methods.add(method);
             }
         }
@@ -147,12 +137,12 @@ public class ReflectionHelper {
      *
      * @param name       the name of the method
      * @param returnType the 'class' type returned by the method
-     * @param strict     setting 'true' considers primitives and their object equivalents to be different. False matches primitive return types with their object counterparts
+     * @param allowAutoboxing     setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
      * @return a set of methods matching the search criteria
      */
-    Set<Method> findMethods(Class<?> returnType, String name, boolean strict) {
-        final Set<Method> methods = findMethods(name);
-        if (strict) {
+    Set<Method> findMethods(Class<?> returnType, String name, boolean allowAutoboxing) {
+        final Set<Method> methods = findMethods(name, false);
+        if (!allowAutoboxing) {
             methods.removeIf(m -> (!m.getReturnType().equals(returnType)));
         } else {
             methods.removeIf(m -> (!classEquivalent(m.getReturnType()).equals(classEquivalent(returnType))));
@@ -163,33 +153,39 @@ public class ReflectionHelper {
     /**
      * Returns methods where the name and return type match.
      * Primitive types will be matched to their class equivalents
-     *
      * @param name       the name of the method
      * @param returnType the 'class' type returned by the method
      * @return a set of methods matching the search criteria
      */
     Set<Method> findMethods(Class<?> returnType, String name) {
-        return findMethods(returnType, name, true);
+        return findMethods(returnType, name, false);
     }
 
 
+    /**
+     * Returns all methods with a specified return type and the specified parameter types
+     * Primitive types will be matched to their boxed equivalents
+     * @param desiredReturnType the return type
+     * @param desiredParamTypes the parameter types
+     * @return A Set of Method objects
+     */
     Set<Method> methodsWithSignature(Class<?> desiredReturnType, Class<?>... desiredParamTypes) {
-        return methodsWithSignature(desiredReturnType, true, false, desiredParamTypes);
+        return methodsWithSignature(desiredReturnType, true, true, desiredParamTypes);
     }
 
     /**
      * Returns a list of methods which match the return type and parameters
-     *
      * @param returnType      class representing the type of data returned by the method
      * @param matchParamOrder whether the parameters must appear in the order supplied
+     * @param allowAutoboxing whether the parameters and return types can be interchanges with their primitive/boxed equivalents
      * @param argTypes        the types for each parameter in the methods parameters. if the only item is an Array, it must be cast as an object
      * @return An arrayList of {@code Method} objects that match the required signature
      */
-    Set<Method> methodsWithSignature(Class<?> returnType, boolean matchParamOrder, boolean strict, Class<?>... argTypes) {
+    Set<Method> methodsWithSignature(Class<?> returnType, boolean matchParamOrder, boolean allowAutoboxing, Class<?>... argTypes) {
 
         //must copy to avoid argTypes being reordered
-        Class<?>[] desiredParamTypes = strict ? argTypes.clone() : classEquivalents(argTypes);
-        Class desiredReturnType = strict ? returnType : classEquivalent(returnType);
+        Class<?>[] desiredParamTypes = !allowAutoboxing ? argTypes.clone() : classEquivalents(argTypes);
+        Class desiredReturnType = !allowAutoboxing ? returnType : classEquivalent(returnType);
 
         if (!matchParamOrder){
             sortParamsTypesByName(desiredParamTypes);
@@ -198,10 +194,10 @@ public class ReflectionHelper {
 
         for (Method method : searchClass.getDeclaredMethods()) {
 
-            Class<?> actualReturnType = strict ? method.getReturnType() : classEquivalent(method.getReturnType());
+            Class<?> actualReturnType = !allowAutoboxing ? method.getReturnType() : classEquivalent(method.getReturnType());
 
             if (actualReturnType.equals(desiredReturnType)) {
-                Class<?>[] actualParamTypes = strict ? method.getParameterTypes() : classEquivalents(method.getParameterTypes());
+                Class<?>[] actualParamTypes = !allowAutoboxing ? method.getParameterTypes() : classEquivalents(method.getParameterTypes());
 
                 if (!matchParamOrder) {
                     sortParamsTypesByName(actualParamTypes);
@@ -216,21 +212,24 @@ public class ReflectionHelper {
     }
 
 
-    private void sortParamsTypesByName(Class<?>[] paramTypes){
-
+    /**
+     * Sorts an array of Class by canonical name (i.e. including package name)
+     * @param paramTypes an array of types
+     */
+    private static void sortParamsTypesByName(Class<?>[] paramTypes){
         Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
             @Override
             public int compare(Class<?> o1, Class<?> o2) {
                 return o1.getCanonicalName().compareTo(o2.getCanonicalName());
             }
         };
-
         Arrays.sort(paramTypes, comparator);
     }
 
 
     /**
-     * Finds a method with a given return type, name and
+     * Finds a method with a given return type, name and parameter types.
+     * Will return methods where primitive types are substituted for box types and vice versa
      *
      * @param returnType The return type of the method
      * @param name       the method name
@@ -239,7 +238,7 @@ public class ReflectionHelper {
      */
     Optional<Method> findMethod(Class returnType, String name, Class... paramTypes) {
 
-        return findMethod(returnType, name, false, paramTypes);
+        return findMethod(returnType, name, true, paramTypes);
 
     }
 
@@ -267,7 +266,7 @@ public class ReflectionHelper {
      * @param executable e.g. a method or constructor
      * @return an array of Strings with the parameter names
      */
-    String[] parameterNames (Executable executable){
+    static String[] parameterNames (Executable executable){
         Parameter[] params = executable.getParameters();
         String[] paramNames = new String[params.length];
         for (int i = 0; i < params.length; i++) {
@@ -277,9 +276,17 @@ public class ReflectionHelper {
     }
 
 
-    Optional<Method> findMethod(Class returnType, String name, boolean strict, Class... paramTypes) {
-        Set<Method> methods = findMethods(returnType, name, strict);
-        Class[] desiredParamTypes = strict ? paramTypes : classEquivalents(paramTypes);
+    /**
+     * Finds a method matching specified criteria
+     * @param returnType the type returned by the method
+     * @param name the name of the method (case sensitive)
+     * @param allowAutoboxing set to false if the parameter types must match exactly or true if primitive and boxed types can be used interchangeably
+     * @param paramTypes the types of the parameters accepted by the method
+     * @return an Optional containing the method, if found
+     */
+    Optional<Method> findMethod(Class returnType, String name, boolean allowAutoboxing, Class... paramTypes) {
+        Set<Method> methods = findMethods(returnType, name, allowAutoboxing);
+        Class[] desiredParamTypes = !allowAutoboxing ? paramTypes : classEquivalents(paramTypes);
 
         for (Method m : methods) {
             Class<?>[] methodParamTypes = m.getParameterTypes();
@@ -287,7 +294,7 @@ public class ReflectionHelper {
                 boolean matchedParams = true;
                 for (int i = 0; i < desiredParamTypes.length; i++) {
 
-                    if (desiredParamTypes[i] != (strict ? methodParamTypes[i] : classEquivalent(methodParamTypes[i]))) {
+                    if (desiredParamTypes[i] != (!allowAutoboxing ? methodParamTypes[i] : classEquivalent(methodParamTypes[i]))) {
                         matchedParams = false;
                     }
                 }
@@ -302,10 +309,18 @@ public class ReflectionHelper {
 
     //endregion
 
-    //region constructorLocation
+    //region constructors
 
 
-    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean strict, boolean matchParamOrder, Object... args ){
+    /**
+     * Finds a constructor matching specified criteria
+     * @param includeNonPublic include constructors not marked as public
+     * @param allowAutoboxing set to false if the parameter types must match exactly or true if primitive and boxed types can be used interchangeably
+     * @param matchParamOrder set to true if the order of parameters in the constructor must match the order they are passed into this method
+     * @param args example arguments for the constructor to take (the types of which will be used to locate the constructor)
+     * @return An Optional containing a matching constructor, if found
+     */
+    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Object... args ){
 
         Class[] desiredParamTypes = classesForArgs(args);
         Constructor[] constructors = includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors();
@@ -323,7 +338,7 @@ public class ReflectionHelper {
                 }
                 boolean matchedParams = true;
                 for (int i = 0; i < desiredParamTypes.length; i++) {
-                    if (desiredParamTypes[i] != (strict ? actualParamTypes[i] : classEquivalents(actualParamTypes)[i] )){
+                    if (desiredParamTypes[i] != (!allowAutoboxing ? actualParamTypes[i] : classEquivalents(actualParamTypes)[i] )){
                         matchedParams = false;
                     }
                 }
@@ -333,7 +348,6 @@ public class ReflectionHelper {
             }
         }
         return Optional.empty();
-
     }
 
 
@@ -350,7 +364,7 @@ public class ReflectionHelper {
      * @param args an array of values of any type
      * @return an array of Class objects
      */
-    Class[] classesForArgs(Object[] args) {
+    static Class[] classesForArgs(Object[] args) {
         List<Class> params = new ArrayList<>();
         Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
         return params.toArray(new Class[args.length]);
@@ -364,7 +378,7 @@ public class ReflectionHelper {
      * @param primitiveClass a primitive 'class' such as double.class
      * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
      */
-    private Class classEquivalent(Class primitiveClass) {
+    private static Class classEquivalent(Class primitiveClass) {
         final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
         final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
@@ -383,7 +397,7 @@ public class ReflectionHelper {
      * @param primitiveClasses an array of Class object, which should include the class for some Primitive types
      * @return an array of Class, each corresponding to an object type
      */
-    private Class[] classEquivalents(Class[] primitiveClasses) {
+    private static Class[] classEquivalents(Class[] primitiveClasses) {
         Class[] classClasses = new Class[primitiveClasses.length];
         for (int i = 0; i < primitiveClasses.length; i++) {
             classClasses[i] = classEquivalent(primitiveClasses[i]);

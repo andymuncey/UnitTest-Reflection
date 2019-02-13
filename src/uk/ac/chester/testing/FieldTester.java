@@ -7,7 +7,6 @@ import java.util.Set;
 public class FieldTester<T> implements ExecutableTester {
 
     private ReflectionHelper helper;
-
     private FieldsTestEventHandler fieldsHandler;
 
     public FieldTester(Class<T> theClass, FieldsTestEventHandler fieldsHandler){
@@ -16,6 +15,9 @@ public class FieldTester<T> implements ExecutableTester {
         this.fieldsHandler = fieldsHandler;
     }
 
+    /*
+    Run all tests against the fields
+     */
     public void testFields(){
         testFieldsArePrivate();
         testFieldNames();

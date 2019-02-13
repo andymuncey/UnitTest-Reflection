@@ -39,11 +39,11 @@ public class ReflectionHelperTest {
 
     @Test
     public void invokeMethodStrict() {
-        Assert.assertEquals(1, (int) h.invokeMethod(true, int.class, "returnsPrimitiveInt"));
+        Assert.assertEquals(1, (int) h.invokeMethod(false, int.class, "returnsPrimitiveInt"));
 
         //should not find method returning int
-        Assert.assertNull(h.invokeMethod(true, int.class, "returnsInteger"));
-        Assert.assertNull(h.invokeMethod(true, Integer.class, "returnsPrimitiveInt"));
+        Assert.assertNull(h.invokeMethod(false, int.class, "returnsInteger"));
+        Assert.assertNull(h.invokeMethod(false, Integer.class, "returnsPrimitiveInt"));
     }
 
     @Test
@@ -78,23 +78,23 @@ public class ReflectionHelperTest {
 
     @Test
     public void findMethodsNotStrict() {
-        Assert.assertFalse("Primitive int type", h.findMethods(Integer.class, "returnsPrimitiveInt", false).isEmpty());
-        Assert.assertFalse("Class Integer type", h.findMethods(int.class, "returnsInteger", false).isEmpty());
+        Assert.assertFalse("Primitive int type", h.findMethods(Integer.class, "returnsPrimitiveInt", true).isEmpty());
+        Assert.assertFalse("Class Integer type", h.findMethods(int.class, "returnsInteger", true).isEmpty());
     }
 
     @Test
     public void findMethod() {
-        Assert.assertTrue(h.findMethod(int.class, "returnsPrimitiveInt", true).isPresent());
-        Assert.assertFalse(h.findMethod(Integer.class, "returnsPrimitiveInt", true).isPresent());
-        Assert.assertTrue(h.findMethod(Integer.class, "returnsPrimitiveInt", false).isPresent());
+        Assert.assertTrue(h.findMethod(int.class, "returnsPrimitiveInt", false).isPresent());
+        Assert.assertFalse(h.findMethod(Integer.class, "returnsPrimitiveInt", false).isPresent());
+        Assert.assertTrue(h.findMethod(Integer.class, "returnsPrimitiveInt", true).isPresent());
 
-        Assert.assertTrue(h.findMethod(Integer.class, "returnsInteger", true).isPresent());
-        Assert.assertFalse(h.findMethod(int.class, "returnsInteger", true).isPresent());
-        Assert.assertTrue(h.findMethod(int.class, "returnsInteger", false).isPresent());
+        Assert.assertTrue(h.findMethod(Integer.class, "returnsInteger", false).isPresent());
+        Assert.assertFalse(h.findMethod(int.class, "returnsInteger", false).isPresent());
+        Assert.assertTrue(h.findMethod(int.class, "returnsInteger", true).isPresent());
 
-        Assert.assertTrue(h.findMethod(void.class, "noReturn", true).isPresent());
-        Assert.assertFalse(h.findMethod(Void.class, "noReturn", true).isPresent());
-        Assert.assertTrue(h.findMethod(Void.class, "noReturn", false).isPresent());
+        Assert.assertTrue(h.findMethod(void.class, "noReturn", false).isPresent());
+        Assert.assertFalse(h.findMethod(Void.class, "noReturn", false).isPresent());
+        Assert.assertTrue(h.findMethod(Void.class, "noReturn", true).isPresent());
 
     }
 

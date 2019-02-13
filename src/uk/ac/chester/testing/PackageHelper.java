@@ -1,9 +1,10 @@
 package uk.ac.chester.testing;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-public class PackageHelper {
+class PackageHelper {
 
     private static String[] ignoredPackages = {
             "com.intellij",
@@ -27,7 +28,7 @@ public class PackageHelper {
 
 
     /**
-     *
+     * find all classes matching a given name
      * @param name the name (not qualified) of the class to find
      * @return all classes matching that name
      */
@@ -39,16 +40,39 @@ public class PackageHelper {
             String packageName = p.getName();
             if (!isIgnoredPackage(packageName)) {
                 String fullyQualifiedClassName = packageName + "." + name;
-                try {
-                Class aClass = Class.forName(fullyQualifiedClassName);
-                classes.add(aClass);
-                } catch (ClassNotFoundException e) {
-                    //Empty catch blocks are usually a bad idea,
-                    //but we really don't need to do anything here!
+                Optional<Class> foundclass = classForName(fullyQualifiedClassName);
+                if (foundclass.isPresent()){
+                    classes.add(foundclass.get());
                 }
             }
         }
         return classes;
+    }
+
+
+    /**
+     * finds a named class in a specific package
+     * @param className the name of the class to find
+     * @param packageName the name of the package to look in
+     * @return An Optional containing the class, if found
+     */
+    static Optional<Class> findClass(String className, String packageName) {
+        String fullyQualifiedClassName = packageName + "." + className;
+        return classForName(fullyQualifiedClassName);
+    }
+
+
+    /**
+     * finds a class given it's fully qualified name
+     * @param fullyQualifiedName fully qualified class name, e.g. com.example.Widget
+     * @return An Optional containing the class, if found
+     */
+    private static Optional<Class> classForName(String fullyQualifiedName) {
+        try {
+            return Optional.of(Class.forName(fullyQualifiedName));
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
+        }
     }
 
 

@@ -8,7 +8,7 @@ import uk.ac.chester.testing.MethodTestEventHandlerEN;
 
 
 /**
- * The tests in the class should FAIL - it's designed to verify expected failures
+ * The tests in the class should FAIL - it's designed to verify expected failures occur and appropriate error messages are displayed
  */
 public class MethodTesterValidator {
 
@@ -36,7 +36,7 @@ public class MethodTesterValidator {
     @Test
     public void strictReturnType() {
         MethodTester<Integer> tester = new MethodTester<>(TestClass.class,int.class,"returnsInteger",new MethodTestEventHandlerEN());
-        tester.testStrict();
+        tester.testForExactReturnType();
     }
 
 

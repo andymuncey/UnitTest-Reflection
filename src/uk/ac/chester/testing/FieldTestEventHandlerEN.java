@@ -2,6 +2,9 @@ package uk.ac.chester.testing;
 
 import org.junit.Assert;
 
+/**
+ * English language implementation of FieldTester.FieldsTestEventHandler
+ */
 public class FieldTestEventHandlerEN implements FieldTester.FieldsTestEventHandler {
 
     @Override
