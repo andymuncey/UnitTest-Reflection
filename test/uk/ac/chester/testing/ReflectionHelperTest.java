@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.util.Optional;
+
 public class ReflectionHelperTest {
 
     private ReflectionHelper h;
@@ -109,6 +112,18 @@ public class ReflectionHelperTest {
 
     @Test
     public void methodsWithSignature() {
+    }
+
+
+
+    @Test
+    public void constructorAutoBoxing(){
+
+        Optional<Constructor> c = h.constructorForParamTypes(true,false,true,int.class);
+        Assert.assertTrue(c.isPresent());
+
+        Optional<Constructor> nonExistentC = h.constructorForArgTypes(true,false,true, Integer.class);
+        Assert.assertFalse(nonExistentC.isPresent());
     }
 
 
