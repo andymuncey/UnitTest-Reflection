@@ -23,7 +23,7 @@ public class ConstructorTestEventHandlerEN implements ConstructorTester.Construc
     }
 
     @Override
-    public void wrongAccessModifier(ExecutableTester.AccessModifier actual, ExecutableTester.AccessModifier required) {
+    public void wrongAccessModifier(MemberTester.AccessModifier actual, MemberTester.AccessModifier required) {
         Assert.fail("A constructor was found with the correct parameters, but the access modifier ("+ actual.toString()+") was not as required ("+required.toString()+")");
     }
 

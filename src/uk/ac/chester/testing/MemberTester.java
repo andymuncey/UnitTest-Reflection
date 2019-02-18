@@ -4,7 +4,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-public interface ExecutableTester {
+public interface MemberTester {
 
     /**
      * Indicates whether a variable name is valid as per the conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
@@ -51,7 +51,7 @@ public interface ExecutableTester {
      * @param member a class member such as a field, method or constructor
      * @return An AccessModifier enum value
      */
-    default AccessModifier accessModifier(Member member){
+    static AccessModifier accessModifier(Member member){
         if (Modifier.isPublic(member.getModifiers())){
             return AccessModifier.PUBLIC;
         }
@@ -90,5 +90,6 @@ public interface ExecutableTester {
                 return "package-private (i.e. no modifier)";
             }
         };
+
     }
 }
