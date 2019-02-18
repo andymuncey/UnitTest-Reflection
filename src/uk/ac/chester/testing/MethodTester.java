@@ -4,11 +4,10 @@ package uk.ac.chester.testing;
  * Tests methods which may not be implemented in a given class.
  * Known issues:
  *  * Passing an array as the only argument to the testConstructor method is ambiguous as it could be inferred as an array object or varargs
- *  * When using the testConstructor() method to testConstructor a method that returns a primitive type will result in a object type being
- *    returned which has to be cast as a primitive in order to be used in an assertion
+ *
  * @param <T> return type of the method that is being tested
  */
-public class MethodTester<T> implements ExecutableTester {
+public class MethodTester<T> implements MemberTester {
 
     private ReflectionHelper helper;
     private String methodName;
