@@ -25,32 +25,32 @@ public class ConstructorTesterValidator {
 
     @Test
     public void testIncorrectParameters() {
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC,"str1", "Str2");
+        t.testConstructor(AccessModifier.PUBLIC,"str1", "Str2");
     }
 
     @Test
     public void testWrongOrderParameters() {
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC,"str1", 4);
+        t.testConstructor(AccessModifier.PUBLIC,"str1", 4);
     }
 
     @Test
     public void testUnconventionalParamNames(){
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC, 3.2);
+        t.testConstructor(AccessModifier.PUBLIC, 3.2);
     }
 
     @Test
     public void testWrongAccessModifierMethodIsPrivate(){
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC,'s', "Hello", 's');
+        t.testConstructor(AccessModifier.PUBLIC,'s', "Hello", 's');
     }
 
     @Test
     public void testWrongAccessModifierMethodIsPublic(){
-        t.testConstructor(MemberTester.AccessModifier.PRIVATE,4, "str");
+        t.testConstructor(AccessModifier.PRIVATE,4, "str");
     }
 
     @Test
     public void testExceptionThrowingConstructor(){
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC, 3.2F);
+        t.testConstructor(AccessModifier.PUBLIC, 3.2F);
     }
 
     //endregion
@@ -63,7 +63,7 @@ public class ConstructorTesterValidator {
 
     @Test
     public void rightOrderParameters(){
-        t.testConstructor(MemberTester.AccessModifier.PUBLIC,4, "str");
+        t.testConstructor(AccessModifier.PUBLIC,4, "str");
     }
 
 

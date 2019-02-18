@@ -7,7 +7,7 @@ package uk.ac.chester.testing;
  *
  * @param <T> return type of the method that is being tested
  */
-public class MethodTester<T> implements MemberTester {
+public class MethodTester<T> extends Tester {
 
     private ReflectionHelper helper;
     private String methodName;
@@ -142,7 +142,7 @@ public class MethodTester<T> implements MemberTester {
         //found method
         String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
         for (String paramName: paramNames){
-            if (!validVariableName(paramName)){
+            if (!getConventionChecker().validVariableName(paramName)){
                 handler.paramNameUnconventional(methodName, paramName);
             }
         }

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-class PackageHelper {
+public class PackageHelper {
 
     private static String[] ignoredPackages = {
             "com.intellij",
@@ -33,7 +33,7 @@ class PackageHelper {
      * @param name the name (not qualified) of the class to find
      * @return all classes matching that name
      */
-    static Set<Class> findClasses(String name) {
+    public static Set<Class> findClasses(String name) {
 
         Set<Class> classes = new HashSet<Class>();
 
@@ -57,7 +57,7 @@ class PackageHelper {
      * @param packageName the name of the package to look in
      * @return An Optional containing the class, if found
      */
-    static Optional<Class> findClass(String className, String packageName) {
+    public static Optional<Class> findClass(String className, String packageName) {
         String fullyQualifiedClassName = packageName + "." + className;
         return classForName(fullyQualifiedClassName);
     }

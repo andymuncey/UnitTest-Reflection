@@ -35,4 +35,8 @@ public class FieldTestEventHandlerEN implements FieldTester.FieldsTestEventHandl
         Assert.fail("The field '" + fieldName + "' should be of type " + requiredType.getSimpleName() + ", however, it is declared as " + actualType.getSimpleName());
     }
 
+    @Override
+    public void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier) {
+        Assert.fail("The field '" + name + "' should be declared as " +desiredModifier+ " but is currently declared as " + actualModifier +".");
+    }
 }

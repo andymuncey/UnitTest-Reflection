@@ -4,11 +4,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-public class FieldTester<T> implements MemberTester {
+public class FieldTester<T> extends Tester {
 
     private FieldsTestEventHandler handler;
     private Set<Field> fields;
-
 
     public FieldTester(Class<T> theClass, FieldsTestEventHandler handler){
         ReflectionHelper helper = new ReflectionHelper(theClass);
@@ -18,8 +17,7 @@ public class FieldTester<T> implements MemberTester {
         fields = allFields;
     }
 
-
-    public void testSpecificField(String name, Class desiredClass, boolean allowAutoboxing){
+    public void testField(AccessModifier desiredModifier, String name, Class desiredClass, boolean allowAutoboxing){
 
         for (Field field : fields){
             if (field.getName().equals(name)){
@@ -33,6 +31,12 @@ public class FieldTester<T> implements MemberTester {
                         handler.fieldFoundButNotCorrectType(name,desiredClass,actualClass);
                     }
                 }
+                //check correct access modifier
+                AccessModifier actualModifier = AccessModifier.accessModifier(field);
+                if (!actualModifier.equals(desiredModifier)){
+                    handler.fieldHasIncorrectModifier(name,desiredModifier,actualModifier );
+                }
+
                 return;
             }
         }
@@ -80,11 +84,11 @@ public class FieldTester<T> implements MemberTester {
         for (Field field: fields){
             int modifiers = field.getModifiers();
             if (Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers)) {
-                if (!this.validVariableName(field.getName())) {
+                if (!getConventionChecker().validVariableName(field.getName())) {
                     handler.fieldNameUnconventional(field.getName(), false);
                 }
             } else if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
-                if (!this.validClassConstantName(field.getName())) {
+                if (!getConventionChecker().validClassConstantName(field.getName())) {
                     handler.fieldNameUnconventional(field.getName(), true);
                 }
             }
@@ -124,6 +128,14 @@ public class FieldTester<T> implements MemberTester {
          * @param actualType the actual type
          */
         void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType);
+
+        /**
+         * Indicates that a field does not have the expected access modifier
+         * @param name the name of the field
+         * @param desiredModifier the expected modifier
+         * @param actualModifier the actual modifier
+         */
+        void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier);
     }
 
 }

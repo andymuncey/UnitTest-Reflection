@@ -10,7 +10,7 @@ import java.util.Optional;
  *   returned which has to be cast as a primitive in order to be used in an assertion
  * @param <T>
  */
-public class ConstructorTester<T> implements MemberTester {
+public class ConstructorTester<T> extends Tester {
 
     private ReflectionHelper helper;
     private ConstructorTestEventHandler constructorHandler;
@@ -19,6 +19,8 @@ public class ConstructorTester<T> implements MemberTester {
         helper = new ReflectionHelper(theClass);
         this.constructorHandler = constructorHandler;
     }
+
+
 
     /**
      * Tests the following:
@@ -81,7 +83,7 @@ public class ConstructorTester<T> implements MemberTester {
 
 
     private void checkModifier(AccessModifier modifier, Constructor c) {
-        AccessModifier actualModifier = MemberTester.accessModifier(c);
+        AccessModifier actualModifier = AccessModifier.accessModifier(c);
         if (!modifier.equals(actualModifier)) {
             constructorHandler.wrongAccessModifier(actualModifier, modifier);
         }
@@ -90,7 +92,7 @@ public class ConstructorTester<T> implements MemberTester {
     private void checkParameterNames(Constructor c) {
         String[] paramNames = ReflectionHelper.parameterNames(c);
         for (String name : paramNames) {
-            if (!validVariableName(name)) {
+            if (!getConventionChecker().validVariableName(name)) {
                 constructorHandler.paramNameUnconventional(name);
             }
         }

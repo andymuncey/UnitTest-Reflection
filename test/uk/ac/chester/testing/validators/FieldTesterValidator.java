@@ -1,9 +1,7 @@
 package uk.ac.chester.testing.validators;
 
 import org.junit.Test;
-import uk.ac.chester.testing.FieldTestEventHandlerEN;
-import uk.ac.chester.testing.FieldTester;
-import uk.ac.chester.testing.TestClass;
+import uk.ac.chester.testing.*;
 
 public class FieldTesterValidator {
 
@@ -46,7 +44,7 @@ public class FieldTesterValidator {
         };
         FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
         FieldTester t = new FieldTester<>(x.getClass(), handler);
-        t.testSpecificField("myString",int.class,true);
+        t.testField(AccessModifier.PRIVATE,"myString",int.class,true);
     }
 
 
@@ -57,7 +55,7 @@ public class FieldTesterValidator {
         };
         FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
         FieldTester t = new FieldTester<>(x.getClass(), handler);
-        t.testSpecificField("nonExistentField",String.class,true);
+        t.testField(AccessModifier.PRIVATE,"nonExistentField",String.class,true);
     }
 
 
@@ -71,8 +69,21 @@ public class FieldTesterValidator {
         };
         FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
         FieldTester t = new FieldTester<>(x.getClass(), handler);
-        t.testSpecificField("myInteger",int.class,false);
+        t.testField(AccessModifier.PRIVATE,"myInteger",int.class,false);
     }
+
+    @Test
+    public void testWrongAccessModifier(){
+        Object x = new Object(){
+            Integer myInteger;
+        };
+        FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
+        FieldTester t = new FieldTester<>(x.getClass(), handler);
+        t.testField(AccessModifier.PRIVATE,"myInteger",Integer.class,false);
+    }
+
+
+
     //end region
 
 
@@ -89,7 +100,7 @@ public class FieldTesterValidator {
         };
         FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
         FieldTester t = new FieldTester<>(x.getClass(), handler);
-        t.testSpecificField("myString",String.class,false);
+        t.testField(AccessModifier.PRIVATE,"myString",String.class,false);
     }
 
 
@@ -105,8 +116,8 @@ public class FieldTesterValidator {
         };
         FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
         FieldTester t = new FieldTester<>(x.getClass(), handler);
-        t.testSpecificField("myInteger",int.class,true);
-        t.testSpecificField("myInt",Integer.class,true);
+        t.testField(AccessModifier.PRIVATE,"myInteger",int.class,true);
+        t.testField(AccessModifier.PRIVATE,"myInt",Integer.class,true);
     }
 
 

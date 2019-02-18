@@ -12,20 +12,17 @@ import uk.ac.chester.testing.MethodTestEventHandlerEN;
  */
 public class MethodTesterValidator {
 
-
     @Test
     public void nonExistentMethod() {
         MethodTester<Void> tester = new MethodTester<>(TestClass.class, void.class, "nonExistentMethod", new MethodTestEventHandlerEN());
         Assert.assertNull(tester.test());
     }
 
-
     @Test
     public void wrongCaseForMethodName() {
         MethodTester<Void> tester = new MethodTester<>(TestClass.class, void.class, "RETURNSINTEGER", new MethodTestEventHandlerEN());
         tester.test();
     }
-
 
     @Test
     public void wrongReturnType() {
@@ -38,7 +35,6 @@ public class MethodTesterValidator {
         MethodTester<Integer> tester = new MethodTester<>(TestClass.class,int.class,"returnsInteger",new MethodTestEventHandlerEN());
         tester.testForExactReturnType();
     }
-
 
     @Test
     public void wrongParams(){
@@ -67,10 +63,7 @@ public class MethodTesterValidator {
     @Test
     public void paramConvention(){
         MethodTester<Void> tester = new MethodTester<>(TestClass.class, void.class, "paramNameNotLowerCamelCase", new MethodTestEventHandlerEN());
-        tester.test(3); //should indicate the the parameter doesn't follow convention
+        tester.test(3); //should indicate the the parameter doesn't follow naming convention
     }
-
-
-
 
 }

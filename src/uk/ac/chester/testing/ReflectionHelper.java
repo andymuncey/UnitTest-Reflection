@@ -315,7 +315,8 @@ public class ReflectionHelper {
      * Finds a constructor matching specified criteria
      * @param includeNonPublic include constructors not marked as public
      * @param allowAutoboxing set to false if the parameter types must match exactly or true if primitive and boxed types can be used interchangeably
-     * @param matchParamOrder set to true if the order of parameters in the constructor must match the order they are passed into this method
+     * @param matchParamOrder set to true if the order of parameters in the constructor must match the order they are passed into this method.
+     *                        Note that if this is set to false, the first constructor with matching parameters would be returned, even if there is a better match
      * @param params the type of params the constructor should take
      * @return An Optional containing a matching constructor, if found
      */
