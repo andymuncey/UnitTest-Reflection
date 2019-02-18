@@ -25,4 +25,14 @@ public class FieldTestEventHandlerEN implements FieldTester.FieldsTestEventHandl
                 "if it's a class constant, then you should add the final keyword");
     }
 
+    @Override
+    public void fieldNotFound(String name) {
+        Assert.fail("A field named '" + name +"' is expected, but not found");
+    }
+
+    @Override
+    public void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType) {
+        Assert.fail("The field '" + fieldName + "' should be of type " + requiredType.getSimpleName() + ", however, it is declared as " + actualType.getSimpleName());
+    }
+
 }

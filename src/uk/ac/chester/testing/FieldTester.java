@@ -4,58 +4,59 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-public class FieldTester<T> implements ExecutableTester {
+public class FieldTester<T> implements MemberTester {
 
-    private ReflectionHelper helper;
-    private FieldsTestEventHandler fieldsHandler;
+    private FieldsTestEventHandler handler;
+    private Set<Field> fields;
 
-    public FieldTester(Class<T> theClass, FieldsTestEventHandler fieldsHandler){
 
-        helper = new ReflectionHelper(theClass);
-        this.fieldsHandler = fieldsHandler;
+    public FieldTester(Class<T> theClass, FieldsTestEventHandler handler){
+        ReflectionHelper helper = new ReflectionHelper(theClass);
+        this.handler = handler;
+        Set<Field> allFields = helper.fields();
+        allFields.removeIf(Field::isSynthetic);
+        fields = allFields;
     }
 
+
+    public void testSpecificField(String name, Class desiredClass, boolean allowAutoboxing){
+
+        for (Field field : fields){
+            if (field.getName().equals(name)){
+                Class actualClass = field.getType(); //careful not to use getClass() here (which will be Field!)
+                if (allowAutoboxing) {
+                    if (!ReflectionHelper.equivalentType(actualClass,desiredClass)){
+                        handler.fieldFoundButNotCorrectType(name,desiredClass,actualClass);
+                    }
+                } else {
+                    if (!actualClass.equals(desiredClass)){
+                        handler.fieldFoundButNotCorrectType(name,desiredClass,actualClass);
+                    }
+                }
+                return;
+            }
+        }
+        handler.fieldNotFound(name);
+    }
+
+
     /*
-    Run all tests against the fields
+    Run all tests against all fields
      */
     public void testFields(){
-        testFieldsArePrivate();
-        testFieldNames();
-        testForStaticNonFinalFields();
+        checkNonStaticArePrivate();
+        checkStaticAreFinal();
+        checkNames();
     }
 
     /**
      * Tests that fields that are not static and are private
      */
-    private void testFieldsArePrivate() {
-        Set<Field> fields = helper.fields();
-        for (Field field: fields){
-            if (field.getName().startsWith("this$")){ //ignores anonymous inner class variable names created by Java
-                continue;
-            }
-            if (!Modifier.isStatic(field.getModifiers())) {
-                if (accessModifier(field) != AccessModifier.PRIVATE) {
-                    fieldsHandler.nonPrivateFieldFound(field.getName());
-                }
-            }
-        }
-    }
-
-    /**
-     * Tests that field names match Java naming conventions
-     */
-    private void testFieldNames() {
-        Set<Field> fields = helper.fields();
+    private void checkNonStaticArePrivate() {
         for (Field field: fields){
             int modifiers = field.getModifiers();
-            if (Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers)){
-                if (!this.validVariableName(field.getName())){
-                    fieldsHandler.fieldNameUnconventional(field.getName(),false);
-                }
-            } else if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)){
-                if (!this.validClassConstantName(field.getName())){
-                    fieldsHandler.fieldNameUnconventional(field.getName(),true);
-                }
+            if (!Modifier.isStatic(modifiers) && !Modifier.isPrivate(modifiers)) {
+                handler.nonPrivateFieldFound(field.getName());
             }
         }
     }
@@ -63,15 +64,33 @@ public class FieldTester<T> implements ExecutableTester {
     /**
      * Tests for the presence of static fields which are not declared as final
      */
-    private void testForStaticNonFinalFields() {
-        Set<Field> fields = helper.fields();
+    private void checkStaticAreFinal() {
         for (Field field: fields) {
             int modifiers = field.getModifiers();
-            if (Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)){
-                fieldsHandler.fieldStaticButNotFinal(field.getName());
+            if (Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
+                handler.fieldStaticButNotFinal(field.getName());
             }
         }
     }
+
+    /**
+     * Tests that field names match Java naming conventions
+     */
+    private void checkNames() {
+        for (Field field: fields){
+            int modifiers = field.getModifiers();
+            if (Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers)) {
+                if (!this.validVariableName(field.getName())) {
+                    handler.fieldNameUnconventional(field.getName(), false);
+                }
+            } else if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
+                if (!this.validClassConstantName(field.getName())) {
+                    handler.fieldNameUnconventional(field.getName(), true);
+                }
+            }
+        }
+    }
+
 
     public interface FieldsTestEventHandler {
         /**
@@ -91,6 +110,20 @@ public class FieldTester<T> implements ExecutableTester {
          * @param fieldName the name of the field
          */
         void fieldStaticButNotFinal(String fieldName);
+
+        /**
+         * No field found matching the specified name
+         * @param name the name of the field
+         */
+        void fieldNotFound(String name);
+
+        /**
+         * Indicates a fields has been found, but the type is not as expected
+         * @param fieldName the name of the field
+         * @param requiredType the expected type
+         * @param actualType the actual type
+         */
+        void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType);
     }
 
 }
