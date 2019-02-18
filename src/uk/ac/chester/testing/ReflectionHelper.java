@@ -311,35 +311,36 @@ public class ReflectionHelper {
 
     //region constructors
 
-
     /**
      * Finds a constructor matching specified criteria
      * @param includeNonPublic include constructors not marked as public
      * @param allowAutoboxing set to false if the parameter types must match exactly or true if primitive and boxed types can be used interchangeably
      * @param matchParamOrder set to true if the order of parameters in the constructor must match the order they are passed into this method
-     * @param args example arguments for the constructor to take (the types of which will be used to locate the constructor)
+     * @param params the type of params the constructor should take
      * @return An Optional containing a matching constructor, if found
      */
-    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Object... args ){
+    Optional<Constructor> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
+        Constructor[] constructorsArray = includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors();
 
-        Class[] desiredParamTypes = classesForArgs(args);
-        Constructor[] constructors = includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors();
+        Set<Constructor> constructors = new HashSet<>(Arrays.asList(constructorsArray));
+        constructors.removeIf(Constructor::isSynthetic);
 
         if (!matchParamOrder){
-            sortParamsTypesByName(desiredParamTypes);
+            sortParamsTypesByName(params);
         }
 
         for (Constructor c: constructors) {
-            if (desiredParamTypes.length == c.getParameterCount()){
+            if (params.length == c.getParameterCount()){
 
                 Class[] actualParamTypes = c.getParameterTypes();
                 if (!matchParamOrder){
                     sortParamsTypesByName(actualParamTypes);
                 }
                 boolean matchedParams = true;
-                for (int i = 0; i < desiredParamTypes.length; i++) {
-                    if (desiredParamTypes[i] != (!allowAutoboxing ? actualParamTypes[i] : classEquivalents(actualParamTypes)[i] )){
+                for (int i = 0; i < params.length; i++) {
+                    if (params[i] != (allowAutoboxing ?  classEquivalents(actualParamTypes)[i] : actualParamTypes[i] )){
                         matchedParams = false;
+                        break;
                     }
                 }
                 if (matchedParams) {
@@ -348,6 +349,19 @@ public class ReflectionHelper {
             }
         }
         return Optional.empty();
+    }
+
+
+    /**
+     * Finds a constructor matching specified criteria
+     * @param includeNonPublic include constructors not marked as public
+     * @param matchParamOrder set to true if the order of parameters in the constructor must match the order they are passed into this method
+     * @param args example arguments for the constructor to take (the types of which will be used to locate the constructor)
+     * @return An Optional containing a matching constructor, if found
+     */
+    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean matchParamOrder, Object... args ){
+        Class[] desiredParamTypes = classesForArgs(args);
+        return constructorForParamTypes(includeNonPublic,true,matchParamOrder,desiredParamTypes);
     }
 
 
@@ -378,7 +392,7 @@ public class ReflectionHelper {
      * @param primitiveClass a primitive 'class' such as double.class
      * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
      */
-    private static Class classEquivalent(Class primitiveClass) {
+    static Class classEquivalent(Class primitiveClass) {
         final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
         final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
@@ -403,6 +417,16 @@ public class ReflectionHelper {
             classClasses[i] = classEquivalent(primitiveClasses[i]);
         }
         return classClasses;
+    }
+
+    /**
+     * Determines if two types are the same
+     * @param classA
+     * @param classB
+     * @return true if types are equal, or one is the boxed equivalent of the other, false otherwise
+     */
+    static boolean equivalentType(Class classA, Class classB){
+            return classEquivalent(classA).equals(classEquivalent(classB));
     }
 
     //endregion
