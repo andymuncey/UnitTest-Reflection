@@ -27,7 +27,6 @@ public class PackageHelper {
         return false;
     }
 
-
     /**
      * find all classes matching a given name
      * @param name the name (not qualified) of the class to find
@@ -50,18 +49,16 @@ public class PackageHelper {
         return classes;
     }
 
-
     /**
      * finds a named class in a specific package
      * @param className the name of the class to find
      * @param packageName the name of the package to look in
      * @return An Optional containing the class, if found
      */
-    public static Optional<Class> findClass(String className, String packageName) {
+    static Optional<Class> findClass(String className, String packageName) {
         String fullyQualifiedClassName = packageName + "." + className;
         return classForName(fullyQualifiedClassName);
     }
-
 
     /**
      * finds a class given it's fully qualified name
@@ -75,6 +72,4 @@ public class PackageHelper {
             return Optional.empty();
         }
     }
-
-
 }

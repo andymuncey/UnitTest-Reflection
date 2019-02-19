@@ -1,5 +1,7 @@
 package uk.ac.chester.testing;
 
+import java.lang.reflect.Method;
+
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
@@ -16,7 +18,6 @@ public class MethodTester<T> extends Tester {
 
     /**
      * The type parameter should correlate to the class type of the methods return type (e.g. for a return type of int, specify Integer)
-     *
      * @param searchClass     the class in which the method should be written
      * @param returnTypeClass the class of the return type
      * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
@@ -29,7 +30,6 @@ public class MethodTester<T> extends Tester {
         this.returnTypeClass = returnTypeClass;
     }
 
-
     /**
      * Indicates if a method exists with the name corresponding to the one supplied when the class was initialised
      * @return true if found, else false
@@ -37,7 +37,6 @@ public class MethodTester<T> extends Tester {
     private boolean methodMatchingNameFound(){
         return !helper.findMethods(methodName,false).isEmpty();
     }
-
 
     /**
      * Indicates a method is found matching the name, but the case may not match, e.g. MyMethod() would find myMethod()
@@ -146,9 +145,9 @@ public class MethodTester<T> extends Tester {
                 handler.paramNameUnconventional(methodName, paramName);
             }
         }
-
         return true;
     }
+
 
     /**
      * Allows callbacks to indicate problems when attempting to testConstructor methods that do not exist
@@ -194,6 +193,4 @@ public class MethodTester<T> extends Tester {
          */
         void paramNameUnconventional(String methodName, String paramName);
     }
-
-
 }

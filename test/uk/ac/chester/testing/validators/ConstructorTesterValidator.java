@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.chester.testing.*;
+import uk.ac.chester.testing.handlers.ConstructorTestEventHandlerEN;
 
 public class ConstructorTesterValidator {
 
@@ -21,7 +22,6 @@ public class ConstructorTesterValidator {
     }
 
     //region Tests that should fail
-
 
     @Test
     public void testIncorrectParameters() {
@@ -54,8 +54,6 @@ public class ConstructorTesterValidator {
     }
 
     //endregion
-
-
 
 
 

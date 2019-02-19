@@ -30,7 +30,6 @@ public enum AccessModifier {
         }
     };
 
-
     /**
      * Returns our own type of access modifier so dependent classes don't need to import the reflection package
      * @param member a class member such as a field, method or constructor
@@ -48,5 +47,4 @@ public enum AccessModifier {
         }
         return AccessModifier.PACKAGE_PRIVATE;
     }
-
 }

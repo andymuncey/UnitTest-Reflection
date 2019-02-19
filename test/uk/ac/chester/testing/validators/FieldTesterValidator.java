@@ -2,40 +2,11 @@ package uk.ac.chester.testing.validators;
 
 import org.junit.Test;
 import uk.ac.chester.testing.*;
+import uk.ac.chester.testing.handlers.FieldTestEventHandlerEN;
 
 public class FieldTesterValidator {
 
-
-    //region failing tests
-
-    //These tests are meant to fail!
-
-    @Test
-    public void testPublicField() {
-        Object x = new Object(){
-            public String publicField;
-        };
-        FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
-        FieldTester t  = new FieldTester<>(x.getClass(), handler);
-        t.testFields();
-    }
-
-    @Test
-    public void testBadFieldName() {
-        Object x = new Object(){
-            private String MY_STRING;
-        };
-        FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
-        FieldTester t  = new FieldTester<>(x.getClass(),  handler);
-        t.testFields();
-    }
-
-    @Test
-    public void testFieldStaticButNotFinal() {
-        FieldTestEventHandlerEN handler = new FieldTestEventHandlerEN();
-        FieldTester t  = new FieldTester<>(TestClass.class,  handler);
-        t.testFields();
-    }
+    //region failing tests - These tests are meant to fail!
 
     @Test
     public void testFieldType(){
@@ -81,14 +52,10 @@ public class FieldTesterValidator {
         FieldTester t = new FieldTester<>(x.getClass(), handler);
         t.testField(AccessModifier.PRIVATE,"myInteger",Integer.class,false);
     }
-
-
-
     //end region
 
 
     //region passing tests
-
 
     /**
      * Tests that a field exists with the name myString

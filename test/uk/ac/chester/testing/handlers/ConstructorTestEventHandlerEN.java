@@ -1,6 +1,9 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.handlers;
 
 import org.junit.Assert;
+import uk.ac.chester.testing.AccessModifier;
+import uk.ac.chester.testing.ClassDescriber;
+import uk.ac.chester.testing.ConstructorTester;
 
 /**
  * English language implementation of ConstructorTester.ConstructorTestEventHandler
@@ -9,7 +12,13 @@ public class ConstructorTestEventHandlerEN implements ConstructorTester.Construc
 
     @Override
     public void incorrectParameters(Class[] requiredParamTypes) {
-        Assert.fail("A constructor was found, but it has the wrong parameters, expected parameters are " + describe(requiredParamTypes));
+        String message = "A constructor was found";
+        if (requiredParamTypes.length > 0) {
+            message += ", but it has the wrong parameters, expected parameters are " + describe(requiredParamTypes);
+        } else {
+            message += ", but it has parameters, and a constructor with no parameters is expected";
+        }
+        Assert.fail(message);
     }
 
     @Override
@@ -24,7 +33,7 @@ public class ConstructorTestEventHandlerEN implements ConstructorTester.Construc
 
     @Override
     public void wrongAccessModifier(AccessModifier actual, AccessModifier required) {
-        Assert.fail("A constructor was found with the correct parameters, but the access modifier ("+ actual.toString()+") was not as required ("+required.toString()+")");
+        Assert.fail("A constructor was found with the correct parameters (or no parameters if this is required), but the access modifier ("+ actual.toString()+") was not as required ("+required.toString()+")");
     }
 
     @Override
@@ -37,5 +46,4 @@ public class ConstructorTestEventHandlerEN implements ConstructorTester.Construc
         String message = messageBuilder.toString().trim()+".";
         Assert.fail(message + " Error details: " + e.getMessage());
     }
-
 }

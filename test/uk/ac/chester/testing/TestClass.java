@@ -17,6 +17,12 @@ public class TestClass {
 
     public static String nonFinal;
 
+    private int regularIvar;
+    public static final int REGULAR_CONSTANT = 3;
+
+
+    private void BadNamedMethod(){}
+
 
     //bad param name
     public TestClass(double A){}

@@ -1,6 +1,8 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.handlers;
 
 import org.junit.Assert;
+import uk.ac.chester.testing.ClassDescriber;
+import uk.ac.chester.testing.MethodTester;
 
 /**
  * An English language implementation of the MethodTester.MethodTestEventHandler interface
@@ -38,6 +40,4 @@ public class MethodTestEventHandlerEN implements MethodTester.MethodTestEventHan
         Assert.fail("Method \"" + methodName + "\" found, but the parameter: \""+ paramName+ "\" does not meet the convention for naming Java parameters " +
                 "(e.g. lowerCamelCase, and longer than a single character in most cases)");
     }
-
-
 }

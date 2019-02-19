@@ -1,4 +1,4 @@
-package uk.ac.chester;
+package uk.ac.chester.tasks;
 
 
 //file used for generating figures for written work
@@ -10,7 +10,7 @@ public class Tasks {
      * @param numbers
      * @return the sum of all integers in the array
      */
-    int arraySum(int[] numbers){
+    public int arraySum(int[] numbers){
         int total = 0;
         for (double number: numbers)
         {
@@ -24,7 +24,7 @@ public class Tasks {
      * @param temp temperature (F)
      * @return temperature (K)
      */
-    double fahrenheitToKelvin(double temp){
+    public double fahrenheitToKelvin(double temp){
         return (temp - 32) * 5/9 + 273.15;
     }
 

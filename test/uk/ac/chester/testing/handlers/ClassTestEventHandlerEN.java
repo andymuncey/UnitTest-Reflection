@@ -1,14 +1,19 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.handlers;
 
 import org.junit.Assert;
+import uk.ac.chester.testing.ClassTester;
 
-/**
- * English language implementation of FieldTester.FieldsTestEventHandler
- */
-public class FieldTestEventHandlerEN implements FieldTester.FieldsTestEventHandler {
+public class ClassTestEventHandlerEN implements ClassTester.ClassTestEventHandler {
 
     @Override
-    public void nonPrivateFieldFound(String fieldName) {
+    public void methodNameUnconventional(String name) {
+        String message = "Methods '" +name+ "' does not follow Java naming conventions. " +
+                "It should be named using lowerCamelCase, and be a verb";
+        Assert.fail(message);
+    }
+
+    @Override
+    public void fieldNotPrivate(String fieldName) {
         Assert.fail("Field '" + fieldName + "' is not private. For proper encapsulation fields should normally be private with an accessor and mutator being used for each field as required.");
     }
 
@@ -23,20 +28,5 @@ public class FieldTestEventHandlerEN implements FieldTester.FieldsTestEventHandl
         Assert.fail("The field '" + fieldName + "' is declared as static, but not final. It is highly unusual to have a class variable like this. " +
                 "If the value should belong to an instance of the class, you should remove the static keyword, " +
                 "if it's a class constant, then you should add the final keyword");
-    }
-
-    @Override
-    public void fieldNotFound(String name) {
-        Assert.fail("A field named '" + name +"' is expected, but not found");
-    }
-
-    @Override
-    public void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType) {
-        Assert.fail("The field '" + fieldName + "' should be of type " + requiredType.getSimpleName() + ", however, it is declared as " + actualType.getSimpleName());
-    }
-
-    @Override
-    public void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier) {
-        Assert.fail("The field '" + name + "' should be declared as " +desiredModifier+ " but is currently declared as " + actualModifier +".");
     }
 }

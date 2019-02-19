@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.chester.testing.MethodTester;
 import uk.ac.chester.testing.TestClass;
-import uk.ac.chester.testing.MethodTestEventHandlerEN;
+import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 
 /**

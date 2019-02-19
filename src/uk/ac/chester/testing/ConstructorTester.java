@@ -5,22 +5,29 @@ import java.util.Optional;
 
 
 /**
- * Known issues
+ * A class to test Constructors for a class
+ * <p>
+ * Known issue:
  * * When using the testConstructor() method to testConstructor a method that returns a primitive type will result in a object type being
- *   returned which has to be cast as a primitive in order to be used in an assertion
- * @param <T>
+ * * returned which has to be cast as a primitive in order to be used in an assertion
  */
 public class ConstructorTester<T> extends Tester {
 
     private ReflectionHelper helper;
     private ConstructorTestEventHandler constructorHandler;
+    private Class<T> theClass;
 
+    /**
+     * Creates a ConstructorTester for the provided class
+     *
+     * @param theClass           the class to test the constructors of
+     * @param constructorHandler An implementation of ConstructorTestEventHandler, likely containing unit test assertions
+     */
     public ConstructorTester(Class<T> theClass, ConstructorTestEventHandler constructorHandler) {
+        this.theClass = theClass;
         helper = new ReflectionHelper(theClass);
         this.constructorHandler = constructorHandler;
     }
-
-
 
     /**
      * Tests the following:
@@ -34,7 +41,7 @@ public class ConstructorTester<T> extends Tester {
      * @param constructorArgs arguments to be passed to the constructor
      * @return an object instantiated using the arguments, or null if this is not possible
      */
-    public T testConstructor(AccessModifier modifier,  Object... constructorArgs) {
+    public T testConstructor(AccessModifier modifier, Object... constructorArgs) {
 
         if (checkExistence(constructorArgs)) {
             Optional<Constructor> possibleCtor = helper.constructorForArgTypes(true, true, constructorArgs);
@@ -65,7 +72,7 @@ public class ConstructorTester<T> extends Tester {
         return null;
     }
 
-    private boolean checkExistence(Object[] args ){
+    private boolean checkExistence(Object[] args) {
         if (!constructorWithArgsExists(false, args)) {
             //doesn't exist with the parameters in any order
             constructorHandler.incorrectParameters(ReflectionHelper.classesForArgs(args));
@@ -80,7 +87,6 @@ public class ConstructorTester<T> extends Tester {
         }
         return true;
     }
-
 
     private void checkModifier(AccessModifier modifier, Constructor c) {
         AccessModifier actualModifier = AccessModifier.accessModifier(c);
@@ -97,7 +103,6 @@ public class ConstructorTester<T> extends Tester {
             }
         }
     }
-
 
     private boolean constructorWithArgsExists(boolean matchParamOrder, Object... args) {
         return helper.constructorForArgTypes(true, matchParamOrder, args).isPresent();
@@ -142,8 +147,5 @@ public class ConstructorTester<T> extends Tester {
          * @param args the arguments used when construction fails
          */
         void constructionFails(Throwable e, Object... args);
-
     }
-
-
 }

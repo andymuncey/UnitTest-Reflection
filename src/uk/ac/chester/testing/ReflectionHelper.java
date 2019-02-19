@@ -32,7 +32,6 @@ public class ReflectionHelper {
     }
     //endregion
 
-
     //region fields
 
     /**
@@ -211,22 +210,6 @@ public class ReflectionHelper {
         return methods;
     }
 
-
-    /**
-     * Sorts an array of Class by canonical name (i.e. including package name)
-     * @param paramTypes an array of types
-     */
-    private static void sortParamsTypesByName(Class<?>[] paramTypes){
-        Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
-            @Override
-            public int compare(Class<?> o1, Class<?> o2) {
-                return o1.getCanonicalName().compareTo(o2.getCanonicalName());
-            }
-        };
-        Arrays.sort(paramTypes, comparator);
-    }
-
-
     /**
      * Finds a method with a given return type, name and parameter types.
      * Will return methods where primitive types are substituted for box types and vice versa
@@ -241,7 +224,6 @@ public class ReflectionHelper {
         return findMethod(returnType, name, true, paramTypes);
 
     }
-
 
     /**
      * Finds the parameter names for a method
@@ -258,23 +240,6 @@ public class ReflectionHelper {
         }
         return new String[0];
     }
-
-
-    /**
-     * Returns the parameter names for an executable, such as a method or constructor
-     * <important>Requires the compiler -parameters switch to be set</important>
-     * @param executable e.g. a method or constructor
-     * @return an array of Strings with the parameter names
-     */
-    static String[] parameterNames (Executable executable){
-        Parameter[] params = executable.getParameters();
-        String[] paramNames = new String[params.length];
-        for (int i = 0; i < params.length; i++) {
-            paramNames[i] = params[i].getName();
-        }
-        return paramNames;
-    }
-
 
     /**
      * Finds a method matching specified criteria
@@ -305,7 +270,6 @@ public class ReflectionHelper {
         }
         return Optional.empty();
     }
-
 
     //endregion
 
@@ -352,7 +316,6 @@ public class ReflectionHelper {
         return Optional.empty();
     }
 
-
     /**
      * Finds a constructor matching specified criteria
      * @param includeNonPublic include constructors not marked as public
@@ -364,14 +327,9 @@ public class ReflectionHelper {
         Class[] desiredParamTypes = classesForArgs(args);
         return constructorForParamTypes(includeNonPublic,true,matchParamOrder,desiredParamTypes);
     }
-
-
-
     //endregion
 
-
-
-    //region conversions
+    //region helpers and conversions
 
     /**
      * given an array of arguments (values) returns an array of the same size representing the types (as classes) of each argument
@@ -384,7 +342,6 @@ public class ReflectionHelper {
         Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
         return params.toArray(new Class[args.length]);
     }
-
 
     /**
      * Given the 'class' of a primitive type (e.g. int.class returns the class of the corresponding boxed type, e.g. Integer.class)
@@ -404,7 +361,6 @@ public class ReflectionHelper {
         }
         return primitiveClass; //not actually a primitive
     }
-
 
     /**
      * Returns an array with the results of calling {@link #classEquivalent} on each item
@@ -430,7 +386,34 @@ public class ReflectionHelper {
             return classEquivalent(classA).equals(classEquivalent(classB));
     }
 
+    /**
+     * Returns the parameter names for an executable, such as a method or constructor
+     * <important>Requires the compiler -parameters switch to be set</important>
+     * @param executable e.g. a method or constructor
+     * @return an array of Strings with the parameter names
+     */
+    static String[] parameterNames (Executable executable){
+        Parameter[] params = executable.getParameters();
+        String[] paramNames = new String[params.length];
+        for (int i = 0; i < params.length; i++) {
+            paramNames[i] = params[i].getName();
+        }
+        return paramNames;
+    }
+
+    /**
+     * Sorts an array of Class by canonical name (i.e. including package name)
+     * @param paramTypes an array of types
+     */
+    private static void sortParamsTypesByName(Class<?>[] paramTypes){
+        Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
+            @Override
+            public int compare(Class<?> o1, Class<?> o2) {
+                return o1.getCanonicalName().compareTo(o2.getCanonicalName());
+            }
+        };
+        Arrays.sort(paramTypes, comparator);
+    }
+
     //endregion
-
-
 }

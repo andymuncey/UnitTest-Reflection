@@ -1,7 +1,6 @@
 package uk.ac.chester.testing;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 
 public class FieldTester<T> extends Tester {
@@ -9,6 +8,11 @@ public class FieldTester<T> extends Tester {
     private FieldsTestEventHandler handler;
     private Set<Field> fields;
 
+    /**
+     * Creates a FieldTester for a specified class
+     * @param theClass the class to test the fields in
+     * @param handler An implementation of FieldsTestEventHandler, likely containing unit test assertions
+     */
     public FieldTester(Class<T> theClass, FieldsTestEventHandler handler){
         ReflectionHelper helper = new ReflectionHelper(theClass);
         this.handler = handler;
@@ -17,6 +21,13 @@ public class FieldTester<T> extends Tester {
         fields = allFields;
     }
 
+    /**
+     * Tests a specific field
+     * @param desiredModifier the expected access modifier for the field
+     * @param name the name of the field to test
+     * @param desiredClass the type of the field
+     * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
+     */
     public void testField(AccessModifier desiredModifier, String name, Class desiredClass, boolean allowAutoboxing){
 
         for (Field field : fields){
@@ -43,77 +54,7 @@ public class FieldTester<T> extends Tester {
         handler.fieldNotFound(name);
     }
 
-
-    /*
-    Run all tests against all fields
-     */
-    public void testFields(){
-        checkNonStaticArePrivate();
-        checkStaticAreFinal();
-        checkNames();
-    }
-
-    /**
-     * Tests that fields that are not static and are private
-     */
-    private void checkNonStaticArePrivate() {
-        for (Field field: fields){
-            int modifiers = field.getModifiers();
-            if (!Modifier.isStatic(modifiers) && !Modifier.isPrivate(modifiers)) {
-                handler.nonPrivateFieldFound(field.getName());
-            }
-        }
-    }
-
-    /**
-     * Tests for the presence of static fields which are not declared as final
-     */
-    private void checkStaticAreFinal() {
-        for (Field field: fields) {
-            int modifiers = field.getModifiers();
-            if (Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
-                handler.fieldStaticButNotFinal(field.getName());
-            }
-        }
-    }
-
-    /**
-     * Tests that field names match Java naming conventions
-     */
-    private void checkNames() {
-        for (Field field: fields){
-            int modifiers = field.getModifiers();
-            if (Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers)) {
-                if (!getConventionChecker().validVariableName(field.getName())) {
-                    handler.fieldNameUnconventional(field.getName(), false);
-                }
-            } else if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
-                if (!getConventionChecker().validClassConstantName(field.getName())) {
-                    handler.fieldNameUnconventional(field.getName(), true);
-                }
-            }
-        }
-    }
-
-
     public interface FieldsTestEventHandler {
-        /**
-         *  Indicates when a non-static field is not declared as private
-         */
-        void nonPrivateFieldFound(String fieldName);
-
-        /**
-         * Indicates when a field doesn't follow the Java naming convention
-         * @param fieldName the name of the field
-         * @param isStatic whether the field is static
-         */
-        void fieldNameUnconventional(String fieldName, boolean isStatic);
-
-        /**
-         * Indicates a field has been found which is marked as static, but not final
-         * @param fieldName the name of the field
-         */
-        void fieldStaticButNotFinal(String fieldName);
 
         /**
          * No field found matching the specified name
@@ -137,5 +78,4 @@ public class FieldTester<T> extends Tester {
          */
         void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier);
     }
-
 }

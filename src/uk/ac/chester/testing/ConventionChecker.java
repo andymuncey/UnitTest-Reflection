@@ -16,6 +16,10 @@ public interface ConventionChecker {
         return validThrowAwayVarName || (atLeastTwoChars && startsWithLowerChar(name));
     }
 
+    default boolean validMethodName(String name){
+        return startsWithLowerChar(name) && name.length() >= 2;
+    }
+
     /**
      * Verifies that the String matches the convention for a class constant (i.e. UPPERCASE_WITH_UNDERSCORES)
      * As per the conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
