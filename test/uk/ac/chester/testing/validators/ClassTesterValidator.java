@@ -43,4 +43,29 @@ public class ClassTesterValidator {
         ClassTester t  = new ClassTester<>(x.getClass(),  handler);
         t.checkMethods();
     }
+
+
+    @Test
+    public void testMethodParamNameInvalid(){
+        Object x = new Object(){
+            private String someMethod(String BadName){return "hello";};
+        };
+        ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
+        ClassTester t  = new ClassTester<>(x.getClass(),  handler);
+        t.checkMethodParameterNames();
+    }
+
+
+    private class BadConstructorParamClass {
+        private BadConstructorParamClass(String BadConstructorParamName){ }
+    }
+    @Test
+    public void testConstructorParamName(){
+        ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
+        ClassTester t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
+        t.checkConstructorParameterNames();
+    }
+
+
+
 }

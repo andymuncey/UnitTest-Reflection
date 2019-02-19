@@ -1,8 +1,6 @@
 package uk.ac.chester.testing;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +11,7 @@ public class ClassTester<T> extends Tester {
     private ClassTestEventHandler handler;
     private Set<Field> fields;
     private Set<Method> methods;
+    private Set<Constructor> constructors;
 
     /**
      * Creates a ClassTester for a specified class
@@ -30,6 +29,10 @@ public class ClassTester<T> extends Tester {
         Set<Method> allMethods = new HashSet<>(Arrays.asList(theClass.getDeclaredMethods()));
         allMethods.removeIf(Method::isSynthetic);
         methods = allMethods;
+
+        Set<Constructor> allConstructors = new HashSet<>(Arrays.asList(theClass.getDeclaredConstructors()));
+        allConstructors.removeIf(Constructor::isSynthetic);
+        constructors = allConstructors;
     }
 
     /*
@@ -89,7 +92,6 @@ public class ClassTester<T> extends Tester {
      */
     public void checkMethods(){
 
-        Method[] methods = theClass.getDeclaredMethods();
         for (Method m: methods){
             String name = m.getName();
             if (!getConventionChecker().validMethodName(name)){
@@ -98,13 +100,48 @@ public class ClassTester<T> extends Tester {
         }
     }
 
+    /**
+     * Verifies that parameter names across all methods follow convention
+     */
+    public void checkMethodParameterNames(){
+        for (Method m: methods){
+            for (Parameter param : m.getParameters()){
+                String paramName = param.getName();
+                if (!getConventionChecker().validVariableName(paramName)) {
+                    handler.methodParameterNameUnconventional(paramName, m.getName());
+                }
+            }
+        }
+    }
+
+    /**
+     * Verifies that parameter names across all constructors follow convention
+     */
+    public void checkConstructorParameterNames(){
+        for (Constructor c: constructors){
+            for (Parameter param : c.getParameters()){
+                String paramName = param.getName();
+                if (!getConventionChecker().validVariableName(paramName)) {
+                    handler.constructorParameterNameUnconventional(paramName);
+                }
+            }
+        }
+    }
+
     public interface ClassTestEventHandler {
 
         /**
-         * This methods does not conform to the naming convention for Java methods
+         * Indicates this method does not conform to the naming convention for Java methods
          * @param name the name of the method
          */
         void methodNameUnconventional(String name);
+
+        /**
+         * Indicates that a parameter in a method doesn't fit adhere to convention
+         * @param paramName the parameter name
+         * @param methodName the method name
+         */
+        void methodParameterNameUnconventional(String paramName, String methodName);
 
         /**
          *  Indicates when a non-static field is not declared as private
@@ -124,5 +161,10 @@ public class ClassTester<T> extends Tester {
          */
         void fieldStaticButNotFinal(String fieldName);
 
+        /**
+         * Indicates a parameter for a constrictor doesn't follow the Java naming convention
+         * @param paramName the parameter
+         */
+        void constructorParameterNameUnconventional(String paramName);
     }
 }

@@ -17,7 +17,7 @@ public class TopDownValidator {
         Set<Class> classes = PackageHelper.findClasses(className);
 
         if (classes.isEmpty()) {
-            Assert.fail("No class named " + className + " found");
+            Assert.fail("No class named " + className + " found. Class names are case sensitive");
         }
 
         if (classes.size() > 1) {
@@ -31,6 +31,8 @@ public class TopDownValidator {
         ClassTester classTester = new ClassTester(aClass,new ClassTestEventHandlerEN());
         classTester.checkFields();
         classTester.checkMethods();
+        classTester.checkMethodParameterNames();
+        classTester.checkConstructorParameterNames();
 
         //construct it using no arg constructor
         ConstructorTester constructorTester = new ConstructorTester<>(aClass,new ConstructorTestEventHandlerEN());
