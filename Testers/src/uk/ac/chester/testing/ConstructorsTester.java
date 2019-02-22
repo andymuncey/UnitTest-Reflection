@@ -35,13 +35,13 @@ public class ConstructorsTester<T> extends Tester {
      * -That the object can be instantiated using the constructor
      *
      * @param modifier        an AccessModifier, or null to skip testing this
-     * @param constructorArgs arguments to be passed to the constructor
+     * @param args arguments to be passed to the constructor
      * @return an object instantiated using the arguments, or null if this is not possible
      */
-    public T test(AccessModifier modifier, Object... constructorArgs) {
+    public T test(AccessModifier modifier, Object... args) {
 
-        if (checkExistence(constructorArgs)) {
-            Optional<Constructor<T>> possibleCtor = helper.constructorForArgTypes(true, true, constructorArgs);
+        if (checkExistence(args)) {
+            Optional<Constructor<T>> possibleCtor = helper.constructorForArgTypes(true, true, args);
 
             if (possibleCtor.isPresent()) {
                 Constructor<T> c = possibleCtor.get();
@@ -53,16 +53,16 @@ public class ConstructorsTester<T> extends Tester {
                 checkParameterNames(c);
 
                 try {
-                    return c.newInstance(constructorArgs);
+                    return c.newInstance(args);
                 } catch (InstantiationException e) {
                     //could not instantiate - abstract class?
-                    handler.constructionFails(e, constructorArgs);
+                    handler.constructionFails(e, args);
                 } catch (IllegalAccessException e) {
                     //unable to access constructor, maybe private (shouldn't happen)
-                    handler.constructionFails(e, constructorArgs);
+                    handler.constructionFails(e, args);
                 } catch (InvocationTargetException e) {
                     //underlying constructor threw an exception
-                    handler.constructionFails(e.getCause(), constructorArgs);
+                    handler.constructionFails(e.getCause(), args);
                 }
             }
         }
