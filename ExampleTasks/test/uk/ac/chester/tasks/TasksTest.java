@@ -13,12 +13,12 @@ public class TasksTest {
     private Tasks tasks;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         tasks = new Tasks();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown()  {
         tasks = null;
     }
 
@@ -49,22 +49,22 @@ public class TasksTest {
     @Test
     public void arraySumReflection() {
 
-        MethodTester<Integer> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new MethodTestEventHandlerEN() );
+        MethodTester<Integer, Tasks> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new MethodTestEventHandlerEN() );
 
         int[] emptyArray = {};
         int resultWithEmpty = tester.test((Object)emptyArray);
         Assert.assertEquals("empty array",resultWithEmpty,0);
 
         int[] singleItemArray = {4};
-        int resultSingleItem = tester.test(singleItemArray); //Casting to object will avoid warning
+        int resultSingleItem = tester.test((Object)singleItemArray); //Casting to object will avoid warning
         Assert.assertEquals("single item array", 4,resultSingleItem);
 
         int[]multiItemArray = {3,6,8};
-        int resultMultiItem = tester.test(multiItemArray);
+        int resultMultiItem = tester.test((Object)multiItemArray);
         Assert.assertEquals("multi item array",17,resultMultiItem);
 
         int[]largerValuesArray = {951, 762, 60485};
-        int resultLarger = tester.test(largerValuesArray);
+        int resultLarger = tester.test((Object)largerValuesArray);
         Assert.assertEquals("larger values",62198, resultLarger);
     }
 
@@ -77,13 +77,13 @@ public class TasksTest {
         Assert.assertEquals(285.372, tasks.fahrenheitToKelvin(54.0),0.001);
 
         //Reflection based assertion with method helper class
-        MethodTester<Double> tester = new MethodTester<>(tasks.getClass(), double.class, "fahrenheitToKelvin", new MethodTestEventHandlerEN());
+        MethodTester<Double, Tasks> tester = new MethodTester<>(Tasks.class, double.class, "fahrenheitToKelvin", new MethodTestEventHandlerEN());
         Assert.assertEquals(285.372,tester.test(54.0),0.001);
     }
 
     @Test
     public void addTen(){
-        MethodTester<Integer> tester = new MethodTester<>(Tasks.class, int.class, "addTen", new MethodTestEventHandlerEN());
+        MethodTester<Integer, Tasks> tester = new MethodTester<>(Tasks.class, int.class, "addTen", new MethodTestEventHandlerEN());
         int result = tester.test(13); //needs to be stored or cast to int to avoid ambiguous overloads for the assertion
         Assert.assertEquals(23,result);
 
@@ -94,7 +94,7 @@ public class TasksTest {
 
     @Test
     public void reversedSentence(){
-        MethodTester<String> tester = new MethodTester<>(Tasks.class, String.class, "reversedSentence", new MethodTestEventHandlerEN());
+        MethodTester<String, Tasks> tester = new MethodTester<>(Tasks.class, String.class, "reversedSentence", new MethodTestEventHandlerEN());
         Assert.assertEquals("mat the on sat cat the", tester.test("the cat sat on the mat"));
     }
 

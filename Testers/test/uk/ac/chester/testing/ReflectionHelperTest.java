@@ -12,32 +12,22 @@ import java.util.Optional;
 
 public class ReflectionHelperTest {
 
-    private ReflectionHelper h;
+    private ReflectionHelper<TestClass> h;
 
     @Before
-    public void setUp() throws Exception {
-        h = new ReflectionHelper(TestClass.class);
+    public void setUp()  {
+        h = new ReflectionHelper<>(TestClass.class);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown()  {
         h = null;
-    }
-
-    @Test
-    public void createFromString() {
-
-        ReflectionHelper helper = ReflectionHelper.forClassName("java.lang.String");
-        Assert.assertNotNull(helper);
-
-        ReflectionHelper ownClassHelper = ReflectionHelper.forClassName("TestClass");
-        Assert.assertNotNull(ownClassHelper);
     }
 
     @Test
     public void invokeMethod() {
         Assert.assertEquals(1, (int) h.invokeMethod(int.class, "returnsPrimitiveInt"));
-        Assert.assertEquals(Integer.valueOf(1), (Integer) h.invokeMethod(Integer.class, "returnsInteger"));
+        Assert.assertEquals(Integer.valueOf(1), h.invokeMethod(Integer.class, "returnsInteger"));
     }
 
     @Test
@@ -56,7 +46,7 @@ public class ReflectionHelperTest {
         Assert.assertNotEquals(Void.class, void.class); //also a reminder
 
         Object[] args = {1, 5000000000L, 1.5F, 2.345, 'a', "text"};
-        Class[] actualTypes = h.classesForArgs(args);
+        Class[] actualTypes = ReflectionHelper.classesForArgs(args);
         Class[] expectedTypes = {Integer.class, Long.class, Float.class, Double.class, Character.class, String.class};
         Assert.assertArrayEquals(expectedTypes, actualTypes);
 
@@ -103,11 +93,9 @@ public class ReflectionHelperTest {
 
     @Test
     public void methodParamNames() {
-
     String[] paramNames = {"p0", "p1"};
     String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
     Assert.assertArrayEquals(message, paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class));
-
     }
 
     @Test
@@ -115,14 +103,13 @@ public class ReflectionHelperTest {
     }
 
 
-
     @Test
     public void constructorAutoBoxing(){
 
-        Optional<Constructor> c = h.constructorForParamTypes(true,false,true,int.class);
+        Optional<Constructor<TestClass>> c = h.constructorForParamTypes(true,false,true,int.class);
         Assert.assertTrue(c.isPresent());
 
-        Optional<Constructor> nonExistentC = h.constructorForArgTypes(true,false,true, Integer.class);
+        Optional<Constructor<TestClass>> nonExistentC = h.constructorForArgTypes(true,false,true, Integer.class);
         Assert.assertFalse(nonExistentC.isPresent());
     }
 

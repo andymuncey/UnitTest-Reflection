@@ -8,7 +8,7 @@ class Tester {
 
     private ConventionChecker conventionChecker = new ConventionChecker(){};
 
-    public ConventionChecker getConventionChecker() {
+    ConventionChecker getConventionChecker() {
         return conventionChecker;
     }
 

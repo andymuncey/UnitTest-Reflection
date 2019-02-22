@@ -3,34 +3,13 @@ package uk.ac.chester.testing;
 import java.lang.reflect.*;
 import java.util.*;
 
-public class ReflectionHelper {
+ class ReflectionHelper<C> {
 
-    final private Class<?> searchClass;
+    final private Class<C> searchClass;
 
-    //region constructors (for this class)
-    public ReflectionHelper(Object o) {
-        this(o.getClass());
-    }
-
-    public ReflectionHelper(Class searchClass) {
+    ReflectionHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
-
-    /**
-     * Returns a ReflectionHelper given a fully qualified class name
-     *
-     * @param name the fully qualified name of a class, e.g. java.lang.String
-     * @return a ReflectionHelper object for the named class, or null if the Class cannot be found
-     */
-    static ReflectionHelper forClassName(String name) {
-        try {
-            Class c = Class.forName(name);
-            return new ReflectionHelper(c);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-    //endregion
 
     //region fields
 
@@ -47,7 +26,6 @@ public class ReflectionHelper {
 
 
     //region method invocation
-
     /**
      * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with allowAutoboxing set to true
      */
@@ -87,7 +65,9 @@ public class ReflectionHelper {
                         Object classInstance = searchClass.getDeclaredConstructor().newInstance();
                         m.setAccessible(true); //allows testing of private method
                         Object result = m.invoke(classInstance, args);
-                        return (T) result;
+                        if (returnType.isInstance(result)){
+                            return returnType.cast(result);
+                        }
                     } catch (IllegalAccessException e) {
                         //method is not accessible (i.e. private etc.) - should not occur
                         System.err.println(e.getMessage());
@@ -284,17 +264,18 @@ public class ReflectionHelper {
      * @param params the type of params the constructor should take
      * @return An Optional containing a matching constructor, if found
      */
-    Optional<Constructor> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
-        Constructor[] constructorsArray = includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors();
+    Optional<Constructor<C>> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
+        @SuppressWarnings("unchecked") //cast declared constructors not of type, but must be given the class in which they appear
+        Constructor<C>[] constructorsArray = (Constructor<C>[]) (includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors());
 
-        Set<Constructor> constructors = new HashSet<>(Arrays.asList(constructorsArray));
+        Set<Constructor<C>> constructors = new HashSet<>(Arrays.asList(constructorsArray));
         constructors.removeIf(Constructor::isSynthetic);
 
         if (!matchParamOrder){
             sortParamsTypesByName(params);
         }
 
-        for (Constructor c: constructors) {
+        for (Constructor<C> c: constructors) {
             if (params.length == c.getParameterCount()){
 
                 Class[] actualParamTypes = c.getParameterTypes();
@@ -323,7 +304,7 @@ public class ReflectionHelper {
      * @param args example arguments for the constructor to take (the types of which will be used to locate the constructor)
      * @return An Optional containing a matching constructor, if found
      */
-    Optional<Constructor> constructorForArgTypes(boolean includeNonPublic, boolean matchParamOrder, Object... args ){
+    Optional<Constructor<C>> constructorForArgTypes(boolean includeNonPublic, boolean matchParamOrder, Object... args ){
         Class[] desiredParamTypes = classesForArgs(args);
         return constructorForParamTypes(includeNonPublic,true,matchParamOrder,desiredParamTypes);
     }
@@ -350,7 +331,7 @@ public class ReflectionHelper {
      * @param primitiveClass a primitive 'class' such as double.class
      * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
      */
-    static Class classEquivalent(Class primitiveClass) {
+    private static Class classEquivalent(Class primitiveClass) {
         final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
         final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
@@ -378,8 +359,8 @@ public class ReflectionHelper {
 
     /**
      * Determines if two types are the same
-     * @param classA
-     * @param classB
+     * @param classA the first class
+     * @param classB the second class
      * @return true if types are equal, or one is the boxed equivalent of the other, false otherwise
      */
     static boolean equivalentType(Class classA, Class classB){
@@ -406,13 +387,7 @@ public class ReflectionHelper {
      * @param paramTypes an array of types
      */
     private static void sortParamsTypesByName(Class<?>[] paramTypes){
-        Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
-            @Override
-            public int compare(Class<?> o1, Class<?> o2) {
-                return o1.getCanonicalName().compareTo(o2.getCanonicalName());
-            }
-        };
-        Arrays.sort(paramTypes, comparator);
+        Arrays.sort(paramTypes, Comparator.comparing(Class::getCanonicalName));
     }
 
     //endregion

@@ -20,6 +20,4 @@ public class PackageHelperTest {
         Assert.assertFalse(PackageHelper.findClass("NonExistentClass", packageName).isPresent());
     }
 
-
-
 }

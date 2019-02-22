@@ -14,7 +14,7 @@ public class FieldsTester<T> extends Tester {
      * @param handler An implementation of FieldsTestEventHandler, likely containing unit test assertions
      */
     public FieldsTester(Class<T> theClass, FieldsTestEventHandler handler){
-        ReflectionHelper helper = new ReflectionHelper(theClass);
+        ReflectionHelper<T> helper = new ReflectionHelper<>(theClass);
         this.handler = handler;
         Set<Field> allFields = helper.fields();
         allFields.removeIf(Field::isSynthetic);

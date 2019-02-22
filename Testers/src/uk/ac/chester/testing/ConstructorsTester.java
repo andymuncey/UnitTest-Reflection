@@ -13,9 +13,8 @@ import java.util.Optional;
  */
 public class ConstructorsTester<T> extends Tester {
 
-    private ReflectionHelper helper;
+    private ReflectionHelper<T> helper;
     private ConstructorTestEventHandler constructorHandler;
-    private Class<T> theClass;
 
     /**
      * Creates a ConstructorsTester for the provided class
@@ -24,8 +23,7 @@ public class ConstructorsTester<T> extends Tester {
      * @param constructorHandler An implementation of ConstructorTestEventHandler, likely containing unit test assertions
      */
     public ConstructorsTester(Class<T> theClass, ConstructorTestEventHandler constructorHandler) {
-        this.theClass = theClass;
-        helper = new ReflectionHelper(theClass);
+        helper = new ReflectionHelper<>(theClass);
         this.constructorHandler = constructorHandler;
     }
 
@@ -44,7 +42,7 @@ public class ConstructorsTester<T> extends Tester {
     public T test(AccessModifier modifier, Object... constructorArgs) {
 
         if (checkExistence(constructorArgs)) {
-            Optional<Constructor> possibleCtor = helper.constructorForArgTypes(true, true, constructorArgs);
+            Optional<Constructor<T>> possibleCtor = helper.constructorForArgTypes(true, true, constructorArgs);
 
             if (possibleCtor.isPresent()) {
                 Constructor<T> c = possibleCtor.get();

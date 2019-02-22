@@ -5,14 +5,15 @@ package uk.ac.chester.testing;
  * Known issues:
  *  * Passing an array as the only argument to the test method is ambiguous as it could be inferred as an array object or varargs
  *
- * @param <T> return type of the method that is being tested
+ * @param <R> return type of the method that is being tested
+ * @param <C> type of the class that's being tested
  */
-public class MethodTester<T> extends Tester {
+public class MethodTester<R, C> extends Tester {
 
-    private ReflectionHelper helper;
+    private ReflectionHelper<C> helper;
     private String methodName;
     private MethodTestEventHandler handler;
-    private Class<T> returnTypeClass;
+    private Class<R> returnTypeClass;
 
     /**
      * The type parameter should correlate to the class type of the methods return type (e.g. for a return type of int, specify Integer)
@@ -21,8 +22,8 @@ public class MethodTester<T> extends Tester {
      * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
      * @param handler         a {@link MethodTestEventHandler} for handling non-existent methods
      */
-    public MethodTester(Class searchClass, Class<T> returnTypeClass, String methodName, MethodTestEventHandler handler) {
-        this.helper = new ReflectionHelper(searchClass);
+    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass, String methodName, MethodTestEventHandler handler) {
+        this.helper = new ReflectionHelper<>(searchClass);
         this.methodName = methodName;
         this.handler = handler;
         this.returnTypeClass = returnTypeClass;
@@ -71,7 +72,13 @@ public class MethodTester<T> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    private T test(boolean allowAutoboxing, Object[] args){
+    private R test(boolean allowAutoboxing, Object[] args){
+
+        if (testExistence(returnTypeClass, args, allowAutoboxing)) {
+            R result = helper.invokeMethod(returnTypeClass, methodName, args);
+
+        }
+
         return testExistence(returnTypeClass, args, allowAutoboxing) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
     }
 
@@ -81,7 +88,7 @@ public class MethodTester<T> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public T test(Object... args){
+    public R test(Object... args){
         return test(true,args);
     }
 
@@ -91,7 +98,7 @@ public class MethodTester<T> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public T testForExactReturnType(Object... args){
+    public R testForExactReturnType(Object... args){
         return test(false, args);
     }
 
@@ -125,7 +132,7 @@ public class MethodTester<T> extends Tester {
             return false;
         }
 
-        final Class[] argTypes = helper.classesForArgs(args);
+        final Class[] argTypes = ReflectionHelper.classesForArgs(args);
 
         if (!methodFound(returnType,argTypes)){
             if (!helper.methodsWithSignature(returnType,false, allowAutoboxing, argTypes).isEmpty()){

@@ -32,6 +32,7 @@ public class TopDownValidator {
         Class aClass = (Class)classes.toArray()[0];
 
         //generic class member tests
+        @SuppressWarnings("unchecked")
         ClassTester classTester = new ClassTester(aClass,new ClassTestEventHandlerEN());
         classTester.checkFields();
         classTester.checkMethods();
@@ -40,6 +41,7 @@ public class TopDownValidator {
         //individual constructor tests
         //construct it using no arg constructor
         ConstructorsTester.ConstructorTestEventHandler constructorHandler = new ConstructorsTestEventHandlerEN();
+        @SuppressWarnings("unchecked")
         ConstructorsTester constructorsTester = new ConstructorsTester<>(aClass,constructorHandler);
         Object instance = constructorsTester.test(AccessModifier.PUBLIC);
         Assert.assertNotNull(instance);
@@ -50,17 +52,20 @@ public class TopDownValidator {
 
         //test specific fields
         FieldsTester.FieldsTestEventHandler fieldHandler = new FieldsTestEventHandlerEN();
+        @SuppressWarnings("unchecked")
         FieldsTester fieldsTester = new FieldsTester(aClass,fieldHandler);
         fieldsTester.test(AccessModifier.PRIVATE,"regularIvar",int.class,false);
         fieldsTester.test(AccessModifier.PUBLIC, "REGULAR_CONSTANT", int.class, false);
 
         //test specific methods
         MethodTester.MethodTestEventHandler methodHandler = new MethodTestEventHandlerEN();
-        MethodTester<Object> methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
+        @SuppressWarnings("unchecked")
+        MethodTester<Object, Integer> methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
         Object result = methodTester.test();
         Assert.assertEquals(1,result);
 
-        MethodTester<Object> methodTester2 = new MethodTester(aClass, void.class, "intParamStringParam", methodHandler);
+        @SuppressWarnings("unchecked")
+        MethodTester<Object, Void> methodTester2 = new MethodTester(aClass, void.class, "intParamStringParam", methodHandler);
         Object result2 = methodTester2.test(1,"test");
         Assert.assertNull(result2);
     }
