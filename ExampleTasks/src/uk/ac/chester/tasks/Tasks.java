@@ -1,16 +1,14 @@
 package uk.ac.chester.tasks;
 
 
-//file used for generating figures for written work
-
-public class Tasks {
+class Tasks {
 
     /**
      * sums the values of all integers in an array
-     * @param numbers
+     * @param numbers an array of numbers
      * @return the sum of all integers in the array
      */
-    public int arraySum(int[] numbers){
+     int arraySum(int[] numbers){
         int total = 0;
         for (double number: numbers)
         {
@@ -24,7 +22,7 @@ public class Tasks {
      * @param temp temperature (F)
      * @return temperature (K)
      */
-    public double fahrenheitToKelvin(double temp){
+    double fahrenheitToKelvin(double temp){
         return (temp - 32) * 5/9 + 273.15;
     }
 
@@ -36,7 +34,10 @@ public class Tasks {
         String[] words = sentence.split(" ");
         StringBuilder result = new StringBuilder();
         for (int i = words.length-1; i>=0; i--){
-            result.append(words[i] + " ");
+            if (i != 0){
+                result.append(" ");
+            }
+            result.append(words[i]);
         }
         return result.toString().trim();
     }

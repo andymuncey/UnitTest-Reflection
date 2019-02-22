@@ -60,12 +60,12 @@ public class TopDownValidator {
         //test specific methods
         MethodTester.MethodTestEventHandler methodHandler = new MethodTestEventHandlerEN();
         @SuppressWarnings("unchecked")
-        MethodTester<Object, Integer> methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
+        MethodTester methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
         Object result = methodTester.test();
         Assert.assertEquals(1,result);
 
         @SuppressWarnings("unchecked")
-        MethodTester<Object, Void> methodTester2 = new MethodTester(aClass, void.class, "intParamStringParam", methodHandler);
+        MethodTester<Void, Object> methodTester2 = new MethodTester(aClass, void.class, "intParamStringParam", methodHandler);
         Object result2 = methodTester2.test(1,"test");
         Assert.assertNull(result2);
     }

@@ -49,7 +49,7 @@ public class TasksTest {
     @Test
     public void arraySumReflection() {
 
-        MethodTester<Integer, Tasks> tester = new MethodTester<>(Tasks.class,int.class,"arraySum",new MethodTestEventHandlerEN() );
+        MethodTester<Tasks, Integer> tester = new MethodTester<>(Tasks.class,Integer.class,"arraySum",new MethodTestEventHandlerEN() );
 
         int[] emptyArray = {};
         int resultWithEmpty = tester.test((Object)emptyArray);
@@ -77,13 +77,13 @@ public class TasksTest {
         Assert.assertEquals(285.372, tasks.fahrenheitToKelvin(54.0),0.001);
 
         //Reflection based assertion with method helper class
-        MethodTester<Double, Tasks> tester = new MethodTester<>(Tasks.class, double.class, "fahrenheitToKelvin", new MethodTestEventHandlerEN());
+        MethodTester<Tasks, Double> tester = new MethodTester<>(Tasks.class, Double.class, "fahrenheitToKelvin", new MethodTestEventHandlerEN());
         Assert.assertEquals(285.372,tester.test(54.0),0.001);
     }
 
     @Test
     public void addTen(){
-        MethodTester<Integer, Tasks> tester = new MethodTester<>(Tasks.class, int.class, "addTen", new MethodTestEventHandlerEN());
+        MethodTester<Tasks, Integer> tester = new MethodTester<>(Tasks.class, Integer.class, "addTen", new MethodTestEventHandlerEN());
         int result = tester.test(13); //needs to be stored or cast to int to avoid ambiguous overloads for the assertion
         Assert.assertEquals(23,result);
 
@@ -94,7 +94,7 @@ public class TasksTest {
 
     @Test
     public void reversedSentence(){
-        MethodTester<String, Tasks> tester = new MethodTester<>(Tasks.class, String.class, "reversedSentence", new MethodTestEventHandlerEN());
+        MethodTester<Tasks, String> tester = new MethodTester<>(Tasks.class, String.class, "reversedSentence", new MethodTestEventHandlerEN());
         Assert.assertEquals("mat the on sat cat the", tester.test("the cat sat on the mat"));
     }
 

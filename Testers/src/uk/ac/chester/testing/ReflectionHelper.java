@@ -49,7 +49,7 @@ import java.util.*;
         final Set<Method> possibleMethods = findMethods(returnType, methodName, allowAutoboxing);
 
         for (Method m : possibleMethods) {
-
+            m.setAccessible(true); //allows evaluation of private method
             final Class<?>[] paramTypes = m.getParameterTypes();
             if (args.length == paramTypes.length) {
                 boolean matchedParams = true;
@@ -62,8 +62,10 @@ import java.util.*;
                 }
                 if (matchedParams) {
                     try {
-                        Object classInstance = searchClass.getDeclaredConstructor().newInstance();
-                        m.setAccessible(true); //allows testing of private method
+                        Constructor constructor = searchClass.getDeclaredConstructor();
+                        constructor.setAccessible(true); //ensures private classes can be tested
+                        Object classInstance = constructor.newInstance();
+
                         Object result = m.invoke(classInstance, args);
                         if (returnType.isInstance(result)){
                             return returnType.cast(result);

@@ -5,10 +5,10 @@ package uk.ac.chester.testing;
  * Known issues:
  *  * Passing an array as the only argument to the test method is ambiguous as it could be inferred as an array object or varargs
  *
- * @param <R> return type of the method that is being tested
  * @param <C> type of the class that's being tested
+ * @param <R> return type of the method that is being tested
  */
-public class MethodTester<R, C> extends Tester {
+public class MethodTester<C, R> extends Tester {
 
     private ReflectionHelper<C> helper;
     private String methodName;
@@ -16,9 +16,10 @@ public class MethodTester<R, C> extends Tester {
     private Class<R> returnTypeClass;
 
     /**
-     * The type parameter should correlate to the class type of the methods return type (e.g. for a return type of int, specify Integer)
+     * The type parameters should be the type of the class that's being tests,
+     * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
      * @param searchClass     the class in which the method should be written
-     * @param returnTypeClass the class of the return type
+     * @param returnTypeClass the reference type corresponding to the class of the return type (e.g. int -> Integer.class)
      * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
      * @param handler         a {@link MethodTestEventHandler} for handling non-existent methods
      */
