@@ -4,10 +4,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import uk.ac.chester.testing.MethodTester;
-
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
+
 
 public class TasksTest {
 
