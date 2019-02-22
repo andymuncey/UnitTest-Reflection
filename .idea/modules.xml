@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MethodTesting.iml" filepath="$PROJECT_DIR$/MethodTesting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClassTesting.iml" filepath="$PROJECT_DIR$/ClassTesting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExampleTasks/ExampleTasks.iml" filepath="$PROJECT_DIR$/ExampleTasks/ExampleTasks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Testers/Testers.iml" filepath="$PROJECT_DIR$/Testers/Testers.iml" />
     </modules>
   </component>
 </project>
