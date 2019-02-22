@@ -6,9 +6,9 @@ import uk.ac.chester.testing.ConstructorsTester;
 import org.junit.Assert;
 
 /**
- * English language implementation of ConstructorsTester.ConstructorTestEventHandler
+ * English language implementation of ConstructorsTester.EventHandler
  */
-public class ConstructorsTestEventHandlerEN implements ConstructorsTester.ConstructorTestEventHandler, ClassDescriber {
+public class ConstructorsTestEventHandlerEN implements ConstructorsTester.EventHandler, ClassDescriber {
 
     @Override
     public void incorrectParameters(Class[] requiredParamTypes) {

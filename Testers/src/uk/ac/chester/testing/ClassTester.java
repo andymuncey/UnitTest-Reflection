@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ClassTester<T> extends Tester {
 
-    private ClassTestEventHandler handler;
+    private EventHandler handler;
     private Set<Field> fields;
     private Set<Method> methods;
     private Set<Constructor> constructors;
@@ -15,9 +15,9 @@ public class ClassTester<T> extends Tester {
     /**
      * Creates a ClassTester for a specified class
      * @param theClass the class to test the fields in
-     * @param handler An implementation of FieldsTestEventHandler, likely containing unit test assertions
+     * @param handler An implementation of EventHandler, likely containing unit test assertions
      */
-    public ClassTester(Class<T> theClass, ClassTestEventHandler handler){
+    public ClassTester(Class<T> theClass, EventHandler handler){
         this.handler = handler;
 
         Set<Field> allFields = new HashSet<>(Arrays.asList(theClass.getDeclaredFields()));
@@ -138,7 +138,7 @@ public class ClassTester<T> extends Tester {
         }
     }
 
-    public interface ClassTestEventHandler {
+    public interface EventHandler {
 
         /**
          * Indicates this method does not conform to the naming convention for Java methods

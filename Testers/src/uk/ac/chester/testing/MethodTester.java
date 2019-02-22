@@ -1,5 +1,6 @@
 package uk.ac.chester.testing;
 
+
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
@@ -12,8 +13,9 @@ public class MethodTester<C, R> extends Tester {
 
     private ReflectionHelper<C> helper;
     private String methodName;
-    private MethodTestEventHandler handler;
+    private EventHandler handler;
     private Class<R> returnTypeClass;
+    private AccessModifier accessModifier;
 
     /**
      * The type parameters should be the type of the class that's being tests,
@@ -21,14 +23,28 @@ public class MethodTester<C, R> extends Tester {
      * @param searchClass     the class in which the method should be written
      * @param returnTypeClass the reference type corresponding to the class of the return type (e.g. int -> Integer.class)
      * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
-     * @param handler         a {@link MethodTestEventHandler} for handling non-existent methods
+     * @param handler         a {@link EventHandler} for handling non-existent methods
      */
-    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass, String methodName, MethodTestEventHandler handler) {
+    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass,  String methodName, EventHandler handler) {
         this.helper = new ReflectionHelper<>(searchClass);
         this.methodName = methodName;
         this.handler = handler;
         this.returnTypeClass = returnTypeClass;
     }
+
+    /**
+     * The type parameters should be the type of the class that's being tests,
+     * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
+     * @param searchClass     the class in which the method should be written
+     * @param returnTypeClass the reference type corresponding to the class of the return type (e.g. int -> Integer.class)
+     * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
+     * @param handler         a {@link EventHandler} for handling non-existent methods
+     */
+    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass, AccessModifier accessModifier,  String methodName, EventHandler handler) {
+        this(searchClass,returnTypeClass,methodName,handler);
+        this.accessModifier = accessModifier;
+    }
+
 
     /**
      * Indicates if a method exists with the name corresponding to the one supplied when the class was initialised
@@ -67,25 +83,30 @@ public class MethodTester<C, R> extends Tester {
     }
 
     /**
+     * Indicates if a method with the corresponding return type and parameter types is found (not strict with regard to class / primitive types)
+     * @param modifier the expected access modifier for the method
+     * @param returnType the return type of the method
+     * @param paramTypes the parameter types of the method
+     * @return true if a method is found matching the specification
+     */
+    private boolean methodFound(AccessModifier modifier, Class returnType, Class[] paramTypes){
+         return helper.findMethod(modifier,returnType,  methodName,true,paramTypes).isPresent();
+    }
+
+    /**
      * If the method exists, method is invoked, and the value returned
-     * If the method is not found, an appropriate {@link MethodTestEventHandler} event will fire and null is returned
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
      * @param allowAutoboxing whether the return type must be an exact match (Integer and int would not be considered an exact match)
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
     private R test(boolean allowAutoboxing, Object[] args){
-
-        if (testExistence(returnTypeClass, args, allowAutoboxing)) {
-            R result = helper.invokeMethod(returnTypeClass, methodName, args);
-
-        }
-
         return testExistence(returnTypeClass, args, allowAutoboxing) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
     }
 
     /**
      * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
-     * If the method is not found, an appropriate {@link MethodTestEventHandler} event will fire and null is returned
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
@@ -95,7 +116,7 @@ public class MethodTester<C, R> extends Tester {
 
     /**
      * If the method exists, method is invoked, and the value returned. Return type will not be matched to boxed/unboxed type
-     * If the method is not found, an appropriate {@link MethodTestEventHandler} event will fire and null is returned
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
@@ -144,6 +165,15 @@ public class MethodTester<C, R> extends Tester {
             return false;
         }
 
+
+        if (accessModifier != null){
+            if (!methodFound(accessModifier,returnType,argTypes)){
+                handler.accessModifierIncorrect(methodName,accessModifier);
+            }
+            return false;
+        }
+
+
         //found method
         String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
         for (String paramName: paramNames){
@@ -159,7 +189,7 @@ public class MethodTester<C, R> extends Tester {
      * Allows callbacks to indicate problems when attempting to test methods that do not exist
      * It is anticipated that Assert.fail will be used in the implementation of each method to provide a describe
      */
-    public interface MethodTestEventHandler {
+    public interface EventHandler {
         /**
          * Cannot find a method with the correct name
          * @param methodName the name of the method as it should be
@@ -198,5 +228,13 @@ public class MethodTester<C, R> extends Tester {
          * @param paramName the parameter that doesn't meet the convention
          */
         void paramNameUnconventional(String methodName, String paramName);
+
+
+        /**
+         * Correct parameters exist for the method, but the access modifier is incorrect
+         * @param methodName the name of the method
+         * @param requiredModifier the access modifier expected
+         */
+        void accessModifierIncorrect(String methodName, AccessModifier requiredModifier);
     }
 }

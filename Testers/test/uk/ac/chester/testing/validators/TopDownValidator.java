@@ -40,7 +40,7 @@ public class TopDownValidator {
 
         //individual constructor tests
         //construct it using no arg constructor
-        ConstructorsTester.ConstructorTestEventHandler constructorHandler = new ConstructorsTestEventHandlerEN();
+        ConstructorsTester.EventHandler constructorHandler = new ConstructorsTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         ConstructorsTester constructorsTester = new ConstructorsTester<>(aClass,constructorHandler);
         Object instance = constructorsTester.test(AccessModifier.PUBLIC);
@@ -51,14 +51,14 @@ public class TopDownValidator {
         Assert.assertNotNull(instanceFromParams);
 
         //test specific fields
-        FieldsTester.FieldsTestEventHandler fieldHandler = new FieldsTestEventHandlerEN();
+        FieldsTester.EventHandler fieldHandler = new FieldsTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         FieldsTester fieldsTester = new FieldsTester(aClass,fieldHandler);
         fieldsTester.test(AccessModifier.PRIVATE,"regularIvar",int.class,false);
         fieldsTester.test(AccessModifier.PUBLIC, "REGULAR_CONSTANT", int.class, false);
 
         //test specific methods
-        MethodTester.MethodTestEventHandler methodHandler = new MethodTestEventHandlerEN();
+        MethodTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         MethodTester methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
         Object result = methodTester.test();

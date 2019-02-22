@@ -3,7 +3,7 @@ package uk.ac.chester.testing.handlers;
 import uk.ac.chester.testing.ClassTester;
 import org.junit.Assert;
 
-public class ClassTestEventHandlerEN implements ClassTester.ClassTestEventHandler {
+public class ClassTestEventHandlerEN implements ClassTester.EventHandler {
 
     @Override
     public void methodNameUnconventional(String name) {

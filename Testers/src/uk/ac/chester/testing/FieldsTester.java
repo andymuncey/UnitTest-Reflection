@@ -5,15 +5,15 @@ import java.util.Set;
 
 public class FieldsTester<T> extends Tester {
 
-    private FieldsTestEventHandler handler;
+    private EventHandler handler;
     private Set<Field> fields;
 
     /**
      * Creates a FieldsTester for a specified class
      * @param theClass the class to test the fields in
-     * @param handler An implementation of FieldsTestEventHandler, likely containing unit test assertions
+     * @param handler An implementation of EventHandler, likely containing unit test assertions
      */
-    public FieldsTester(Class<T> theClass, FieldsTestEventHandler handler){
+    public FieldsTester(Class<T> theClass, EventHandler handler){
         ReflectionHelper<T> helper = new ReflectionHelper<>(theClass);
         this.handler = handler;
         Set<Field> allFields = helper.fields();
@@ -54,7 +54,7 @@ public class FieldsTester<T> extends Tester {
         handler.fieldNotFound(name);
     }
 
-    public interface FieldsTestEventHandler {
+    public interface EventHandler {
 
         /**
          * No field found matching the specified name

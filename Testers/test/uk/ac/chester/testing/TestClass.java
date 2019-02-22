@@ -24,6 +24,9 @@ public class TestClass {
     private void BadNamedMethod(){}
 
 
+    private void privateMethod(){}
+
+
     //bad param name
     public TestClass(double A){}
 

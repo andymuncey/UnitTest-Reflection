@@ -2,6 +2,7 @@ package uk.ac.chester.testing.validators;
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.MethodTester;
 import uk.ac.chester.testing.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
@@ -64,6 +65,12 @@ public class MethodTesterValidator {
     public void paramConvention(){
         MethodTester tester = new MethodTester<>(TestClass.class, void.class, "paramNameNotLowerCamelCase", new MethodTestEventHandlerEN());
         tester.test(3); //should indicate the the parameter doesn't follow naming convention
+    }
+
+    @Test
+    public void accessModifier(){
+        MethodTester tester = new MethodTester<>(TestClass.class, void.class, AccessModifier.PUBLIC,"privateMethod", new MethodTestEventHandlerEN());
+        tester.test();
     }
 
 }

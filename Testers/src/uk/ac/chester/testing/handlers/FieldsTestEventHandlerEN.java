@@ -5,9 +5,9 @@ import uk.ac.chester.testing.FieldsTester;
 import org.junit.Assert;
 
 /**
- * English language implementation of FieldsTester.FieldsTestEventHandler
+ * English language implementation of FieldsTester.EventHandler
  */
-public class FieldsTestEventHandlerEN implements FieldsTester.FieldsTestEventHandler {
+public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
 
     @Override
     public void fieldNotFound(String name) {

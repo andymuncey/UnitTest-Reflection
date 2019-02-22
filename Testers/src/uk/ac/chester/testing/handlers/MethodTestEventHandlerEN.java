@@ -1,13 +1,14 @@
 package uk.ac.chester.testing.handlers;
 
+import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.ClassDescriber;
 import uk.ac.chester.testing.MethodTester;
 import org.junit.Assert;
 
 /**
- * An English language implementation of the MethodTester.MethodTestEventHandler interface
+ * An English language implementation of the MethodTester.EventHandler interface
  */
-public class MethodTestEventHandlerEN implements MethodTester.MethodTestEventHandler, ClassDescriber {
+public class MethodTestEventHandlerEN implements MethodTester.EventHandler, ClassDescriber {
 
     @Override
     public void notFound(String methodName) {
@@ -39,5 +40,10 @@ public class MethodTestEventHandlerEN implements MethodTester.MethodTestEventHan
     public void paramNameUnconventional(String methodName, String paramName) {
         Assert.fail("Method \"" + methodName + "\" found, but the parameter: \""+ paramName+ "\" does not meet the convention for naming Java parameters " +
                 "(e.g. lowerCamelCase, and longer than a single character in most cases)");
+    }
+
+    @Override
+    public void accessModifierIncorrect(String methodName, AccessModifier requiredModifier) {
+        Assert.fail("Method '" +methodName+ "' does not have the correct access modifier. The expected modifier is " + requiredModifier);
     }
 }

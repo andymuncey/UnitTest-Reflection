@@ -131,7 +131,8 @@ import java.util.*;
         return methods;
     }
 
-    /**
+
+     /**
      * Returns methods where the name and return type match.
      * Primitive types will be matched to their class equivalents
      * @param name       the name of the method
@@ -207,21 +208,17 @@ import java.util.*;
 
     }
 
-    /**
-     * Finds the parameter names for a method
-     * <important>Requires the compiler -parameters switch to be set</important>
-     * @param returnType The return type of the method
-     * @param name       the method name
-     * @param paramTypes the types of the parameters the method should have
-     * @return an array of Strings with the names of the parameters
-     */
-    String[] methodParamNames(Class returnType, String name, Class... paramTypes){
-        Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
-        if (possibleMethod.isPresent()){
-           return parameterNames(possibleMethod.get());
+
+    Optional<Method> findMethod(AccessModifier modifier, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
+        Optional<Method> method = findMethod(returnType, name, allowAutoboxing, paramTypes);
+        if (method.isPresent()) {
+            if (AccessModifier.accessModifier(method.get()).equals(modifier)){
+                return method;
+            }
         }
-        return new String[0];
+        return Optional.empty();
     }
+
 
     /**
      * Finds a method matching specified criteria
@@ -252,6 +249,23 @@ import java.util.*;
         }
         return Optional.empty();
     }
+
+
+     /**
+      * Finds the parameter names for a method
+      * <important>Requires the compiler -parameters switch to be set</important>
+      * @param returnType The return type of the method
+      * @param name       the method name
+      * @param paramTypes the types of the parameters the method should have
+      * @return an array of Strings with the names of the parameters
+      */
+     String[] methodParamNames(Class returnType, String name, Class... paramTypes){
+         Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
+         if (possibleMethod.isPresent()){
+             return parameterNames(possibleMethod.get());
+         }
+         return new String[0];
+     }
 
     //endregion
 

@@ -41,5 +41,5 @@ class Tasks {
         }
         return result.toString().trim();
     }
-    
+
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 /**
  * A class to test Constructors for a class
- * <p>
  * Known issue:
  * * When using the test() method to test a method that returns a primitive type will result in a object type being
  * * returned which has to be cast as a primitive in order to be used in an assertion
@@ -14,17 +13,17 @@ import java.util.Optional;
 public class ConstructorsTester<T> extends Tester {
 
     private ReflectionHelper<T> helper;
-    private ConstructorTestEventHandler constructorHandler;
+    private EventHandler handler;
 
     /**
      * Creates a ConstructorsTester for the provided class
      *
      * @param theClass           the class to test the constructors of
-     * @param constructorHandler An implementation of ConstructorTestEventHandler, likely containing unit test assertions
+     * @param handler An implementation of EventHandler, likely containing unit test assertions
      */
-    public ConstructorsTester(Class<T> theClass, ConstructorTestEventHandler constructorHandler) {
+    public ConstructorsTester(Class<T> theClass, EventHandler handler) {
         helper = new ReflectionHelper<>(theClass);
-        this.constructorHandler = constructorHandler;
+        this.handler = handler;
     }
 
     /**
@@ -57,13 +56,13 @@ public class ConstructorsTester<T> extends Tester {
                     return c.newInstance(constructorArgs);
                 } catch (InstantiationException e) {
                     //could not instantiate - abstract class?
-                    constructorHandler.constructionFails(e, constructorArgs);
+                    handler.constructionFails(e, constructorArgs);
                 } catch (IllegalAccessException e) {
                     //unable to access constructor, maybe private (shouldn't happen)
-                    constructorHandler.constructionFails(e, constructorArgs);
+                    handler.constructionFails(e, constructorArgs);
                 } catch (InvocationTargetException e) {
                     //underlying constructor threw an exception
-                    constructorHandler.constructionFails(e.getCause(), constructorArgs);
+                    handler.constructionFails(e.getCause(), constructorArgs);
                 }
             }
         }
@@ -73,14 +72,14 @@ public class ConstructorsTester<T> extends Tester {
     private boolean checkExistence(Object[] args) {
         if (!constructorWithArgsExists(false, args)) {
             //doesn't exist with the parameters in any order
-            constructorHandler.incorrectParameters(ReflectionHelper.classesForArgs(args));
+            handler.incorrectParameters(ReflectionHelper.classesForArgs(args));
             return false;
         }
 
         //exists with the params, order may or may not be correct
         if (!constructorWithArgsExists(true, args)) {
             //not in correct order
-            constructorHandler.incorrectParamOrder(ReflectionHelper.classesForArgs(args));
+            handler.incorrectParamOrder(ReflectionHelper.classesForArgs(args));
             return false;
         }
         return true;
@@ -89,7 +88,7 @@ public class ConstructorsTester<T> extends Tester {
     private void checkModifier(AccessModifier modifier, Constructor c) {
         AccessModifier actualModifier = AccessModifier.accessModifier(c);
         if (!modifier.equals(actualModifier)) {
-            constructorHandler.wrongAccessModifier(actualModifier, modifier);
+            handler.wrongAccessModifier(actualModifier, modifier);
         }
     }
 
@@ -97,7 +96,7 @@ public class ConstructorsTester<T> extends Tester {
         String[] paramNames = ReflectionHelper.parameterNames(c);
         for (String name : paramNames) {
             if (!getConventionChecker().validVariableName(name)) {
-                constructorHandler.paramNameUnconventional(name);
+                handler.paramNameUnconventional(name);
             }
         }
     }
@@ -106,7 +105,7 @@ public class ConstructorsTester<T> extends Tester {
         return helper.constructorForArgTypes(true, matchParamOrder, args).isPresent();
     }
 
-    public interface ConstructorTestEventHandler {
+    public interface EventHandler {
 
         /**
          * A constructor has been found, but the parameters are not as required
