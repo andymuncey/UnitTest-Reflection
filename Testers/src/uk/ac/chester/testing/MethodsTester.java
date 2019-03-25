@@ -1,56 +1,32 @@
 package uk.ac.chester.testing;
 
-
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
  *  * Passing an array as the only argument to the test method is ambiguous as it could be inferred as an array object or varargs
- *
  * @param <C> type of the class that's being tested
- * @param <R> return type of the method that is being tested
  */
-public class MethodTester<C, R> extends Tester {
+public class MethodsTester<C> extends Tester {
 
     private ReflectionHelper<C> helper;
-    private String methodName;
     private EventHandler handler;
-    private Class<R> returnTypeClass;
-    private AccessModifier accessModifier;
 
     /**
      * The type parameters should be the type of the class that's being tests,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
      * @param searchClass     the class in which the method should be written
-     * @param returnTypeClass the reference type corresponding to the class of the return type (e.g. int -> Integer.class)
-     * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
      * @param handler         a {@link EventHandler} for handling non-existent methods
      */
-    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass,  String methodName, EventHandler handler) {
+    public MethodsTester(Class<C> searchClass, EventHandler handler) {
         this.helper = new ReflectionHelper<>(searchClass);
-        this.methodName = methodName;
         this.handler = handler;
-        this.returnTypeClass = returnTypeClass;
     }
-
-    /**
-     * The type parameters should be the type of the class that's being tests,
-     * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
-     * @param searchClass     the class in which the method should be written
-     * @param returnTypeClass the reference type corresponding to the class of the return type (e.g. int -> Integer.class)
-     * @param methodName      the name of the method to be tested, as a string, with no parentheses or parameter types
-     * @param handler         a {@link EventHandler} for handling non-existent methods
-     */
-    public MethodTester(Class<C> searchClass, Class<R> returnTypeClass, AccessModifier accessModifier,  String methodName, EventHandler handler) {
-        this(searchClass,returnTypeClass,methodName,handler);
-        this.accessModifier = accessModifier;
-    }
-
 
     /**
      * Indicates if a method exists with the name corresponding to the one supplied when the class was initialised
      * @return true if found, else false
      */
-    private boolean methodMatchingNameFound(){
+    private boolean methodMatchingNameFound(String methodName){
         return !helper.findMethods(methodName,false).isEmpty();
     }
 
@@ -58,7 +34,7 @@ public class MethodTester<C, R> extends Tester {
      * Indicates a method is found matching the name, but the case may not match, e.g. MyMethod() would find myMethod()
      * @return true if a method exists, false otherwise
      */
-    private boolean methodMatchingCaseInsensitiveNameFound(){
+    private boolean methodMatchingCaseInsensitiveNameFound(String methodName){
         return !helper.findMethods(methodName,true).isEmpty();
     }
 
@@ -68,7 +44,7 @@ public class MethodTester<C, R> extends Tester {
      * @param allowAutoboxing whether the return type must be an exact match (Integer and int would not be considered an exact match)
      * @return true if found, else false
      */
-    private boolean methodMatchingNameAndReturnTypeFound(Class returnType, boolean allowAutoboxing){
+    private boolean methodMatchingNameAndReturnTypeFound(Class returnType, String methodName, boolean allowAutoboxing){
         return !helper.findMethods(returnType, methodName, allowAutoboxing).isEmpty();
     }
 
@@ -78,7 +54,7 @@ public class MethodTester<C, R> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if the specified method exists, false otherwise
      */
-    private boolean methodFound(Class returnType, Class[] paramTypes){
+    private boolean methodFound(Class returnType, String methodName, Class[] paramTypes){
         return helper.findMethod(returnType, methodName,paramTypes).isPresent();
     }
 
@@ -89,7 +65,7 @@ public class MethodTester<C, R> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if a method is found matching the specification
      */
-    private boolean methodFound(AccessModifier modifier, Class returnType, Class[] paramTypes){
+    private boolean methodFound(AccessModifier modifier, Class returnType, String methodName, Class[] paramTypes){
          return helper.findMethod(modifier,returnType,  methodName,true,paramTypes).isPresent();
     }
 
@@ -100,8 +76,8 @@ public class MethodTester<C, R> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    private R test(boolean allowAutoboxing, Object[] args){
-        return testExistence(returnTypeClass, args, allowAutoboxing) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
+    private <R> R test(AccessModifier modifier, Class<R> returnTypeClass, String methodName, boolean allowAutoboxing, Object[] args){
+        return testExistence(modifier, returnTypeClass,methodName, args, allowAutoboxing) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
     }
 
     /**
@@ -110,18 +86,60 @@ public class MethodTester<C, R> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public R test(Object... args){
-        return test(true,args);
+    public <R> R test(AccessModifier modifier, Class<R> returnTypeClass, String methodName, Object... args){
+        return test(modifier, returnTypeClass,methodName, true,args);
+    }
+    
+    /**
+     * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
+     * Access modifiers are ignored
+     * @param returnTypeClass the type the method is expected to return
+     * @param methodName the name of the method
+     * @param <R> the type the method returns
+     * @return the result of invoking the method (or null)
+     */
+    public <R> R test(Class<R> returnTypeClass, String methodName){
+        return test(null, returnTypeClass, methodName);
+    }
+
+    /**
+     * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
+     * Access modifiers are ignored
+     * @param returnTypeClass the type the method is expected to return
+     * @param methodName the name of the method
+     * @param args the arguments to invoke the method with
+     * @param <R> the type the method returns
+     * @return the result of invoking the method (or null)
+     */
+    public <R> R test(Class<R> returnTypeClass, String methodName, Object... args){
+        return test(null, returnTypeClass, methodName, args);
     }
 
     /**
      * If the method exists, method is invoked, and the value returned. Return type will not be matched to boxed/unboxed type
      * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
+     * @param modifier An AccessModifier indicating the desired access modifier, or null if this is unimportant
+     * @param returnTypeClass the type the method is expected to return
+     * @param methodName the name of the method
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public R testForExactReturnType(Object... args){
-        return test(false, args);
+    public <R> R testForExactReturnType(AccessModifier modifier, Class<R> returnTypeClass, String methodName,Object... args){
+        return test(modifier, returnTypeClass,methodName,false, args);
+    }
+
+    /**
+     * If the method exists, method is invoked, and the value returned. Return type will not be matched to boxed/unboxed type
+     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
+     * @param returnTypeClass the type the method is expected to return
+     * @param methodName the name of the method
+     * @param args arguments to invoke the method with
+     * @return the result of invoking the method (or null)
+     */
+    public <R> R testForExactReturnType(Class<R> returnTypeClass, String methodName, Object... args){
+        return testForExactReturnType(null,returnTypeClass,methodName,args);
     }
 
     /**
@@ -138,10 +156,10 @@ public class MethodTester<C, R> extends Tester {
      * @param args arguments for passing to the method (actual values, not types)
      * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
      */
-    private boolean testExistence(Class<?> returnType,  Object[] args, boolean allowAutoboxing) {
+    private boolean testExistence(AccessModifier accessModifier, Class<?> returnType, String methodName, Object[] args, boolean allowAutoboxing) {
 
-        if (!methodMatchingNameFound()){
-            if (methodMatchingCaseInsensitiveNameFound()){
+        if (!methodMatchingNameFound(methodName)){
+            if (methodMatchingCaseInsensitiveNameFound(methodName)){
                 handler.wrongCaseName(methodName);
             } else {
                 handler.notFound(methodName);
@@ -149,14 +167,14 @@ public class MethodTester<C, R> extends Tester {
             return false;
         }
 
-        if (!methodMatchingNameAndReturnTypeFound(returnType, allowAutoboxing)) {
+        if (!methodMatchingNameAndReturnTypeFound(returnType, methodName, allowAutoboxing)) {
             handler.incorrectReturnType(methodName,returnType);
             return false;
         }
 
         final Class[] argTypes = ReflectionHelper.classesForArgs(args);
 
-        if (!methodFound(returnType,argTypes)){
+        if (!methodFound(returnType, methodName,argTypes)){
             if (!helper.methodsWithSignature(returnType,false, allowAutoboxing, argTypes).isEmpty()){
                 handler.incorrectParamOrder(methodName,argTypes);
             }else {
@@ -167,7 +185,7 @@ public class MethodTester<C, R> extends Tester {
 
 
         if (accessModifier != null){
-            if (!methodFound(accessModifier,returnType,argTypes)){
+            if (!methodFound(accessModifier,returnType,methodName, argTypes)){
                 handler.accessModifierIncorrect(methodName,accessModifier);
             }
             return false;

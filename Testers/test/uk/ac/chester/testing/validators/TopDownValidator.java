@@ -58,15 +58,15 @@ public class TopDownValidator {
         fieldsTester.test(AccessModifier.PUBLIC, "REGULAR_CONSTANT", int.class, false);
 
         //test specific methods
-        MethodTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
+        MethodsTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
         @SuppressWarnings("unchecked")
-        MethodTester methodTester = new MethodTester(aClass, int.class,"returnsPrimitiveInt",methodHandler);
-        Object result = methodTester.test();
+        MethodsTester methodsTester = new MethodsTester(aClass, methodHandler);
+        Object result = methodsTester.test(null, int.class,"returnsPrimitiveInt");
         Assert.assertEquals(1,result);
 
         @SuppressWarnings("unchecked")
-        MethodTester<Void, Object> methodTester2 = new MethodTester(aClass, void.class, "intParamStringParam", methodHandler);
-        Object result2 = methodTester2.test(1,"test");
+        MethodsTester<Object> methodsTester2 = new MethodsTester(aClass, methodHandler);
+        Object result2 = methodsTester2.test(null, void.class, "intParamStringParam",1,"test");
         Assert.assertNull(result2);
     }
 }

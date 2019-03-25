@@ -2,13 +2,13 @@ package uk.ac.chester.testing.handlers;
 
 import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.ClassDescriber;
-import uk.ac.chester.testing.MethodTester;
+import uk.ac.chester.testing.MethodsTester;
 import org.junit.Assert;
 
 /**
- * An English language implementation of the MethodTester.EventHandler interface
+ * An English language implementation of the MethodsTester.EventHandler interface
  */
-public class MethodTestEventHandlerEN implements MethodTester.EventHandler, ClassDescriber {
+public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, ClassDescriber {
 
     @Override
     public void notFound(String methodName) {
@@ -17,7 +17,7 @@ public class MethodTestEventHandlerEN implements MethodTester.EventHandler, Clas
 
     @Override
     public void wrongCaseName(String methodName) {
-        Assert.fail("The case required for the method is not as required - check which letters should be uppercase, and which should be lower. " +
+        Assert.fail("The case required for the method is not correct - check which letters should be uppercase, and which should be lower. " +
                 "Method names in java use lowerCamelCase");
     }
 
@@ -28,7 +28,9 @@ public class MethodTestEventHandlerEN implements MethodTester.EventHandler, Clas
 
     @Override
     public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
-        Assert.fail("A method \"" + methodName + "\" was found, but it has the wrong parameters, expected parameters are " + describe(requiredParamTypes));
+        String plural = requiredParamTypes.length == 1 ? "": "s";
+        String isOrAre = requiredParamTypes.length == 1 ? "is": "are";
+        Assert.fail("A method \"" + methodName + "\" was found, but it has the wrong parameter"+plural+", expected parameter"+plural +" " +isOrAre+" "+ describe(requiredParamTypes));
     }
 
     @Override
