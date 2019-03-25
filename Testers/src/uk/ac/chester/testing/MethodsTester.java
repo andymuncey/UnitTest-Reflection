@@ -1,5 +1,8 @@
 package uk.ac.chester.testing;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
@@ -172,10 +175,26 @@ public class MethodsTester<C> extends Tester {
             return false;
         }
 
+        //check for correct number of params
+        Set<Method> methods = helper.findMethods(returnType,methodName,allowAutoboxing);
+        boolean matchedParameterCount = false;
+        for (Method method : methods){
+            if (method.getParameterCount() == args.length){
+                matchedParameterCount = true;
+                break;
+            }
+        }
+        if (!matchedParameterCount){
+            handler.incorrectNumberOfParameters(methodName,args.length);
+            return false;
+        }
+
+
         final Class[] argTypes = ReflectionHelper.classesForArgs(args);
 
         if (!methodFound(returnType, methodName,argTypes)){
             if (!helper.methodsWithSignature(returnType,false, allowAutoboxing, argTypes).isEmpty()){
+
                 handler.incorrectParamOrder(methodName,argTypes);
             }else {
                 handler.incorrectParameters(methodName, argTypes);
@@ -226,6 +245,15 @@ public class MethodsTester<C> extends Tester {
          * @param requiredReturnType the type the methods is expected to return
          */
         void incorrectReturnType(String methodName, Class requiredReturnType);
+
+
+        /**
+         * A method has been found but it does not have the expected number of parameters
+         * @param methodName the name of the method
+         * @param expectedParamCount the number of parameters expected
+         */
+        void incorrectNumberOfParameters(String methodName, int expectedParamCount);
+
 
         /**
          * A method has been found, but the parameters are not as required

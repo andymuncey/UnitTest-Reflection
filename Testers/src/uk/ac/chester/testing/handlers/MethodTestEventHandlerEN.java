@@ -27,6 +27,11 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     }
 
     @Override
+    public void incorrectNumberOfParameters(String methodName, int expectedParamCount) {
+        Assert.fail("A method named \"" + methodName + "\" was found but it does not have the expected number of parameters, which is " + expectedParamCount);
+    }
+
+    @Override
     public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
         String plural = requiredParamTypes.length == 1 ? "": "s";
         String isOrAre = requiredParamTypes.length == 1 ? "is": "are";
