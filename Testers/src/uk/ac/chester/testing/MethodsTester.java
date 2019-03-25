@@ -14,6 +14,15 @@ public class MethodsTester<C> extends Tester {
     private ReflectionHelper<C> helper;
     private EventHandler handler;
 
+    public boolean constructInstance(Object... args){
+        try {
+            helper.construct(args);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     /**
      * The type parameters should be the type of the class that's being tests,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)

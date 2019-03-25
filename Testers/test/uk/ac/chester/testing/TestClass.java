@@ -17,6 +17,19 @@ public class TestClass {
     }
 
 
+    //Property for testing
+    private int intProperty;
+
+    public int getIntProperty() {
+        return intProperty;
+    }
+
+    public void setIntProperty(int intProperty) {
+        this.intProperty = intProperty;
+    }
+
+
+
     public static String nonFinal;
 
     private int regularIvar;
@@ -56,5 +69,6 @@ public class TestClass {
         int i = 0;
         int fail = 4/i;
     }
+
 
 }

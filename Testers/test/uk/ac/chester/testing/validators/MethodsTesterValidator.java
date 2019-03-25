@@ -7,12 +7,11 @@ import org.junit.Test;
 import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.MethodsTester;
 import uk.ac.chester.testing.TestClass;
+import uk.ac.chester.testing.TestClass2;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 
-/**
- * The tests in the class should FAIL - it's designed to verify expected failures occur and appropriate error messages are displayed
- */
+
 public class MethodsTesterValidator {
 
     private MethodsTester tester;
@@ -26,6 +25,13 @@ public class MethodsTesterValidator {
     public void tearDown() throws Exception {
         tester = null;
     }
+
+    //region failing tests
+
+    /**
+     * The tests in the section should FAIL - it's designed to verify expected failures occur and appropriate error messages are displayed
+     */
+
 
     @Test
     public void nonExistentMethod() {
@@ -87,6 +93,27 @@ public class MethodsTesterValidator {
     public void returnedValue(){
         int result = (Integer)tester.test(Integer.class,"returnsPrimitiveInt"); //Either cast the result to an object, or ensure that the methods tester is typed
         Assert.assertEquals("The method (deliberately) returns the wrong value",2,result);
+    }
+
+    //end region
+
+
+    //region passing tests
+
+    @Test
+    public void property(){
+        tester.test(void.class, "setIntProperty",5);
+        Integer gotValue = (Integer)tester.test(Integer.class, "getIntProperty");
+        Assert.assertEquals(Integer.valueOf(5),gotValue);
+    }
+
+
+    @Test
+    public void propertyCustomConstructor(){
+        MethodsTester<TestClass2> tester2 = new MethodsTester<>(TestClass2.class,new MethodTestEventHandlerEN());
+        tester2.constructInstance(3,4);
+        int xValue = tester2.test(Integer.class, "getX");
+        Assert.assertEquals(3,xValue);
     }
 
 }

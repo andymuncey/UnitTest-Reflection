@@ -7,6 +7,19 @@ import java.util.*;
 
     final private Class<C> searchClass;
 
+    private Object constructedClass;
+
+    void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Optional<Constructor<C>> possibleConstructor = constructorForArgTypes(true, true, args);
+        if (possibleConstructor.isPresent()) {
+            Constructor constructor = possibleConstructor.get();
+            constructor.setAccessible(true); //ensures private classes can be tested
+            constructedClass = constructor.newInstance(args);
+        }
+    }
+
+
+
     ReflectionHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
@@ -35,6 +48,7 @@ import java.util.*;
 
     /**
      * Attempts to invoke a method matching the specified returnType and name, with the supplied values
+     * Will use the constructed class if available, else will try and create an instance of the class using the parameterless constructor
      *
      * @param returnType the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
      * @param allowAutoboxing     setting 'false' considers primitives and their object equivalents to be different when considering return type. True matches primitive return types with their object counterparts
@@ -61,28 +75,36 @@ import java.util.*;
                     }
                 }
                 if (matchedParams) {
+                    if (constructedClass == null) {
+                        try {
+                            construct();
+                        }
+                          catch (InstantiationException e) {
+                            //failed while attempting to instantiate something (e.g. call a constructor)
+                            throw new RuntimeException("Cannot instantiate with no parameter constructor", e.getCause());
+                        } catch (IllegalAccessException e) {
+                            //constructor is not accessible (i.e. private etc.) - should not occur
+                            System.err.println(e.getMessage());
+                        }
+                        catch (InvocationTargetException e) {
+                            //invocationTarget exception: the method itself has thrown an exception - error in student code
+                            //throw unchecked exception, like the original method would, so student sees reason for error
+                            throw new RuntimeException(e.getCause());
+                        }
+                    }
                     try {
-                        Constructor constructor = searchClass.getDeclaredConstructor();
-                        constructor.setAccessible(true); //ensures private classes can be tested
-                        Object classInstance = constructor.newInstance();
-
-                        Object result = m.invoke(classInstance, args);
-                        if (returnType.isInstance(result)){
+                        Object result = m.invoke(constructedClass, args);
+                        if (returnType.isInstance(result)) {
                             return returnType.cast(result);
                         }
                     } catch (IllegalAccessException e) {
                         //method is not accessible (i.e. private etc.) - should not occur
                         System.err.println(e.getMessage());
-                    } catch (InvocationTargetException e) {
+                    }
+                    catch (InvocationTargetException e) {
                         //invocationTarget exception: the method itself has thrown an exception - error in student code
                         //throw unchecked exception, like the original method would, so student sees reason for error
                         throw new RuntimeException(e.getCause());
-                    } catch (InstantiationException e) {
-                        //failed while attempting to instantiate something (e.g. call a constructor)
-                        throw new RuntimeException(e);
-                    } catch (NoSuchMethodException e) {
-                        //method not found, should not get this far as method has been retrieved from class
-                        System.err.println("Method not found in "+searchClass.getSimpleName() +"class. More info: " + e.getMessage());
                     }
                 }
             }
