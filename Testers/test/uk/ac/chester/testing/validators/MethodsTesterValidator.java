@@ -15,7 +15,7 @@ import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
  */
 public class MethodsTesterValidator {
 
-    MethodsTester tester;
+    private MethodsTester tester;
 
     @Before
     public void setUp() throws Exception {
@@ -58,7 +58,6 @@ public class MethodsTesterValidator {
         tester.test(void.class,"oneIntParam","text");
     }
 
-
     @Test
     public void wrongMultiParams(){
         tester.test(void.class,"intParamStringParam","text", 23.5);
@@ -82,6 +81,12 @@ public class MethodsTesterValidator {
     @Test
     public void accessModifier(){
         tester.test(AccessModifier.PUBLIC, void.class,"privateMethod" );
+    }
+
+    @Test
+    public void returnedValue(){
+        int result = (Integer)tester.test(Integer.class,"returnsPrimitiveInt"); //Either cast the result to an object, or ensure that the methods tester is typed
+        Assert.assertEquals("The method (deliberately) returns the wrong value",2,result);
     }
 
 }
