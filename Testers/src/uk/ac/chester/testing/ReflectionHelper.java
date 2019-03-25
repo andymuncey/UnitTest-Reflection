@@ -9,13 +9,15 @@ import java.util.*;
 
     private Object constructedClass;
 
-    void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    boolean construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Optional<Constructor<C>> possibleConstructor = constructorForArgTypes(true, true, args);
         if (possibleConstructor.isPresent()) {
             Constructor constructor = possibleConstructor.get();
             constructor.setAccessible(true); //ensures private classes can be tested
             constructedClass = constructor.newInstance(args);
+            return true;
         }
+        return false;
     }
 
 

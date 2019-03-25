@@ -95,6 +95,13 @@ public class MethodsTesterValidator {
         Assert.assertEquals("The method (deliberately) returns the wrong value",2,result);
     }
 
+    @Test
+    public void invalidConstruction(){
+        boolean constructed = tester.constructInstance('a','b','c',1,2,3);
+        Assert.assertTrue("Cannot construct an object with params that don't match the constructor",constructed);
+    }
+
+
     //end region
 
 

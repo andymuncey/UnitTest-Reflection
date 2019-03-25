@@ -16,8 +16,7 @@ public class MethodsTester<C> extends Tester {
 
     public boolean constructInstance(Object... args){
         try {
-            helper.construct(args);
-            return true;
+            return helper.construct(args);
         } catch (Exception e){
             return false;
         }
