@@ -1,5 +1,8 @@
 package uk.ac.chester.testing;
 
+import uk.ac.chester.testing.reflection.MethodsHelper;
+import uk.ac.chester.testing.reflection.Utilities;
+
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -11,16 +14,8 @@ import java.util.Set;
  */
 public class MethodsTester<C> extends Tester {
 
-    private ReflectionHelper<C> helper;
+    private MethodsHelper<C> helper;
     private EventHandler handler;
-
-    public boolean constructInstance(Object... args){
-        try {
-            return helper.construct(args);
-        } catch (Exception e){
-            return false;
-        }
-    }
 
     /**
      * The type parameters should be the type of the class that's being tests,
@@ -29,7 +24,7 @@ public class MethodsTester<C> extends Tester {
      * @param handler         a {@link EventHandler} for handling non-existent methods
      */
     public MethodsTester(Class<C> searchClass, EventHandler handler) {
-        this.helper = new ReflectionHelper<>(searchClass);
+        this.helper = new MethodsHelper<>(searchClass);
         this.handler = handler;
     }
 
@@ -56,7 +51,7 @@ public class MethodsTester<C> extends Tester {
      * @return true if found, else false
      */
     private boolean methodMatchingNameAndReturnTypeFound(Class returnType, String methodName, boolean allowAutoboxing){
-        return !helper.findMethods(returnType, methodName, allowAutoboxing).isEmpty();
+        return !helper.findMethods(allowAutoboxing, returnType, methodName).isEmpty();
     }
 
     /**
@@ -65,8 +60,8 @@ public class MethodsTester<C> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if the specified method exists, false otherwise
      */
-    private boolean methodFound(Class returnType, String methodName, Class[] paramTypes){
-        return helper.findMethod(returnType, methodName,paramTypes).isPresent();
+    private boolean methodFound(boolean allowAutoboxing, Class returnType, String methodName, Class[] paramTypes){
+        return helper.findMethod(allowAutoboxing, returnType, methodName,paramTypes).isPresent();
     }
 
     /**
@@ -80,6 +75,26 @@ public class MethodsTester<C> extends Tester {
          return helper.findMethod(modifier,returnType,  methodName,true,paramTypes).isPresent();
     }
 
+
+
+    public <T> T executeStaticWithSpecifics(boolean allowAutoboxing, AccessModifier modifier, Class<T> returnTypeClass, String methodName, Object... args){
+        return testExistence(allowAutoboxing, modifier, returnTypeClass,methodName, args) ? helper.invokeStaticMethod(allowAutoboxing,returnTypeClass,methodName,args) : null ;
+    }
+
+
+    /**
+     * Executes a static method, allowing autoboxing/unboxing, and any access modifier
+     * @param returnTypeClass
+     * @param methodName
+     * @param args
+     * @param <T>
+     * @return
+     */
+    public <T> T executeStatic(Class<T> returnTypeClass, String methodName, Object... args){
+        return executeStaticWithSpecifics(true,null,returnTypeClass,methodName,args);
+    }
+
+
     /**
      * If the method exists, method is invoked, and the value returned
      * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
@@ -87,8 +102,9 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    private <R> R test(AccessModifier modifier, Class<R> returnTypeClass, String methodName, boolean allowAutoboxing, Object[] args){
-        return testExistence(modifier, returnTypeClass,methodName, args, allowAutoboxing) ? helper.invokeMethod(returnTypeClass, methodName, args) : null;
+    private boolean test(boolean allowAutoboxing, AccessModifier modifier, Class returnTypeClass, String methodName, Object[] args){
+        return testExistence(allowAutoboxing, modifier, returnTypeClass,methodName, args) ;
+//        return  helper.invokeMethod(returnTypeClass, methodName, args);
     }
 
     /**
@@ -97,10 +113,10 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public <R> R test(AccessModifier modifier, Class<R> returnTypeClass, String methodName, Object... args){
-        return test(modifier, returnTypeClass,methodName, true,args);
+    public boolean test(AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
+        return test(true, modifier, returnTypeClass,methodName, args);
     }
-    
+
 //    /**
 //     * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
 //     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
@@ -121,10 +137,9 @@ public class MethodsTester<C> extends Tester {
      * @param returnTypeClass the type the method is expected to return
      * @param methodName the name of the method
      * @param args the arguments to invoke the method with
-     * @param <R> the type the method returns
      * @return the result of invoking the method (or null)
      */
-    public <R> R test(Class<R> returnTypeClass, String methodName, Object... args){
+    public boolean test(Class returnTypeClass, String methodName, Object... args){
         return test(null, returnTypeClass, methodName, args);
     }
 
@@ -137,8 +152,8 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public <R> R testForExactReturnType(AccessModifier modifier, Class<R> returnTypeClass, String methodName,Object... args){
-        return test(modifier, returnTypeClass,methodName,false, args);
+    public boolean testForExactReturnType(AccessModifier modifier, Class returnTypeClass, String methodName,Object... args){
+        return test(false, modifier, returnTypeClass,methodName, args);
     }
 
     /**
@@ -149,9 +164,13 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public <R> R testForExactReturnType(Class<R> returnTypeClass, String methodName, Object... args){
+    public boolean testForExactReturnType(Class returnTypeClass, String methodName, Object... args){
         return testForExactReturnType(null,returnTypeClass,methodName,args);
     }
+
+
+
+
 
     /**
      * Tests the following, in relation to the method, returning null soon as any condition is not met:
@@ -163,11 +182,11 @@ public class MethodsTester<C> extends Tester {
      *
      * Finally, if the method is correctly declared, it returns the result of executing the method
      *
+     * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
      * @param returnType the type of data returned by the class
      * @param args arguments for passing to the method (actual values, not types)
-     * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
      */
-    private boolean testExistence(AccessModifier accessModifier, Class<?> returnType, String methodName, Object[] args, boolean allowAutoboxing) {
+    private boolean testExistence(boolean allowAutoboxing, AccessModifier accessModifier, Class<?> returnType, String methodName, Object[] args) {
 
         if (!methodMatchingNameFound(methodName)){
             if (methodMatchingCaseInsensitiveNameFound(methodName)){
@@ -184,7 +203,7 @@ public class MethodsTester<C> extends Tester {
         }
 
         //check for correct number of params
-        Set<Method> methods = helper.findMethods(returnType,methodName,allowAutoboxing);
+        Set<Method> methods = helper.findMethods(allowAutoboxing, returnType,methodName);
         boolean matchedParameterCount = false;
         for (Method method : methods){
             if (method.getParameterCount() == args.length){
@@ -197,12 +216,24 @@ public class MethodsTester<C> extends Tester {
             return false;
         }
 
+        //found method with correct name, return type, but wrong type or order of params
 
-        final Class[] argTypes = ReflectionHelper.classesForArgs(args);
 
-        if (!methodFound(returnType, methodName,argTypes)){
-            if (!helper.methodsWithSignature(returnType,false, allowAutoboxing, argTypes).isEmpty()){
+        final Class[] argTypes = Utilities.classesForArgs(args);
 
+        if (!methodFound(allowAutoboxing, returnType, methodName,argTypes)){
+            //not found an exact match
+
+            Set<Method> similarMethods = helper.methodsWithSignature(allowAutoboxing, returnType,false, argTypes);
+            for (Method m: similarMethods){
+                if (!m.getName().equals(methodName)){
+                    similarMethods.remove(m);
+                }
+            }
+
+
+            if (!similarMethods.isEmpty()){
+                //found a method
                 handler.incorrectParamOrder(methodName,argTypes);
             }else {
                 handler.incorrectParameters(methodName, argTypes);
@@ -254,14 +285,12 @@ public class MethodsTester<C> extends Tester {
          */
         void incorrectReturnType(String methodName, Class requiredReturnType);
 
-
         /**
          * A method has been found but it does not have the expected number of parameters
          * @param methodName the name of the method
          * @param expectedParamCount the number of parameters expected
          */
         void incorrectNumberOfParameters(String methodName, int expectedParamCount);
-
 
         /**
          * A method has been found, but the parameters are not as required
@@ -282,7 +311,6 @@ public class MethodsTester<C> extends Tester {
          * @param paramName the parameter that doesn't meet the convention
          */
         void paramNameUnconventional(String methodName, String paramName);
-
 
         /**
          * Correct parameters exist for the method, but the access modifier is incorrect

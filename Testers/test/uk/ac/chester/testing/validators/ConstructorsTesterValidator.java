@@ -1,6 +1,6 @@
 package uk.ac.chester.testing.validators;
 
-import uk.ac.chester.testing.TestClass;
+import uk.ac.chester.testing.testclasses.TestClass;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

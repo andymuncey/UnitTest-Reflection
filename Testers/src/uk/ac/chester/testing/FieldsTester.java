@@ -1,5 +1,8 @@
 package uk.ac.chester.testing;
 
+import uk.ac.chester.testing.reflection.FieldsHelper;
+import uk.ac.chester.testing.reflection.Utilities;
+
 import java.lang.reflect.Field;
 import java.util.Set;
 
@@ -14,7 +17,7 @@ public class FieldsTester<T> extends Tester {
      * @param handler An implementation of EventHandler, likely containing unit test assertions
      */
     public FieldsTester(Class<T> theClass, EventHandler handler){
-        ReflectionHelper<T> helper = new ReflectionHelper<>(theClass);
+        FieldsHelper<T> helper = new FieldsHelper<>(theClass);
         this.handler = handler;
         Set<Field> allFields = helper.fields();
         allFields.removeIf(Field::isSynthetic);
@@ -34,7 +37,7 @@ public class FieldsTester<T> extends Tester {
             if (field.getName().equals(name)){
                 Class actualClass = field.getType(); //careful not to use getClass() here (which will be Field!)
                 if (allowAutoboxing) {
-                    if (!ReflectionHelper.equivalentType(actualClass,desiredClass)){
+                    if (!Utilities.equivalentType(actualClass,desiredClass)){
                         handler.fieldFoundButNotCorrectType(name,desiredClass,actualClass);
                     }
                 } else {

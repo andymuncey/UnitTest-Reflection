@@ -61,12 +61,12 @@ public class TopDownValidator {
         MethodsTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         MethodsTester methodsTester = new MethodsTester(aClass, methodHandler);
-        Object result = methodsTester.test( int.class,"returnsPrimitiveInt");
-        Assert.assertEquals(1,result);
+        boolean returnsPrimitiveIntExists = methodsTester.test( int.class,"returnsPrimitiveInt");
+        Assert.assertTrue(returnsPrimitiveIntExists);
 
         @SuppressWarnings("unchecked")
         MethodsTester<Object> methodsTester2 = new MethodsTester(aClass, methodHandler);
-        Object result2 = methodsTester2.test(void.class, "intParamStringParam",1,"test");
-        Assert.assertNull(result2);
+        boolean anotherMethodExists = methodsTester2.test(void.class, "intParamStringParam",1,"test");
+        Assert.assertTrue(anotherMethodExists);
     }
 }

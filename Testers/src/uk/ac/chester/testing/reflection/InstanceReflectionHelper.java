@@ -1,0 +1,121 @@
+package uk.ac.chester.testing.reflection;
+
+import uk.ac.chester.testing.TestingExecutionException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Optional;
+
+public class InstanceReflectionHelper<C> {
+
+    private FieldsHelper<C> fieldsHelper;
+    private ConstructorsHelper<C> constructorsHelper;
+    private MethodsHelper<C> methodsHelper;
+
+    private Object instance;
+
+    public InstanceReflectionHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        construct(args);
+        fieldsHelper = new FieldsHelper<>(searchClass);
+        constructorsHelper = new ConstructorsHelper<>(searchClass);
+        methodsHelper = new MethodsHelper<>(searchClass);
+    }
+
+    private void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Optional<Constructor<C>> possibleConstructor = constructorsHelper.constructorForArgTypes(true, true, args);
+        if (possibleConstructor.isPresent()) {
+            Constructor constructor = possibleConstructor.get();
+            constructor.setAccessible(true); //ensures private classes can be tested
+            instance = constructor.newInstance(args);
+        }
+    }
+
+    public boolean hasValidInstance() {
+        return instance != null;
+    }
+
+    /**
+     * Checks if the helper has an instance of the class for testing
+     *
+     * @return true or false
+     */
+    boolean hasInstance() {
+        return instance != null;
+    }
+
+
+
+
+    /**
+     * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with allowAutoboxing set to true
+     */
+    public <T> T invokeMethod(Class<T> returnType, String methodName, Object... args) throws TestingExecutionException {
+        return invokeMethod(true, returnType, methodName, args);
+    }
+
+
+    /**
+     * Attempts to invoke a method matching the specified returnType and name, with the supplied values
+     * Will use the constructed class if available, else will try and create an instance of the class using the parameterless constructor
+     *
+     * @param returnType      the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
+     * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different when considering return type. True matches primitive return types with their object counterparts
+     * @param methodName      the name of the method to invoke (excluding return type, parameters and parentheses), e.g. "myMethod"
+     * @param args            a list of arguments (any primitives will be converted to non-primitive types)
+     *                        If the argument is a single array, you need to cast it as an Object (so it's not interpreted a multiple arguments)
+     * @param <T>             type of data returned will match the return type specified
+     * @return the result of invoking the method
+     */
+    <T> T invokeMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) throws TestingExecutionException {
+
+        final Optional<Method> optionalMethod = methodsHelper.findMethod(true, returnType, methodName, Utilities.classesForArgs(args));
+
+        if (optionalMethod.isPresent()) {
+            final Method m = optionalMethod.get();
+
+            try {
+                Object result = m.invoke(instance, args);
+                //if (returnType.isInstance(result)) { //todo: make types equivalent
+                    return returnType.cast(result);
+                //}
+            } catch (IllegalAccessException e) {
+                //method is not accessible (i.e. private etc.) - should not occur
+                System.err.println(e.getMessage());
+            } catch (InvocationTargetException e) {
+                //invocationTarget exception: the method itself has thrown an exception - error in student code
+                //throw unchecked exception, like the original method would, so student sees reason for error
+                throw new RuntimeException(e.getCause());
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        Class[] paramClasses = Utilities.classesForArgs(args);
+        for (int i = 0; i < paramClasses.length; i++) {
+            if (i > 0) {
+                builder.append(", ");
+            }
+            builder.append(paramClasses[i].getSimpleName());
+        }
+        throw new TestingExecutionException("Method matching " + returnType.getName() + " " + methodName + "(" + builder.toString() + ") not found");
+
+    }
+
+
+    public <T> T fieldValue(Class<T> type, String name) throws TestingExecutionException {
+        Optional<Field> optionalField = fieldsHelper.field(name);
+        if (optionalField.isPresent()) {
+            Field field = optionalField.get();
+            field.setAccessible(true);
+            if (field.getType().equals(type)) {
+                try {
+                    return (T) field.get(instance);
+                } catch (Exception e) {
+                    System.err.println();
+                }
+            }
+        }
+        throw new TestingExecutionException("Field named " + name + "of type " + type.getSimpleName() + " not found");
+    }
+
+}

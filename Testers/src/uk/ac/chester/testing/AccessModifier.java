@@ -35,7 +35,7 @@ public enum AccessModifier {
      * @param member a class member such as a field, method or constructor
      * @return An AccessModifier enum value
      */
-    static AccessModifier accessModifier(Member member){
+    public static AccessModifier accessModifier(Member member){
         if (Modifier.isPublic(member.getModifiers())){
             return AccessModifier.PUBLIC;
         }

@@ -1,4 +1,4 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.testclasses;
 
 public class TestClass {
 

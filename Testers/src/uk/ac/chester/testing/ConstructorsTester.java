@@ -1,5 +1,8 @@
 package uk.ac.chester.testing;
 
+import uk.ac.chester.testing.reflection.ConstructorsHelper;
+import uk.ac.chester.testing.reflection.Utilities;
+
 import java.lang.reflect.*;
 import java.util.Optional;
 
@@ -12,7 +15,7 @@ import java.util.Optional;
  */
 public class ConstructorsTester<T> extends Tester {
 
-    private ReflectionHelper<T> helper;
+    private ConstructorsHelper<T> helper;
     private EventHandler handler;
 
     /**
@@ -22,7 +25,7 @@ public class ConstructorsTester<T> extends Tester {
      * @param handler An implementation of EventHandler, likely containing unit test assertions
      */
     public ConstructorsTester(Class<T> theClass, EventHandler handler) {
-        helper = new ReflectionHelper<>(theClass);
+        helper = new ConstructorsHelper<>(theClass);
         this.handler = handler;
     }
 
@@ -72,14 +75,14 @@ public class ConstructorsTester<T> extends Tester {
     private boolean checkExistence(Object[] args) {
         if (!constructorWithArgsExists(false, args)) {
             //doesn't exist with the parameters in any order
-            handler.incorrectParameters(ReflectionHelper.classesForArgs(args));
+            handler.incorrectParameters(Utilities.classesForArgs(args));
             return false;
         }
 
         //exists with the params, order may or may not be correct
         if (!constructorWithArgsExists(true, args)) {
             //not in correct order
-            handler.incorrectParamOrder(ReflectionHelper.classesForArgs(args));
+            handler.incorrectParamOrder(Utilities.classesForArgs(args));
             return false;
         }
         return true;
@@ -93,7 +96,7 @@ public class ConstructorsTester<T> extends Tester {
     }
 
     private void checkParameterNames(Constructor c) {
-        String[] paramNames = ReflectionHelper.parameterNames(c);
+        String[] paramNames = Utilities.parameterNames(c);
         for (String name : paramNames) {
             if (!getConventionChecker().validVariableName(name)) {
                 handler.paramNameUnconventional(name);

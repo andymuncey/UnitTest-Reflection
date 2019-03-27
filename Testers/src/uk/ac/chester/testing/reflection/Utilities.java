@@ -1,0 +1,97 @@
+package uk.ac.chester.testing.reflection;
+
+import java.lang.reflect.Executable;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public class Utilities {
+
+
+    /**
+     * given an array of arguments (values) returns an array of the same size representing the types (as classes) of each argument
+     *
+     * @param args an array of values of any type
+     * @return an array of Class objects
+     */
+    public static Class[] classesForArgs(Object[] args) {
+        List<Class> params = new ArrayList<>();
+        Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
+        return params.toArray(new Class[args.length]);
+    }
+
+    /**
+     * Given the 'class' of a primitive type (e.g. int.class returns the class of the corresponding boxed type, e.g. Integer.class)
+     * Classes that do not belong to primitive types will remain unmodified
+     *
+     * @param primitiveClass a primitive 'class' such as double.class
+     * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
+     */
+    static Class classEquivalent(Class primitiveClass) {
+        final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
+        final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
+
+        for (int i = 0; i < primitives.length; i++) {
+            if (primitiveClass == primitives[i]) {
+                return classes[i];
+            }
+        }
+
+        return primitiveClass; //not actually a primitive
+    }
+
+
+    /**
+     * Returns an array with the results of calling {@link #classEquivalent} on each item
+     *
+     * @param primitiveClasses an array of Class object, which should include the class for some Primitive types
+     * @return an array of Class, each corresponding to an object type
+     */
+    static Class[] classEquivalents(Class[] primitiveClasses) {
+        Class[] classClasses = new Class[primitiveClasses.length];
+        for (int i = 0; i < primitiveClasses.length; i++) {
+            classClasses[i] = classEquivalent(primitiveClasses[i]);
+        }
+        return classClasses;
+    }
+
+    /**
+     * Determines if two types are the same
+     * @param classA the first class
+     * @param classB the second class
+     * @return true if types are equal, or one is the boxed equivalent of the other, false otherwise
+     */
+    public static boolean equivalentType(Class classA, Class classB){
+        if (classEquivalent(classA) == classEquivalent(classB)){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the parameter names for an executable, such as a method or constructor
+     * <important>Requires the compiler -parameters switch to be set</important>
+     * @param executable e.g. a method or constructor
+     * @return an array of Strings with the parameter names
+     */
+    public static String[] parameterNames (Executable executable){
+        Parameter[] params = executable.getParameters();
+        String[] paramNames = new String[params.length];
+        for (int i = 0; i < params.length; i++) {
+            paramNames[i] = params[i].getName();
+        }
+        return paramNames;
+    }
+
+    /**
+     * Sorts an array of Class by canonical name (i.e. including package name)
+     * @param paramTypes an array of types
+     */
+    static void sortParamsTypesByName(Class<?>[] paramTypes){
+        Arrays.sort(paramTypes, Comparator.comparing(Class::getCanonicalName));
+    }
+
+
+}
