@@ -5,7 +5,9 @@ import uk.ac.chester.testing.AccessModifier;
 import java.lang.reflect.*;
 import java.util.*;
 
- public class MethodsHelper<C> {
+import static uk.ac.chester.testing.reflection.Utilities.classEquivalent;
+
+public class MethodsHelper<C> {
 
     final private Class<C> searchClass;
 
@@ -48,7 +50,7 @@ import java.util.*;
         if (!allowAutoboxing) {
             methods.removeIf(m -> (!m.getReturnType().equals(returnType)));
         } else {
-            methods.removeIf(m -> (!Utilities.classEquivalent(m.getReturnType()).equals(Utilities.classEquivalent(returnType))));
+            methods.removeIf(m -> (!classEquivalent(m.getReturnType()).equals(classEquivalent(returnType))));
         }
         return methods;
     }
@@ -89,7 +91,7 @@ import java.util.*;
 
         //must copy to avoid argTypes being reordered
         Class<?>[] desiredParamTypes = !allowAutoboxing ? argTypes.clone() : Utilities.classEquivalents(argTypes);
-        Class desiredReturnType = !allowAutoboxing ? returnType : Utilities.classEquivalent(returnType);
+        Class desiredReturnType = !allowAutoboxing ? returnType : classEquivalent(returnType);
 
         if (!matchParamOrder){
             Utilities.sortParamsTypesByName(desiredParamTypes);
@@ -98,7 +100,7 @@ import java.util.*;
 
         for (Method method : searchClass.getDeclaredMethods()) {
 
-            Class<?> actualReturnType = !allowAutoboxing ? method.getReturnType() : Utilities.classEquivalent(method.getReturnType());
+            Class<?> actualReturnType = !allowAutoboxing ? method.getReturnType() : classEquivalent(method.getReturnType());
 
             //todo: handle boxing of arrays of primitives
             if (actualReturnType.equals(desiredReturnType)) {
@@ -129,9 +131,7 @@ import java.util.*;
      * @return An Optional, containing the method if found, or empty if not found
      */
     public Optional<Method> findMethod(Class returnType, String name, Class... paramTypes) {
-
         return findMethod(true, returnType, name, paramTypes);
-
     }
 
 
@@ -186,28 +186,28 @@ import java.util.*;
         return Optional.empty();
     }
 
-//     Optional<Method> methodForParams(boolean allowAutoboxing, Class returnType, String methodName, Object... args) {
-//         final Set<Method> possibleMethods = findMethods(returnType, methodName, allowAutoboxing);
-//
-//         for (Method m : possibleMethods) {
-//             m.setAccessible(true); //allows evaluation of private method
-//             final Class<?>[] paramTypes = m.getParameterTypes();
-//             if (args.length == paramTypes.length) {
-//                 boolean matchedParams = true;
-//                 for (int i = 0; i < args.length; i++) {
-//                     Class<?> paramClass = !allowAutoboxing ? paramTypes[i] : classEquivalent(paramTypes[i]);
-//                     Class<?> argClass = args[i].getClass();
-//                     if (paramClass != argClass) {
-//                         matchedParams = false;
-//                     }
-//                 }
-//                 if (matchedParams) {
-//                     return Optional.of(m);
-//                 }
-//             }
-//         }
-//         return Optional.empty();
-//     }
+     Optional<Method> methodForParams(boolean allowAutoboxing, Class returnType, String methodName, Object... args) {
+         final Set<Method> possibleMethods = findMethods(allowAutoboxing, returnType, methodName);
+
+         for (Method m : possibleMethods) {
+             m.setAccessible(true); //allows evaluation of private method
+             final Class<?>[] paramTypes = m.getParameterTypes();
+             if (args.length == paramTypes.length) {
+                 boolean matchedParams = true;
+                 for (int i = 0; i < args.length; i++) {
+                     Class<?> paramClass = !allowAutoboxing ? paramTypes[i] : classEquivalent(paramTypes[i]);
+                     Class<?> argClass = args[i].getClass();
+                     if (paramClass != argClass) {
+                         matchedParams = false;
+                     }
+                 }
+                 if (matchedParams) {
+                     return Optional.of(m);
+                 }
+             }
+         }
+         return Optional.empty();
+     }
 
 
      /**
@@ -251,7 +251,7 @@ import java.util.*;
              final Method m = optionalMethod.get();
             if (Modifier.isStatic(m.getModifiers())) {
                 try {
-                    Object result = m.invoke(null, args);
+                    Object result = m.invoke(null, args); //static methods do not require an instance of a class to be invoked
                     if (returnType.isInstance(result)) {
                         return returnType.cast(result);
                     }

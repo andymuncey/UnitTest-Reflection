@@ -8,14 +8,11 @@ import java.util.Set;
 
 public class ConstructorsHelper<C> {
 
-
     final private Class<C> searchClass;
 
     public ConstructorsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
-
-
 
     /**
      * Finds a constructor matching specified criteria
@@ -27,7 +24,7 @@ public class ConstructorsHelper<C> {
      * @return An Optional containing a matching constructor, if found
      */
     public Optional<Constructor<C>> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
-        @SuppressWarnings("unchecked") //cast declared constructors not of type, but must be given the class in which they appear
+        @SuppressWarnings("unchecked") //casting declared constructors not of type, but constructors must be of the same type given the class in which they appear
                 Constructor<C>[] constructorsArray = (Constructor<C>[]) (includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors());
 
         Set<Constructor<C>> constructors = new HashSet<>(Arrays.asList(constructorsArray));
@@ -44,19 +41,29 @@ public class ConstructorsHelper<C> {
                 if (!matchParamOrder){
                     Utilities.sortParamsTypesByName(actualParamTypes);
                 }
-                boolean matchedParams = true;
-                for (int i = 0; i < params.length; i++) {
-                    if (params[i] != (allowAutoboxing ?  Utilities.classEquivalents(actualParamTypes)[i] : actualParamTypes[i] )){
-                        matchedParams = false;
-                        break;
-                    }
-                }
-                if (matchedParams) {
+                if (typesMatch(allowAutoboxing, actualParamTypes, params)) {
                     return Optional.of(c);
                 }
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Verify if two sets of types can be considered equal
+     * @param allowAutoboxing
+     * @param actualParamTypes
+     * @param params
+     * @return
+     */
+    //todo: indicate that only 1 set of types are boxed and check whether this is desired
+    private boolean typesMatch(boolean allowAutoboxing, Class[] actualParamTypes, Class[] params) {
+        for (int i = 0; i < params.length; i++) {
+            if (params[i] != (allowAutoboxing ?  Utilities.classEquivalent(actualParamTypes[i]) : actualParamTypes[i] )){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

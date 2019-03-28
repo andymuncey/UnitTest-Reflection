@@ -13,7 +13,6 @@ public class InstanceReflectionHelper<C> {
     private FieldsHelper<C> fieldsHelper;
     private ConstructorsHelper<C> constructorsHelper;
     private MethodsHelper<C> methodsHelper;
-
     private Object instance;
 
     public InstanceReflectionHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
@@ -35,16 +34,6 @@ public class InstanceReflectionHelper<C> {
     public boolean hasValidInstance() {
         return instance != null;
     }
-
-    /**
-     * Checks if the helper has an instance of the class for testing
-     *
-     * @return true or false
-     */
-    boolean hasInstance() {
-        return instance != null;
-    }
-
 
 
 

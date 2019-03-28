@@ -8,14 +8,11 @@ import java.util.Set;
 
 public class FieldsHelper<C> {
 
-
     final private Class<C> searchClass;
 
     public FieldsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
-
-    //region fields
 
     /**
      * Gets all fields within the class
@@ -27,11 +24,10 @@ public class FieldsHelper<C> {
         return fields;
     }
 
-
     /**
      * Finds a field by name
      * @param name the name of the field to search for
-     * @return an optional containing a field if found
+     * @return an Optional containing a field, if found
      */
     Optional<Field> field(String name){
         for (Field field : fields()){
@@ -41,8 +37,4 @@ public class FieldsHelper<C> {
         }
         return Optional.empty();
     }
-
-    //endregion
-
-
 }
