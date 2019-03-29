@@ -37,7 +37,7 @@ public class TrimWithEllipsisTest {
     }
 
     private void test(String expectedOutput, String wrongOutputMessage, String noOutputMessage, String... tokens) {
-        ConsoleTester.EventHandler handler = new ConsoleTester.EventHandler() {
+        ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
             @Override
             public void outputGenerated(String[] linesOfOutput) {
                 String lastLine = linesOfOutput[linesOfOutput.length - 1];
@@ -48,9 +48,11 @@ public class TrimWithEllipsisTest {
             public void noOutputGenerated() {
                 Assert.fail(noOutputMessage);
             }
+
         };
 
-        ConsoleTester<TrimWithEllipsis> tester = new ConsoleTester<>(TrimWithEllipsis.class, handler);
+        ConsoleTester<TrimWithEllipsis> tester = new ConsoleTester<>(TrimWithEllipsis.class);
+        tester.setCompletionHandler(handler);
         tester.test(tokens);
     }
 }

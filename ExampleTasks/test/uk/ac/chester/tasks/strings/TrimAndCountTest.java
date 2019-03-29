@@ -44,7 +44,7 @@ public class TrimAndCountTest {
 
 
     private void test(String expectedOutput, String wrongOutputMessage, String noOutputMessage, String... tokens){
-        ConsoleTester.EventHandler handler = new ConsoleTester.EventHandler() {
+        ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
             @Override
             public void outputGenerated(String[] linesOfOutput) {
                 String lastLine  = linesOfOutput[linesOfOutput.length-1];
@@ -55,9 +55,11 @@ public class TrimAndCountTest {
             public void noOutputGenerated() {
                 Assert.fail(noOutputMessage);
             }
+
         };
 
-        ConsoleTester<TrimAndCount> tester = new ConsoleTester<>(TrimAndCount.class, handler);
+        ConsoleTester<TrimAndCount> tester = new ConsoleTester<>(TrimAndCount.class);
+        tester.setCompletionHandler(handler);
         tester.test(tokens);
     }
 

@@ -31,7 +31,7 @@ public class CaseOfCharacterAtIndexTest {
 
 
     private void test(String expectedOutput, String prohibitedOutput, String wrongOutputMessage, String noOutputMessage, String... tokens){
-        ConsoleTester.EventHandler handler = new ConsoleTester.EventHandler() {
+        ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
             @Override
             public void outputGenerated(String[] linesOfOutput) {
                 String lastLine  = linesOfOutput[linesOfOutput.length-1];
@@ -43,9 +43,12 @@ public class CaseOfCharacterAtIndexTest {
             public void noOutputGenerated() {
                 Assert.fail(noOutputMessage);
             }
+
+
         };
 
-        ConsoleTester<CaseOfCharacterAtIndex> tester = new ConsoleTester<>(CaseOfCharacterAtIndex.class, handler);
+        ConsoleTester<CaseOfCharacterAtIndex> tester = new ConsoleTester<>(CaseOfCharacterAtIndex.class);
+        tester.setCompletionHandler(handler);
         tester.test(tokens);
     }
 }

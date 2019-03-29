@@ -10,11 +10,12 @@ public class StringTasksTest {
 
     @Test
     public void main() {
-        ConsoleTester<StringTasks> tester = new ConsoleTester<>(StringTasks.class, handler);
+        ConsoleTester<StringTasks> tester = new ConsoleTester<>(StringTasks.class);
+        tester.setCompletionHandler(handler);
         tester.test("Hello world", "more input");
     }
 
-    private ConsoleTester.EventHandler handler = new ConsoleTester.EventHandler() {
+    private ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
         @Override
         public void outputGenerated(String[] linesOfOutput) {
             Assert.assertEquals("Hello world",linesOfOutput[0]);
