@@ -34,18 +34,18 @@ public class MethodsTesterValidator {
 
     @Test
     public void nonExistentMethod() {
-        Assert.assertNull(tester.test(Void.class, "nonExistentMethod"));
+        Assert.assertNull(tester.testExistence(Void.class, "nonExistentMethod"));
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void wrongCaseForMethodName() {
-
-        tester.test(void.class, "RETURNSINTEGER");
+        tester.testExistence(void.class, "RETURNSINTEGER");
     }
 
     @Test
     public void wrongReturnType() {
-        tester.test(String.class, "returnsInteger");
+        tester.testExistence(String.class, "returnsInteger");
     }
 
     @Test
@@ -55,34 +55,34 @@ public class MethodsTesterValidator {
 
     @Test
     public void wrongParamCount(){
-        tester.test(void.class, "intParamStringParam");
+        tester.testExistence(void.class, "intParamStringParam");
     }
 
     @Test
     public void wrongParams(){
-        tester.test(void.class,"oneIntParam","text");
+        tester.testExistence(void.class,"oneIntParam","text");
     }
 
     @Test
     public void wrongMultiParams(){
-        tester.test(void.class,"intParamStringParam","text", 23.5);
+        tester.testExistence(void.class,"intParamStringParam","text", 23.5);
     }
 
     @Test
     public void wrongOrderParams(){
-        tester.test(void.class,"intParamStringParam", "text", 5);
+        tester.testExistence(void.class,"intParamStringParam", "text", 5);
     }
 
 
 
     @Test
     public void paramConvention(){
-        tester.test(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
+        tester.testExistence(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
     }
 
     @Test
     public void accessModifier(){
-        tester.test(AccessModifier.PUBLIC, void.class,"privateMethod" );
+        tester.testExistence(AccessModifier.PUBLIC, void.class,"privateMethod" );
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
- *  * Passing an array as the only argument to the test method is ambiguous as it could be inferred as an array object or varargs
+ *  * Passing an array as the only argument to the testExistence method is ambiguous as it could be inferred as an array object or varargs
  * @param <C> type of the class that's being tested
  */
 public class MethodsTester<C> extends Tester {
@@ -95,17 +95,17 @@ public class MethodsTester<C> extends Tester {
     }
 
 
-    /**
-     * If the method exists, method is invoked, and the value returned
-     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
-     * @param allowAutoboxing whether the return type must be an exact match (Integer and int would not be considered an exact match)
-     * @param args arguments to invoke the method with
-     * @return the result of invoking the method (or null)
-     */
-    private boolean test(boolean allowAutoboxing, AccessModifier modifier, Class returnTypeClass, String methodName, Object[] args){
-        return testExistence(allowAutoboxing, modifier, returnTypeClass,methodName, args) ;
-//        return  helper.invokeMethod(returnTypeClass, methodName, args);
-    }
+//    /**
+//     * If the method exists, method is invoked, and the value returned
+//     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
+//     * @param allowAutoboxing whether the return type must be an exact match (Integer and int would not be considered an exact match)
+//     * @param args arguments to invoke the method with
+//     * @return the result of invoking the method (or null)
+//     */
+//    private boolean testExistence(boolean allowAutoboxing, AccessModifier modifier, Class returnTypeClass, String methodName, Object[] args){
+//        return testExistence(allowAutoboxing, modifier, returnTypeClass,methodName, args) ;
+////        return  helper.invokeMethod(returnTypeClass, methodName, args);
+//    }
 
     /**
      * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
@@ -113,8 +113,8 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public boolean test(AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
-        return test(true, modifier, returnTypeClass,methodName, args);
+    public boolean testExistence(AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
+        return testExistence(true, modifier, returnTypeClass,methodName, args);
     }
 
 //    /**
@@ -126,8 +126,8 @@ public class MethodsTester<C> extends Tester {
 //     * @param <R> the type the method returns
 //     * @return the result of invoking the method (or null)
 //     */
-//    public <R> R test(Class<R> returnTypeClass, String methodName){
-//        return test(null, returnTypeClass, methodName);
+//    public <R> R testExistence(Class<R> returnTypeClass, String methodName){
+//        return testExistence(null, returnTypeClass, methodName);
 //    }
 
     /**
@@ -139,8 +139,8 @@ public class MethodsTester<C> extends Tester {
      * @param args the arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public boolean test(Class returnTypeClass, String methodName, Object... args){
-        return test(null, returnTypeClass, methodName, args);
+    public boolean testExistence(Class returnTypeClass, String methodName, Object... args){
+        return testExistence(null, returnTypeClass, methodName, args);
     }
 
     /**
@@ -150,10 +150,10 @@ public class MethodsTester<C> extends Tester {
      * @param returnTypeClass the type the method is expected to return
      * @param methodName the name of the method
      * @param args arguments to invoke the method with
-     * @return the result of invoking the method (or null)
+     * @return true if the method exists, false otherwise
      */
     public boolean testForExactReturnType(AccessModifier modifier, Class returnTypeClass, String methodName,Object... args){
-        return test(false, modifier, returnTypeClass,methodName, args);
+        return testExistence(false, modifier, returnTypeClass,methodName, args);
     }
 
     /**
@@ -179,8 +179,6 @@ public class MethodsTester<C> extends Tester {
      * -That the method returns the correct type
      * -That the method has the correct parameters, though not necessarily in the correct order
      * -That the method has the correct parameters, in the correct order
-     *
-     * Finally, if the method is correctly declared, it returns the result of executing the method
      *
      * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
      * @param returnType the type of data returned by the class
@@ -262,7 +260,7 @@ public class MethodsTester<C> extends Tester {
 
 
     /**
-     * Allows callbacks to indicate problems when attempting to test methods that do not exist
+     * Allows callbacks to indicate problems when attempting to testExistence methods that do not exist
      * It is anticipated that Assert.fail will be used in the implementation of each method to provide a describe
      */
     public interface EventHandler {

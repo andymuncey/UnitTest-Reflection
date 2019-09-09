@@ -3,7 +3,7 @@ package uk.ac.chester.testing;
 import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
 
 /**
- * This class is designed to be used to test method calls and field values and will use an instance of the class passed to the constructor
+ * This class is designed to be used to testExistence method calls and field values and will use an instance of the class passed to the constructor
  * It is important that checks have already been made as to the:
  *      existence of a constructor that takes the required parameters
  *      existence of the methods called (e.g. by using the MethodsTester class)
@@ -26,7 +26,7 @@ public class InstanceTester<C> {
 
         this.handler = handler;
         try {
-            helper = new InstanceReflectionHelper<C>(searchClass, args);
+            helper = new InstanceReflectionHelper<>(searchClass, args);
         } catch (Exception e) {
             this.handler.cannotConstructWithArgs(searchClass.getSimpleName(), args);
         }

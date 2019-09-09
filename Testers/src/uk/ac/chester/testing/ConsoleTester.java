@@ -30,7 +30,7 @@ public class ConsoleTester<C> {
 
 
     public ConsoleTester(Class<C> searchClass) {
-        this.helper = new MethodsHelper<C>(searchClass);
+        this.helper = new MethodsHelper<>(searchClass);
     }
 
     private static boolean causedByNoSuchElementException(Throwable e) {

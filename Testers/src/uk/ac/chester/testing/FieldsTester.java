@@ -13,8 +13,8 @@ public class FieldsTester<T> extends Tester {
 
     /**
      * Creates a FieldsTester for a specified class
-     * @param theClass the class to test the fields in
-     * @param handler An implementation of EventHandler, likely containing unit test assertions
+     * @param theClass the class to testExistence the fields in
+     * @param handler An implementation of EventHandler, likely containing unit testExistence assertions
      */
     public FieldsTester(Class<T> theClass, EventHandler handler){
         FieldsHelper<T> helper = new FieldsHelper<>(theClass);
@@ -27,7 +27,7 @@ public class FieldsTester<T> extends Tester {
     /**
      * Tests a specific field
      * @param desiredModifier the expected access modifier for the field
-     * @param name the name of the field to test
+     * @param name the name of the field to testExistence
      * @param desiredClass the type of the field
      * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
      */

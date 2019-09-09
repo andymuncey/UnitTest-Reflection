@@ -43,7 +43,7 @@ public class ContainsTest {
 
 
     /**
-     * This test should leave the application in a state where it is waiting for more input
+     * This testExistence should leave the application in a state where it is waiting for more input
      */
     @Test
     public void invalidInput() {

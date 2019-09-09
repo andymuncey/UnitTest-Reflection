@@ -50,7 +50,7 @@ public class TopDownValidator {
         Object instanceFromParams = constructorsTester.test(AccessModifier.PRIVATE,'a',"bc",'d');
         Assert.assertNotNull(instanceFromParams);
 
-        //test specific fields
+        //testExistence specific fields
 
 
         FieldsTester.EventHandler fieldHandler = new FieldsTestEventHandlerEN();
@@ -59,16 +59,16 @@ public class TopDownValidator {
         fieldsTester.test(AccessModifier.PRIVATE,"regularIvar",int.class,false);
         fieldsTester.test(AccessModifier.PUBLIC, "REGULAR_CONSTANT", int.class, false);
 
-        //test specific methods
+        //testExistence specific methods
         MethodsTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         MethodsTester methodsTester = new MethodsTester(aClass, methodHandler);
-        boolean returnsPrimitiveIntExists = methodsTester.test( int.class,"returnsPrimitiveInt");
+        boolean returnsPrimitiveIntExists = methodsTester.testExistence( int.class,"returnsPrimitiveInt");
         Assert.assertTrue(returnsPrimitiveIntExists);
 
         @SuppressWarnings("unchecked")
         MethodsTester<Object> methodsTester2 = new MethodsTester(aClass, methodHandler);
-        boolean anotherMethodExists = methodsTester2.test(void.class, "intParamStringParam",1,"test");
+        boolean anotherMethodExists = methodsTester2.testExistence(void.class, "intParamStringParam",1,"testExistence");
         Assert.assertTrue(anotherMethodExists);
     }
 }

@@ -32,7 +32,7 @@ public class InstanceReflectionHelper<C> {
     }
 
     /**
-     * determines whether there is a valid instance of type C to test
+     * determines whether there is a valid instance of type C to testExistence
      * @return true or false
      */
     public boolean hasValidInstance() {

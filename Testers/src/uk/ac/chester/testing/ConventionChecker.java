@@ -23,7 +23,7 @@ public interface ConventionChecker {
     /**
      * Verifies that the String matches the convention for a class constant (i.e. UPPERCASE_WITH_UNDERSCORES)
      * As per the conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
-     * @param name the String to test
+     * @param name the String to testExistence
      * @return true if all characters are either a capital or underscore and there are at least two characters in the string
      */
     default boolean validClassConstantName(String name){

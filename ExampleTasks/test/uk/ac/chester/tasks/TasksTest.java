@@ -10,7 +10,7 @@ import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 public class TasksTest {
 
-    //region example standard unit test for static methods
+    //region example standard unit testExistence for static methods
 
     @Test
     public void arraySum() {
@@ -40,7 +40,7 @@ public class TasksTest {
         MethodsTester<Tasks> tester = new MethodsTester<>(Tasks.class,new MethodTestEventHandlerEN() );
 
         int[] emptyArray = {};
-        boolean methodCreatedCorrectly = tester.test(Integer.class,"arraySum", emptyArray);
+        boolean methodCreatedCorrectly = tester.testExistence(Integer.class,"arraySum", emptyArray);
 
         if (methodCreatedCorrectly) {
             int resultWithEmpty = tester.executeStatic(Integer.class, "arraySum", emptyArray);
@@ -81,7 +81,7 @@ public class TasksTest {
         Assert.assertEquals(23,result);
 
         //below is not valid as tester can only return an object
-        //Assert.assertEquals(23,tester.test(13));
+        //Assert.assertEquals(23,tester.testExistence(13));
     }
 
 

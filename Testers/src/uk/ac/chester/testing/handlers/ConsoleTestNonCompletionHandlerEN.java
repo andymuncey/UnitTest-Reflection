@@ -5,7 +5,7 @@ import uk.ac.chester.testing.ConsoleTester;
 
 
 /**
- * Implements generic failures methods for console tests where the test is expected to finish normally
+ * Implements generic failures methods for console tests where the testExistence is expected to finish normally
  */
 public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompletionHandler {
 

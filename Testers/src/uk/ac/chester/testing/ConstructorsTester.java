@@ -8,9 +8,9 @@ import java.util.Optional;
 
 
 /**
- * A class to test Constructors for a class
+ * A class to testExistence Constructors for a class
  * Known issue:
- * * When using the test() method to test a method that returns a primitive type will result in a object type being
+ * * When using the testExistence() method to testExistence a method that returns a primitive type will result in a object type being
  * * returned which has to be cast as a primitive in order to be used in an assertion
  */
 public class ConstructorsTester<T> extends Tester {
@@ -21,8 +21,8 @@ public class ConstructorsTester<T> extends Tester {
     /**
      * Creates a ConstructorsTester for the provided class
      *
-     * @param theClass           the class to test the constructors of
-     * @param handler An implementation of EventHandler, likely containing unit test assertions
+     * @param theClass           the class to testExistence the constructors of
+     * @param handler An implementation of EventHandler, likely containing unit testExistence assertions
      */
     public ConstructorsTester(Class<T> theClass, EventHandler handler) {
         helper = new ConstructorsHelper<>(theClass);
@@ -44,10 +44,10 @@ public class ConstructorsTester<T> extends Tester {
     public T test(AccessModifier modifier, Object... args) {
 
         if (checkExistence(args)) {
-            Optional<Constructor<T>> possibleCtor = helper.constructorForArgTypes(true, true, args);
+            Optional<Constructor<T>> possibleConstructor = helper.constructorForArgTypes(true, true, args);
 
-            if (possibleCtor.isPresent()) {
-                Constructor<T> c = possibleCtor.get();
+            if (possibleConstructor.isPresent()) {
+                Constructor<T> c = possibleConstructor.get();
                 c.setAccessible(true); //ensures private constructors can be called
 
                 if (modifier != null) {
