@@ -38,10 +38,8 @@ public class Utilities {
                 return classes[i];
             }
         }
-
         return primitiveClass; //not actually a primitive
     }
-
 
     /**
      * Returns an array with the results of calling {@link #classEquivalent} on each item
@@ -64,10 +62,7 @@ public class Utilities {
      * @return true if types are equal, or one is the boxed equivalent of the other, false otherwise
      */
     public static boolean equivalentType(Class classA, Class classB){
-        if (classEquivalent(classA) == classEquivalent(classB)){
-            return true;
-        }
-        return false;
+        return classEquivalent(classA) == classEquivalent(classB);
     }
 
     /**
@@ -93,5 +88,43 @@ public class Utilities {
         Arrays.sort(paramTypes, Comparator.comparing(Class::getCanonicalName));
     }
 
+
+    /**
+     * Verify if two sets of types can be considered equal
+     * @param allowAutoboxing whether boxed and primitive types can be considered equal
+     * @param types an Array of types
+     * @param otherTypes an Array of types
+     * @return true or false
+     */
+    static boolean typesMatch(boolean allowAutoboxing, Class[] types, Class[] otherTypes) {
+        if (types.length != otherTypes.length){
+            return  false;
+        }
+        for (int i = 0; i < otherTypes.length; i++) {
+            Class type = allowAutoboxing ? classEquivalent(otherTypes[i]) : otherTypes[i];
+            Class otherType = allowAutoboxing ?  classEquivalent(types[i]) : types[i];
+            if (type != otherType){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Given a list of arguments, provide a list of types as a String
+     * @param args an array of objects
+     * @return a String in the format "String, Integer, Object"
+     */
+    static String commaSeparatedTypeList(Object[] args) {
+        StringBuilder builder = new StringBuilder();
+        Class[] paramClasses = classesForArgs(args);
+        for (int i = 0; i < paramClasses.length; i++) {
+            if (i > 0) {
+                builder.append(", ");
+            }
+            builder.append(paramClasses[i].getSimpleName());
+        }
+        return builder.toString();
+    }
 
 }

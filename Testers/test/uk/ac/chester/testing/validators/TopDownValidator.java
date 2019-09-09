@@ -51,6 +51,8 @@ public class TopDownValidator {
         Assert.assertNotNull(instanceFromParams);
 
         //test specific fields
+
+
         FieldsTester.EventHandler fieldHandler = new FieldsTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         FieldsTester fieldsTester = new FieldsTester(aClass,fieldHandler);

@@ -31,10 +31,13 @@ public class InstanceReflectionHelper<C> {
         }
     }
 
+    /**
+     * determines whether there is a valid instance of type C to test
+     * @return true or false
+     */
     public boolean hasValidInstance() {
         return instance != null;
     }
-
 
 
     /**
@@ -47,7 +50,7 @@ public class InstanceReflectionHelper<C> {
 
     /**
      * Attempts to invoke a method matching the specified returnType and name, with the supplied values
-     * Will use the constructed class if available, else will try and create an instance of the class using the parameterless constructor
+     * Will use the constructed class if available, else will try and create an instance of the class using the parameter-less constructor
      *
      * @param returnType      the type of data returned by the method you wish to invoke, primitives types will be matched with non-primitive equivalents (e.g. int and Integer)
      * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different when considering return type. True matches primitive return types with their object counterparts
@@ -78,19 +81,19 @@ public class InstanceReflectionHelper<C> {
                 throw new RuntimeException(e.getCause());
             }
         }
-        StringBuilder builder = new StringBuilder();
-        Class[] paramClasses = Utilities.classesForArgs(args);
-        for (int i = 0; i < paramClasses.length; i++) {
-            if (i > 0) {
-                builder.append(", ");
-            }
-            builder.append(paramClasses[i].getSimpleName());
-        }
-        throw new TestingExecutionException("Method matching " + returnType.getName() + " " + methodName + "(" + builder.toString() + ") not found");
+        throw new TestingExecutionException("Method matching " + returnType.getName() + " " + methodName + "(" + Utilities.commaSeparatedTypeList(args) + ") not found");
 
     }
 
-
+    /**
+     * Retrieves the value of a field, with a given name and type
+     * @param type the class for the type of the field
+     * @param name the name of the field
+     * @param <T> the type of the field
+     * @return the value,
+     * @throws TestingExecutionException if the field with the specified name is not found
+     */
+    @SuppressWarnings("unchecked")
     public <T> T fieldValue(Class<T> type, String name) throws TestingExecutionException {
         Optional<Field> optionalField = fieldsHelper.field(name);
         if (optionalField.isPresent()) {
@@ -99,8 +102,10 @@ public class InstanceReflectionHelper<C> {
             if (field.getType().equals(type)) {
                 try {
                     return (T) field.get(instance);
-                } catch (Exception e) {
-                    System.err.println();
+                } catch (IllegalArgumentException ignored) {
+                    //shouldn't happen as set accessible above
+                } catch (IllegalAccessException ignored){
+                    //also shouldn't happen as type of field has been checked
                 }
             }
         }
