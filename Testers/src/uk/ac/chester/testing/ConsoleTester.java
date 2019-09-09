@@ -1,6 +1,5 @@
 package uk.ac.chester.testing;
 
-import org.junit.Assert;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 
 import java.io.ByteArrayInputStream;
@@ -11,7 +10,7 @@ import java.util.concurrent.*;
 
 public class ConsoleTester<C> {
 
-    private MethodsHelper helper;
+    private final MethodsHelper helper;
 
     private CompletionHandler completionHandler;
     private NonCompletionHandler nonCompletionHandler;

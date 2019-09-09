@@ -3,8 +3,6 @@ package uk.ac.chester.testing.reflection;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class UtilitiesTest {
 
     @Test

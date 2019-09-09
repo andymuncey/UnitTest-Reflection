@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.chester.testing.ConsoleTester;
 
-import static org.junit.Assert.*;
-
 //Get a String from the user, remove spaces from the start and end and output how many characters the remaining phrase has
 public class TrimAndCountTest {
 

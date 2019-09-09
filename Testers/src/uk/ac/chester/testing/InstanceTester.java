@@ -14,7 +14,7 @@ import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
 public class InstanceTester<C> {
 
     private InstanceReflectionHelper<C> helper;
-    private EventHandler handler;
+    private final EventHandler handler;
 
     /**
      *

@@ -8,8 +8,8 @@ import java.util.Set;
 
 public class FieldsTester<T> extends Tester {
 
-    private EventHandler handler;
-    private Set<Field> fields;
+    private final EventHandler handler;
+    private final Set<Field> fields;
 
     /**
      * Creates a FieldsTester for a specified class

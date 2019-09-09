@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public class MethodsTester<C> extends Tester {
 
-    private MethodsHelper<C> helper;
-    private EventHandler handler;
+    private final MethodsHelper<C> helper;
+    private final EventHandler handler;
 
     /**
      * The type parameters should be the type of the class that's being tests,

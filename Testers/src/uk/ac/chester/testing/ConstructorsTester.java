@@ -15,8 +15,8 @@ import java.util.Optional;
  */
 public class ConstructorsTester<T> extends Tester {
 
-    private ConstructorsHelper<T> helper;
-    private EventHandler handler;
+    private final ConstructorsHelper<T> helper;
+    private final EventHandler handler;
 
     /**
      * Creates a ConstructorsTester for the provided class

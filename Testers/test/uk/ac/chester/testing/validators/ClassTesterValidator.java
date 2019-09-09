@@ -37,7 +37,7 @@ public class ClassTesterValidator {
     @Test
     public void testMethodNameInvalid(){
         Object x = new Object(){
-            private String BadMethodName(){return "hello";};
+            private String BadMethodName(){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester t  = new ClassTester<>(x.getClass(),  handler);
@@ -48,7 +48,7 @@ public class ClassTesterValidator {
     @Test
     public void testMethodParamNameInvalid(){
         Object x = new Object(){
-            private String someMethod(String BadName){return "hello";};
+            private String someMethod(String BadName){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester t  = new ClassTester<>(x.getClass(),  handler);

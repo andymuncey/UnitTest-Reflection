@@ -40,7 +40,7 @@ public class InstanceValidator {
     public void property(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
         tester.executeMethod("setX",5);
-        Integer gotValue = (Integer)tester.executeMethod(Integer.class, "getX");
+        Integer gotValue = tester.executeMethod(Integer.class, "getX");
         Assert.assertEquals(Integer.valueOf(5),gotValue);
     }
 

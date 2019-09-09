@@ -1,8 +1,6 @@
 package uk.ac.chester.tasks;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.MethodsTester;

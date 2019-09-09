@@ -7,10 +7,10 @@ import java.util.Set;
 
 public class ClassTester<T> extends Tester {
 
-    private EventHandler handler;
-    private Set<Field> fields;
-    private Set<Method> methods;
-    private Set<Constructor> constructors;
+    private final EventHandler handler;
+    private final Set<Field> fields;
+    private final Set<Method> methods;
+    private final Set<Constructor> constructors;
 
     /**
      * Creates a ClassTester for a specified class

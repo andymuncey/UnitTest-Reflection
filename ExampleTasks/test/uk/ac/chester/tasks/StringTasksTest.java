@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.chester.testing.ConsoleTester;
 
-import static org.junit.Assert.*;
-
 public class StringTasksTest {
 
     @Test
@@ -15,7 +13,7 @@ public class StringTasksTest {
         tester.test("Hello world", "more input");
     }
 
-    private ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
+    private final ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
         @Override
         public void outputGenerated(String[] linesOfOutput) {
             Assert.assertEquals("Hello world",linesOfOutput[0]);

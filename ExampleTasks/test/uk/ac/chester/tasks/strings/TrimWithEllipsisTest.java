@@ -4,9 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.chester.testing.ConsoleTester;
 
-import static org.junit.Assert.*;
-
-    //Get a String from the user, if it has more than 30 characters, take the first 27, add an ellipsis (three full stops) and print that, otherwise print the whole String
+//Get a String from the user, if it has more than 30 characters, take the first 27, add an ellipsis (three full stops) and print that, otherwise print the whole String
 public class TrimWithEllipsisTest {
 
     @Test

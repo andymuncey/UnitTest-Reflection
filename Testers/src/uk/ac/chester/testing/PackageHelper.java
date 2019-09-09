@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class PackageHelper {
 
-    private static String[] ignoredPackages = {
+    private static final String[] ignoredPackages = {
             "com.intellij",
             "java",
             "jdk",
