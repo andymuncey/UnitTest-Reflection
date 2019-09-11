@@ -31,14 +31,14 @@ public class CaseOfCharacterAtIndexTest {
     private void test(String expectedOutput, String prohibitedOutput, String wrongOutputMessage, String noOutputMessage, String... tokens){
         ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
             @Override
-            public void outputGenerated(String[] linesOfOutput) {
+            public void outputGenerated(String[] inputTokens, String[] linesOfOutput) {
                 String lastLine  = linesOfOutput[linesOfOutput.length-1];
                 Assert.assertTrue(wrongOutputMessage, lastLine.toLowerCase().contains(expectedOutput));
                 Assert.assertFalse(wrongOutputMessage, lastLine.toLowerCase().contains(prohibitedOutput));
             }
 
             @Override
-            public void noOutputGenerated() {
+            public void noOutputGenerated(String[] inputTokens) {
                 Assert.fail(noOutputMessage);
             }
 

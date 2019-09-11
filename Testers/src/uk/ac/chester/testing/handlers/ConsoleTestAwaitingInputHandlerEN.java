@@ -10,32 +10,33 @@ import uk.ac.chester.testing.ConsoleTester;
 public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler, ConsoleTester.CompletionHandler {
 
     @Override
-    public void outputGenerated(String[] linesOfOutput) {
+    public void outputGenerated(String[] inputTokens, String[] linesOfOutput) {
+        //we don't care about this
+    }
+
+
+    @Override
+    public void noOutputGenerated(String[] inputTokens) {
         //we don't care about this
     }
 
     @Override
-    public void noOutputGenerated() {
-        //we don't care about this
-    }
-
-    @Override
-    public void stillAwaitingInput() {
+    public void stillAwaitingInput(String[] inputTokens) {
         //OK this is expected
     }
 
     @Override
-    public void timeout(int seconds) {
+    public void timeout(String[] inputTokens, int seconds) {
         Assert.fail("The application did not finish executing in the time permitted (maximum " + seconds + " seconds)");
     }
 
     @Override
-    public void wrongInputType() {
+    public void wrongInputType(String[] inputTokens) {
         Assert.fail("The application tried to read data in a format other than that supplied (for example trying to read an String as an int)");
     }
 
     @Override
-    public void otherException(Exception e) {
+    public void otherException(String[] inputTokens, Exception e) {
         Assert.fail("The application threw a "+e.getClass().getSimpleName()+": " + e.getMessage());
     }
 }

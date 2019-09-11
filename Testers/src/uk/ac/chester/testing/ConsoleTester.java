@@ -73,18 +73,18 @@ public class ConsoleTester<C> {
             future.get(timeout, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
             if (nonCompletionHandler != null) {
-                nonCompletionHandler.timeout(timeout);
+                nonCompletionHandler.timeout(inputTokens, timeout);
             }
         } catch (InterruptedException ignored) {
             //called if the current thread was interrupted while waiting, shouldn't happen
         } catch (ExecutionException e) {
             if (causedByNoSuchElementException(e)) {
                 if (nonCompletionHandler != null){
-                    nonCompletionHandler.stillAwaitingInput();
+                    nonCompletionHandler.stillAwaitingInput(inputTokens);
                 }
             } else {
                 if (exceptionHandler != null){
-                    exceptionHandler.otherException(e);
+                    exceptionHandler.otherException(inputTokens, e);
                 }
             }
         } finally {
@@ -108,19 +108,19 @@ public class ConsoleTester<C> {
         } catch (Exception e){
             if (causedByNoSuchElementException(e)) {
                 if (nonCompletionHandler != null){
-                    nonCompletionHandler.stillAwaitingInput();
+                    nonCompletionHandler.stillAwaitingInput(inputTokens);
                 }
             } else if (exceptionHandler != null) {
-                exceptionHandler.otherException(e);
+                exceptionHandler.otherException(inputTokens, e);
             }
             return;
         }
 
         if (completionHandler != null) {
             if (!out.toString().isEmpty()) {
-                completionHandler.outputGenerated(out.toString().split("\n"));
+                completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
             } else {
-                completionHandler.noOutputGenerated();
+                completionHandler.noOutputGenerated(inputTokens);
             }
         }
     }
@@ -129,15 +129,15 @@ public class ConsoleTester<C> {
 
         /**
          * Calling the main method with the specified tokens has generated console output
-         *
+         * @param inputTokens the input supplied
          * @param linesOfOutput the output generated
          */
-        void outputGenerated(String[] linesOfOutput);
+        void outputGenerated(String[] inputTokens, String[] linesOfOutput);
 
         /**
          * Calling the main method with the specified tokens has generated no output
          */
-        void noOutputGenerated();
+        void noOutputGenerated(String[] inputTokens);
 
     }
 
@@ -148,12 +148,12 @@ public class ConsoleTester<C> {
          * (When executed with System.in routed to a stream, it actually throws a NoSuchElementException as there are
          * no more elements for the scanner to process
          */
-        void stillAwaitingInput();
+        void stillAwaitingInput(String[] inputTokens);
 
         /**
          * Called when the application did not finish running in time
          */
-        void timeout(int seconds);
+        void timeout(String[] inputTokens, int seconds);
 
     }
 
@@ -162,16 +162,18 @@ public class ConsoleTester<C> {
         /**
          * Indicates a InputMismatchException has been thrown:
          * For example if the programme has tried to read in an int, but the input buffer contained a String
+         * @param inputTokens
          */
-        void wrongInputType();
+        void wrongInputType(String[] inputTokens);
 
 
         /**
          * Some exception, other than an InputMismatchException or NoSuchElement has been thrown:
          * Typically indicates a bug in the application's code
+         * @param inputTokens
          * @param e the exception
          */
-        void otherException(Exception e);
+        void otherException(String[] inputTokens, Exception e);
 
     }
 

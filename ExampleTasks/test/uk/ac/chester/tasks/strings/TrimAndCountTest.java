@@ -44,13 +44,13 @@ public class TrimAndCountTest {
     private void test(String expectedOutput, String wrongOutputMessage, String noOutputMessage, String... tokens){
         ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
             @Override
-            public void outputGenerated(String[] linesOfOutput) {
+            public void outputGenerated(String[] inputTokens, String[] linesOfOutput) {
                 String lastLine  = linesOfOutput[linesOfOutput.length-1];
                 Assert.assertEquals(wrongOutputMessage, lastLine,expectedOutput);
             }
 
             @Override
-            public void noOutputGenerated() {
+            public void noOutputGenerated(String[] inputTokens) {
                 Assert.fail(noOutputMessage);
             }
 

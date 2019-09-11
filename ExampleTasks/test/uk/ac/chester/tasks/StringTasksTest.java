@@ -15,13 +15,13 @@ public class StringTasksTest {
 
     private final ConsoleTester.CompletionHandler handler = new ConsoleTester.CompletionHandler() {
         @Override
-        public void outputGenerated(String[] linesOfOutput) {
+        public void outputGenerated(String[] inputTokens, String[] linesOfOutput) {
             Assert.assertEquals("Hello world",linesOfOutput[0]);
             Assert.assertFalse("Too many output lines", linesOfOutput.length > 1);
         }
 
         @Override
-        public void noOutputGenerated() {
+        public void noOutputGenerated(String[] inputTokens) {
             Assert.fail("No output was generated, you were meant to print the input");
         }
 
