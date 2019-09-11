@@ -6,6 +6,15 @@ import uk.ac.chester.testing.ConsoleTester;
 
 public class StringTasksTest {
 
+
+    @Test
+    public void testPreamble() {
+        ConsoleTester<StringTasks> tester = new ConsoleTester<>(StringTasks.class);
+        tester.setCompletionHandler(handler);
+        Assert.fail(tester.outputGeneratedBeforeInputProcessed()[0]);
+        tester.test("Hello world", "more input");
+    }
+
     @Test
     public void main() {
         ConsoleTester<StringTasks> tester = new ConsoleTester<>(StringTasks.class);

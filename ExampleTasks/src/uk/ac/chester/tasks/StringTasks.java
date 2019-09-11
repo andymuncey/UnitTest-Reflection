@@ -7,6 +7,8 @@ public class StringTasks {
 
     public static void main(String[] args) {
         //echos first input
+        System.out.println("preamble");
+
         Scanner sc = new Scanner(System.in);
         System.out.println(sc.nextLine());
     }
