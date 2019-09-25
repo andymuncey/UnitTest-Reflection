@@ -53,4 +53,11 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     public void accessModifierIncorrect(String methodName, AccessModifier requiredModifier) {
         Assert.fail("Method '" +methodName+ "' does not have the correct access modifier. The expected modifier is " + requiredModifier);
     }
+
+    @Override
+    public void staticDeclarationIncorrect(String methodName, boolean requiredStatic) {
+        final String should = requiredStatic ? "should" : "should not";
+        final String isNot = requiredStatic ? "is not" : "is";
+        Assert.fail("Method '" + methodName + "' " + should + " be marked as static but it " + isNot);
+    }
 }

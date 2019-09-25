@@ -22,6 +22,10 @@ public class Utilities {
         return params.toArray(new Class[args.length]);
     }
 
+    private static final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
+    private static final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
+
+
     /**
      * Given the 'class' of a primitive type (e.g. int.class returns the class of the corresponding boxed type, e.g. Integer.class)
      * Classes that do not belong to primitive types will remain unmodified
@@ -30,8 +34,6 @@ public class Utilities {
      * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
      */
     static Class classEquivalent(Class primitiveClass) {
-        final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
-        final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
         for (int i = 0; i < primitives.length; i++) {
             if (primitiveClass == primitives[i]) {
@@ -39,6 +41,15 @@ public class Utilities {
             }
         }
         return primitiveClass; //not actually a primitive
+    }
+
+    static Class primitiveEquivalent(Class boxedType) {
+        for (int i = 0; i < classes.length; i++) {
+            if (boxedType == classes[i]) {
+                return primitives[i];
+            }
+        }
+        return boxedType; //no primitive equivalent
     }
 
     /**

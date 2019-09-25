@@ -13,7 +13,7 @@ import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 public class MethodsTesterValidator {
 
-    private MethodsTester tester;
+    private MethodsTester<TestClass> tester;
 
     @Before
     public void setUp() throws Exception {
@@ -33,7 +33,18 @@ public class MethodsTesterValidator {
 
 
     @Test
+    public void staticMethod(){
+        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"nonStaticMethod");
+    }
+
+    @Test
+    public void nonStaticMethod(){
+        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,false,void.class,"staticMethod");
+    }
+
+    @Test
     public void nonExistentMethod() {
+        //noinspection ObviousNullCheck
         Assert.assertNull(tester.testExistence(Void.class, "nonExistentMethod"));
     }
 

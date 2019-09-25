@@ -135,11 +135,19 @@ public class MethodsHelper<C> {
     }
 
 
-    public Optional<Method> findMethod(AccessModifier modifier, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
+    public Optional<Method> findMethod(AccessModifier modifier, Boolean isStatic, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
         Optional<Method> method = findMethod(allowAutoboxing, returnType, name, paramTypes);
         if (method.isPresent()) {
-            if (AccessModifier.accessModifier(method.get()).equals(modifier)){
-                return method;
+            Method actualMethod = method.get();
+            if (AccessModifier.accessModifier(actualMethod).equals(modifier)){
+                if (isStatic != null){
+                    if (Modifier.isStatic(actualMethod.getModifiers()) == isStatic){
+                        return method;
+                    }
+                } else {
+                    return method;
+                }
+
             }
         }
         return Optional.empty();
@@ -252,8 +260,9 @@ public class MethodsHelper<C> {
             if (Modifier.isStatic(m.getModifiers())) {
                 try {
                     Object result = m.invoke(null, args); //static methods do not require an instance of a class to be invoked
-                    if (returnType.isInstance(result)) {
-                        return returnType.cast(result);
+                    Class boxedReturnType = Utilities.classEquivalent(returnType.getClass());
+                    if (boxedReturnType.isInstance(result.getClass())) {
+                        return returnType.cast(result); //todo: fix as this breaks if returnType is primitive (e.g. can't cast Boolean to boolean)
                     }
                 } catch (IllegalAccessException e) {
                     //method is not accessible (i.e. private etc.) - should not occur

@@ -41,6 +41,8 @@ public class TestClass {
 
     private void privateMethod(){}
 
+    void nonStaticMethod(){}
+    static void staticMethod(){}
 
     //bad param name
     public TestClass(double A){}

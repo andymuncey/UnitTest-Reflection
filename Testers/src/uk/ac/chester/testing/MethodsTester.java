@@ -1,5 +1,7 @@
 package uk.ac.chester.testing;
 
+
+import org.jetbrains.annotations.Nullable;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 
@@ -72,23 +74,35 @@ public class MethodsTester<C> extends Tester {
      * @return true if a method is found matching the specification
      */
     private boolean methodFound(AccessModifier modifier, Class returnType, String methodName, Class[] paramTypes){
-         return helper.findMethod(modifier,returnType,  methodName,true,paramTypes).isPresent();
+         return helper.findMethod(modifier, null, returnType,  methodName,true,paramTypes).isPresent();
+    }
+
+    /**
+     * Indicates if a method with the corresponding return type and parameter types is found (not strict with regard to class / primitive types)
+     * @param modifier the expected access modifier for the method
+     * @param isStatic whether the method is static or not
+     * @param returnType the return type of the method
+     * @param paramTypes the parameter types of the method
+     * @return true if a method is found matching the specification
+     */
+    private boolean methodFound(AccessModifier modifier, Boolean isStatic, Class returnType, String methodName, Class[] paramTypes){
+        return helper.findMethod(modifier, isStatic, returnType,  methodName,true,paramTypes).isPresent();
     }
 
 
 
     public <T> T executeStaticWithSpecifics(boolean allowAutoboxing, AccessModifier modifier, Class<T> returnTypeClass, String methodName, Object... args){
-        return testExistence(allowAutoboxing, modifier, returnTypeClass,methodName, args) ? helper.invokeStaticMethod(allowAutoboxing,returnTypeClass,methodName,args) : null ;
+        return testExistence(allowAutoboxing, modifier, null, returnTypeClass,methodName, args) ? helper.invokeStaticMethod(allowAutoboxing,returnTypeClass,methodName,args) : null ;
     }
 
 
     /**
      * Executes a static method, allowing autoboxing/unboxing, and any access modifier
-     * @param returnTypeClass
-     * @param methodName
-     * @param args
-     * @param <T>
-     * @return
+     * @param returnTypeClass Must be a boxed type for this to work
+     * @param methodName name of the method
+     * @param args args to pass to the method (must cast arrays as objects)
+     * @param <T> the type of class returned
+     * @return there result of executing the method
      */
     public <T> T executeStatic(Class<T> returnTypeClass, String methodName, Object... args){
         return executeStaticWithSpecifics(true,null,returnTypeClass,methodName,args);
@@ -114,7 +128,7 @@ public class MethodsTester<C> extends Tester {
      * @return the result of invoking the method (or null)
      */
     public boolean testExistence(AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
-        return testExistence(true, modifier, returnTypeClass,methodName, args);
+        return testExistence(true, modifier, null, returnTypeClass,methodName, args);
     }
 
 //    /**
@@ -153,7 +167,7 @@ public class MethodsTester<C> extends Tester {
      * @return true if the method exists, false otherwise
      */
     public boolean testForExactReturnType(AccessModifier modifier, Class returnTypeClass, String methodName,Object... args){
-        return testExistence(false, modifier, returnTypeClass,methodName, args);
+        return testExistence(false, modifier, null, returnTypeClass,methodName, args);
     }
 
     /**
@@ -179,13 +193,18 @@ public class MethodsTester<C> extends Tester {
      * -That the method returns the correct type
      * -That the method has the correct parameters, though not necessarily in the correct order
      * -That the method has the correct parameters, in the correct order
-     *
+     * -That the method has the correct access modifier
+     * -That the method is or is not static as specified by the isStatic parameter
      * @param allowAutoboxing setting 'false' considers primitives and their object equivalents to be different. True matches primitive return types with their object counterparts
+     * @param accessModifier whether the method should be private, package-private, protected or public. May be null
+     * @param isStatic whether the method should be static, use null if not important. May be null
      * @param returnType the type of data returned by the class
+     * @param methodName the name of the method
      * @param args arguments for passing to the method (actual values, not types)
      */
-    private boolean testExistence(boolean allowAutoboxing, AccessModifier accessModifier, Class<?> returnType, String methodName, Object[] args) {
+    public boolean testExistence(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
 
+        //Name
         if (!methodMatchingNameFound(methodName)){
             if (methodMatchingCaseInsensitiveNameFound(methodName)){
                 handler.wrongCaseName(methodName);
@@ -195,6 +214,7 @@ public class MethodsTester<C> extends Tester {
             return false;
         }
 
+        //Return type
         if (!methodMatchingNameAndReturnTypeFound(returnType, methodName, allowAutoboxing)) {
             handler.incorrectReturnType(methodName,returnType);
             return false;
@@ -243,10 +263,18 @@ public class MethodsTester<C> extends Tester {
         if (accessModifier != null){
             if (!methodFound(accessModifier,returnType,methodName, argTypes)){
                 handler.accessModifierIncorrect(methodName,accessModifier);
+                return false;
             }
-            return false;
+
         }
 
+        //static not correct
+        if (isStatic != null) {
+            if (!methodFound(accessModifier,isStatic,returnType,methodName,argTypes)){
+                handler.staticDeclarationIncorrect(methodName,isStatic);
+                return false;
+            }
+        }
 
         //found method
         String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
@@ -316,5 +344,15 @@ public class MethodsTester<C> extends Tester {
          * @param requiredModifier the access modifier expected
          */
         void accessModifierIncorrect(String methodName, AccessModifier requiredModifier);
+
+
+        /**
+         * Correct parameters exist for the method, but it is either marked as static and shouldn't be or vice versa
+         * @param methodName the name of the method
+         * @param requiredStatic whether the method should be static
+         */
+        void staticDeclarationIncorrect(String methodName, boolean requiredStatic);
+
+
     }
 }
