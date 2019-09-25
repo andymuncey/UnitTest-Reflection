@@ -1,5 +1,6 @@
 package uk.ac.chester.testing.reflection;
 
+import org.jetbrains.annotations.Nullable;
 import uk.ac.chester.testing.AccessModifier;
 
 import java.lang.reflect.*;
@@ -135,19 +136,14 @@ public class MethodsHelper<C> {
     }
 
 
-    public Optional<Method> findMethod(AccessModifier modifier, Boolean isStatic, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
+    public Optional<Method> findMethod(@Nullable AccessModifier modifier, @Nullable Boolean isStatic, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
         Optional<Method> method = findMethod(allowAutoboxing, returnType, name, paramTypes);
         if (method.isPresent()) {
             Method actualMethod = method.get();
-            if (AccessModifier.accessModifier(actualMethod).equals(modifier)){
-                if (isStatic != null){
-                    if (Modifier.isStatic(actualMethod.getModifiers()) == isStatic){
-                        return method;
-                    }
-                } else {
-                    return method;
-                }
-
+            boolean matchingModifier = modifier == null || AccessModifier.accessModifier(actualMethod).equals(modifier);
+            boolean matchingStatic = isStatic == null || Modifier.isStatic(actualMethod.getModifiers()) == isStatic;
+            if (matchingModifier && matchingStatic){
+                return method;
             }
         }
         return Optional.empty();
@@ -251,6 +247,7 @@ public class MethodsHelper<C> {
       * @param <T>             type of data returned will match the return type specified
       * @return the result of invoking the method
       */
+     @SuppressWarnings("unchecked")
      public <T> T invokeStaticMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) {
 
          final Optional<Method> optionalMethod = findMethod(true, returnType,methodName, Utilities.classesForArgs(args));
@@ -259,11 +256,12 @@ public class MethodsHelper<C> {
              final Method m = optionalMethod.get();
             if (Modifier.isStatic(m.getModifiers())) {
                 try {
-                    Object result = m.invoke(null, args); //static methods do not require an instance of a class to be invoked
-                    Class boxedReturnType = Utilities.classEquivalent(returnType.getClass());
-                    if (boxedReturnType.isInstance(result.getClass())) {
-                        return returnType.cast(result); //todo: fix as this breaks if returnType is primitive (e.g. can't cast Boolean to boolean)
-                    }
+                    return (T)m.invoke(null, args);
+//                    Object result = m.invoke(null, args); //static methods do not require an instance of a class to be invoked
+//                    Class boxedReturnType = Utilities.classEquivalent(returnType.getClass());
+//                    if (boxedReturnType.isInstance(result.getClass())) {
+//                        return returnType.cast(result);
+//                    }
                 } catch (IllegalAccessException e) {
                     //method is not accessible (i.e. private etc.) - should not occur
                     System.err.println(e.getMessage());

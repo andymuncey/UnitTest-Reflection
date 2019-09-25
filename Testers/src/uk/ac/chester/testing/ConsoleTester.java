@@ -1,5 +1,6 @@
 package uk.ac.chester.testing;
 
+import org.jetbrains.annotations.NotNull;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 
 import java.io.ByteArrayInputStream;
@@ -10,7 +11,7 @@ import java.util.concurrent.*;
 
 public class ConsoleTester<C> {
 
-    private final MethodsHelper helper;
+    private final MethodsHelper<C> helper;
 
     private CompletionHandler completionHandler;
     private NonCompletionHandler nonCompletionHandler;
@@ -28,18 +29,28 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
-    private Class methodReturnType = void.class;
-    private String methodName = "main";
-    private Object[] args = new Object[]{new String[]{}};
+//    private Class methodReturnType = void.class;
+//    private String methodName = "main";
+//    private Object[] args = new Object[]{new String[]{}};
+//
+//    /**
+//     * specifies an alternate method for the tester to test
+//     * @param returnType return type of the method
+//     * @param methodName name of the method
+//     * @param args arguments to be passed to the method
+//     */
+//    public void setMethod(Class returnType, String methodName, Object...args){
+//        this.methodReturnType = returnType;
+//        this.methodName = methodName;
+//        this.args = args;
+//    }
 
-    public void setMethod(Class returnType, String methodName, Object...args){
-        this.methodReturnType = returnType;
-        this.methodName = methodName;
-        this.args = args;
-    }
-
-    public ConsoleTester(Class<C> searchClass) {
-        this.helper = new MethodsHelper<>(searchClass);
+    /**
+     * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
+     * @param aClass the class to test (e.g. Main)
+     */
+    public ConsoleTester(Class<C> aClass) {
+        this.helper = new MethodsHelper<>(aClass);
     }
 
     private static boolean causedByNoSuchElementException(Throwable e) {
@@ -102,20 +113,35 @@ public class ConsoleTester<C> {
         executor.shutdown();
     }
 
-    public void test(String... inputTokens) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        //Route the system output to the above ByteArrayOutputStream
+    /**
+     * Tests the main method with an empty array of Strings
+     * @param inputTokens
+     */
+    public void test(String... inputTokens) {
+        test(void.class, "main", new Object[]{}, inputTokens);
+    }
+
+    /**
+     *
+     * @param returnType rh
+     * @param methodName name of the method to call
+     * @param args parameters passed to the method (use an empty array if none)
+     * @param inputTokens values for System.in
+     * @param <T>
+     * @return
+     */
+    public <T> T test(Class<T> returnType, String methodName, @NotNull Object[] args, String... inputTokens) {
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
         final ByteArrayInputStream stream = streamFromStrings(inputTokens);
         System.setIn(stream);
 
+        T result = null;
         try {
-
-
-                    //Call the Class's main method (must pass empty string array as the method takes an array of Strings as a parameter
-            helper.invokeStaticMethod(true, methodReturnType, methodName, args);
+           result =  helper.invokeStaticMethod(true, returnType, methodName, args);
         } catch (Exception e){
             if (causedByNoSuchElementException(e)) {
                 if (nonCompletionHandler != null){
@@ -124,16 +150,18 @@ public class ConsoleTester<C> {
             } else if (exceptionHandler != null) {
                 exceptionHandler.otherException(inputTokens, e);
             }
-            return;
+            return null;
         }
 
-        if (completionHandler != null) {
-            if (!out.toString().isEmpty()) {
-                completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
-            } else {
-                completionHandler.noOutputGenerated(inputTokens);
-            }
+        if (completionHandler == null) {
+            return result;
         }
+        if (!out.toString().isEmpty()) {
+            completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
+        } else {
+            completionHandler.noOutputGenerated(inputTokens);
+        }
+        return result;
     }
 
     /**

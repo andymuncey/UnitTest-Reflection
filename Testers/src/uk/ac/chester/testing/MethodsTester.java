@@ -121,14 +121,20 @@ public class MethodsTester<C> extends Tester {
 ////        return  helper.invokeMethod(returnTypeClass, methodName, args);
 //    }
 
-    /**
-     * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
-     * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
-     * @param args arguments to invoke the method with
-     * @return the result of invoking the method (or null)
+
+    /*
+    Tests for the existence of a method matching the supplied criteria
      */
-    public boolean testExistence(AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
+    public boolean testExistence(@Nullable AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
         return testExistence(true, modifier, null, returnTypeClass,methodName, args);
+    }
+
+
+    /*
+    Tests for the existence of a method matching the supplied criteria
+     */
+    public boolean testExistence(boolean isStatic, Class returnTypeClass, String methodName, Object... args) {
+        return testExistence(true, null,isStatic,returnTypeClass,methodName,args);
     }
 
 //    /**
@@ -176,14 +182,11 @@ public class MethodsTester<C> extends Tester {
      * @param returnTypeClass the type the method is expected to return
      * @param methodName the name of the method
      * @param args arguments to invoke the method with
-     * @return the result of invoking the method (or null)
+     * @return true if the method exists, false otherwise
      */
     public boolean testForExactReturnType(Class returnTypeClass, String methodName, Object... args){
         return testForExactReturnType(null,returnTypeClass,methodName,args);
     }
-
-
-
 
 
     /**
