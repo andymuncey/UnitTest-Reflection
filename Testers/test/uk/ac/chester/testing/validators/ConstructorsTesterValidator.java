@@ -9,7 +9,7 @@ import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
 public class ConstructorsTesterValidator {
 
-    ConstructorsTester<TestClass> t;
+    private ConstructorsTester<TestClass> t;
 
     @Before
     public void setUp() throws Exception {

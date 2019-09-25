@@ -28,6 +28,15 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
+    private Class methodReturnType = void.class;
+    private String methodName = "main";
+    private Object[] args = new Object[]{new String[]{}};
+
+    public void setMethod(Class returnType, String methodName, Object...args){
+        this.methodReturnType = returnType;
+        this.methodName = methodName;
+        this.args = args;
+    }
 
     public ConsoleTester(Class<C> searchClass) {
         this.helper = new MethodsHelper<>(searchClass);
@@ -103,8 +112,10 @@ public class ConsoleTester<C> {
         System.setIn(stream);
 
         try {
-            //Call the Class's main method (must pass empty string array as the method takes an array of Strings as a parameter
-            helper.invokeStaticMethod(true, void.class, "main", (Object) new String[]{});
+
+
+                    //Call the Class's main method (must pass empty string array as the method takes an array of Strings as a parameter
+            helper.invokeStaticMethod(true, methodReturnType, methodName, args);
         } catch (Exception e){
             if (causedByNoSuchElementException(e)) {
                 if (nonCompletionHandler != null){

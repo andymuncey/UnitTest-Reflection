@@ -25,6 +25,21 @@ public class MethodsTesterValidator {
         tester = null;
     }
 
+
+    //region passing tests
+    @Test
+    public void staticMethodPass(){
+        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod");
+    }
+
+    @Test
+    public void staticTest(){
+        int result = tester.executeStatic(int.class,"staticInt");
+    }
+
+    //endregion
+
+
     //region failing tests
 
     /**

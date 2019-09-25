@@ -44,6 +44,11 @@ public class TestClass {
     void nonStaticMethod(){}
     static void staticMethod(){}
 
+    static int staticInt(){
+        return 1;
+    }
+
+
     //bad param name
     public TestClass(double A){}
 
