@@ -1,6 +1,7 @@
 package uk.ac.chester.testing;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +10,11 @@ import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.concurrent.*;
 
+/**
+ * KNOWN ISSUES:
+ *  * the first instance of Scanner used will consume all input tokens, thus
+ * @param <C> the class to be tested (e.g. Main)
+ */
 public class ConsoleTester<C> {
 
     private final MethodsHelper<C> helper;
@@ -29,10 +35,10 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
-//    private Class methodReturnType = void.class;
-//    private String methodName = "main";
-//    private Object[] args = new Object[]{new String[]{}};
-//
+    private Class methodReturnType = void.class;
+    private String methodName = "main";
+    private Object[] args = new Object[]{new String[]{}};
+
 //    /**
 //     * specifies an alternate method for the tester to test
 //     * @param returnType return type of the method
@@ -44,6 +50,9 @@ public class ConsoleTester<C> {
 //        this.methodName = methodName;
 //        this.args = args;
 //    }
+
+    /*todo: Currently only facilitates testing static methods,
+    consider inheriting from method tester so instance methods can be tested*/
 
     /**
      * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
@@ -116,10 +125,10 @@ public class ConsoleTester<C> {
 
     /**
      * Tests the main method with an empty array of Strings
-     * @param inputTokens
+     * @param inputTokens the input which would be input at the command line
      */
     public void test(String... inputTokens) {
-        test(void.class, "main", new Object[]{}, inputTokens);
+        test(void.class, "main", inputTokens, (Object)new String[]{});
     }
 
     /**
@@ -128,10 +137,11 @@ public class ConsoleTester<C> {
      * @param methodName name of the method to call
      * @param args parameters passed to the method (use an empty array if none)
      * @param inputTokens values for System.in
-     * @param <T>
-     * @return
+     * @param <T> the type expected to be returned
+     * @return the result of executing the method or null if an exception is thrown
      */
-    public <T> T test(Class<T> returnType, String methodName, @NotNull Object[] args, String... inputTokens) {
+    @Nullable
+    public <T> T test(@NotNull Class<T> returnType, @NotNull String methodName, String[] inputTokens, Object... args ) {
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
@@ -153,13 +163,12 @@ public class ConsoleTester<C> {
             return null;
         }
 
-        if (completionHandler == null) {
-            return result;
-        }
-        if (!out.toString().isEmpty()) {
-            completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
-        } else {
-            completionHandler.noOutputGenerated(inputTokens);
+        if (completionHandler != null) {
+            if (out.toString().isEmpty()) {
+                completionHandler.noOutputGenerated(inputTokens);
+            } else {
+                completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
+            }
         }
         return result;
     }
@@ -205,7 +214,7 @@ public class ConsoleTester<C> {
          * @param inputTokens the input supplied
          * @param linesOfOutput the output generated
          */
-        void outputGenerated(String[] inputTokens, String[] linesOfOutput);
+        void outputGenerated(String[] inputTokens, @NotNull String[] linesOfOutput);
 
         /**
          * Calling the main method with the specified tokens has generated no output
@@ -220,6 +229,7 @@ public class ConsoleTester<C> {
          * but the application would still be awaiting input
          * (When executed with System.in routed to a stream, it actually throws a NoSuchElementException as there are
          * no more elements for the scanner to process
+         * Be aware that input tokens will be consumed by the first instance of Scanner used, so limit instances of Scanner used to one!
          */
         void stillAwaitingInput(String[] inputTokens);
 
@@ -235,7 +245,7 @@ public class ConsoleTester<C> {
         /**
          * Indicates a InputMismatchException has been thrown:
          * For example if the programme has tried to read in an int, but the input buffer contained a String
-         * @param inputTokens
+         * @param inputTokens the input used
          */
         void wrongInputType(String[] inputTokens);
 
@@ -243,7 +253,7 @@ public class ConsoleTester<C> {
         /**
          * Some exception, other than an InputMismatchException or NoSuchElement has been thrown:
          * Typically indicates a bug in the application's code
-         * @param inputTokens
+         * @param inputTokens the input used
          * @param e the exception
          */
         void otherException(String[] inputTokens, Exception e);

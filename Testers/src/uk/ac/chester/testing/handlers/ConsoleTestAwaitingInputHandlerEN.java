@@ -1,5 +1,6 @@
 package uk.ac.chester.testing.handlers;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import uk.ac.chester.testing.ConsoleTester;
 
@@ -10,7 +11,7 @@ import uk.ac.chester.testing.ConsoleTester;
 public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler, ConsoleTester.CompletionHandler {
 
     @Override
-    public void outputGenerated(String[] inputTokens, String[] linesOfOutput) {
+    public void outputGenerated(String[] inputTokens, @NotNull String[] linesOfOutput) {
         //we don't care about this
     }
 

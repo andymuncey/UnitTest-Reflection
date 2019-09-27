@@ -113,7 +113,7 @@ public class MethodsTesterValidator {
 
     @Test
     public void returnedValue(){
-        int result = (Integer)tester.executeStatic(Integer.class,"returnsPrimitiveInt"); //Either cast the result to an object, or ensure that the methods tester is typed
+        int result = tester.executeStatic(Integer.class,"returnsPrimitiveInt"); //Either cast the result to an object, or ensure that the methods tester is typed
         Assert.assertEquals("The method (deliberately) returns the wrong value",2,result);
     }
 

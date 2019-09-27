@@ -3,6 +3,8 @@ package uk.ac.chester.testing.handlers;
 import org.junit.Assert;
 import uk.ac.chester.testing.ConsoleTester;
 
+import java.util.Arrays;
+
 
 /**
  * Implements generic failures methods for console tests where the testExistence is expected to finish normally
@@ -11,7 +13,9 @@ public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompl
 
     @Override
     public void stillAwaitingInput(String[] inputTokens) {
-        Assert.fail("The application should have finished given the input supplied, but would still be waiting for user input");
+        Assert.fail("The application should have finished given the input supplied, but would still be waiting for user input\n" +
+                "This can happen if the method results in the creation of more than one instance of Scanner\n"+
+                "The input supplied was: " + Arrays.toString(inputTokens));
 
     }
 

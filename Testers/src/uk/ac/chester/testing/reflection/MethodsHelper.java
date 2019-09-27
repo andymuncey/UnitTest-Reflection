@@ -203,6 +203,7 @@ public class MethodsHelper<C> {
                      Class<?> argClass = args[i].getClass();
                      if (paramClass != argClass) {
                          matchedParams = false;
+                         break;
                      }
                  }
                  if (matchedParams) {

@@ -80,12 +80,6 @@ public class MethodsHelperTest {
     Assert.assertArrayEquals(message, paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class));
     }
 
-    @Test
-    public void methodsWithSignature() {
-    }
-
-    //todo: move to testExistence for ConstructorsHelper (in reflection package)
-
 //    @Test
 //    public void constructorAutoBoxing(){
 //
