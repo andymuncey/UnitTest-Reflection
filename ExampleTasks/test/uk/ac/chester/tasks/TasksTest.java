@@ -40,7 +40,7 @@ public class TasksTest {
         MethodsTester<Tasks> tester = new MethodsTester<>(Tasks.class,new MethodTestEventHandlerEN() );
 
         int[] emptyArray = {};
-        boolean methodCreatedCorrectly = tester.testExistence(Integer.class,"arraySum", emptyArray);
+        boolean methodCreatedCorrectly = tester.testExistenceForValues(Integer.class,"arraySum", emptyArray);
 
         if (methodCreatedCorrectly) {
             int resultWithEmpty = tester.executeStatic(Integer.class, "arraySum", emptyArray);

@@ -35,7 +35,7 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
         String plural = requiredParamTypes.length == 1 ? "": "s";
         String isOrAre = requiredParamTypes.length == 1 ? "is": "are";
-        Assert.fail("A method \"" + methodName + "\" was found, but it has the wrong parameter"+plural+", expected parameter"+plural +" " +isOrAre+" "+ describe(requiredParamTypes));
+        Assert.fail("A method \"" + methodName + "\" was found, but it has the wrong parameter type"+plural+", expected parameter type"+plural +" " +isOrAre+" "+ describe(requiredParamTypes));
     }
 
     @Override

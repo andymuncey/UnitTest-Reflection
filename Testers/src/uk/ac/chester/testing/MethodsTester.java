@@ -92,20 +92,20 @@ public class MethodsTester<C> extends Tester {
 
 
     public <T> T executeStaticWithSpecifics(boolean allowAutoboxing, AccessModifier modifier, Class<T> returnTypeClass, String methodName, Object... args){
-        return testExistence(allowAutoboxing, modifier, null, returnTypeClass,methodName, args) ? helper.invokeStaticMethod(allowAutoboxing,returnTypeClass,methodName,args) : null ;
+        return testExistenceForValues(allowAutoboxing, modifier, true, returnTypeClass,methodName, args) ? helper.invokeStaticMethod(allowAutoboxing,returnTypeClass,methodName,args) : null ;
     }
 
 
     /**
      * Executes a static method, allowing autoboxing/unboxing, and any access modifier
-     * @param returnTypeClass Must be a boxed type for this to work
+     * @param returnType Must be a boxed type for this to work
      * @param methodName name of the method
      * @param args args to pass to the method (must cast arrays as objects)
      * @param <T> the type of class returned
      * @return there result of executing the method
      */
-    public <T> T executeStatic(Class<T> returnTypeClass, String methodName, Object... args){
-        return executeStaticWithSpecifics(true,null,returnTypeClass,methodName,args);
+    public <T> T executeStatic(Class<T> returnType, String methodName, Object... args){
+        return executeStaticWithSpecifics(true,null,returnType,methodName,args);
     }
 
 
@@ -125,16 +125,23 @@ public class MethodsTester<C> extends Tester {
     /*
     Tests for the existence of a method matching the supplied criteria
      */
-    public boolean testExistence(@Nullable AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
-        return testExistence(true, modifier, null, returnTypeClass,methodName, args);
+    public boolean testExistenceForValues(@Nullable AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
+        return testExistenceForValues(true, modifier, null, returnTypeClass,methodName, args);
     }
 
 
     /*
     Tests for the existence of a method matching the supplied criteria
      */
-    public boolean testExistence(boolean isStatic, Class returnTypeClass, String methodName, Object... args) {
-        return testExistence(true, null,isStatic,returnTypeClass,methodName,args);
+    public boolean testExistenceForValues(boolean isStatic, Class returnTypeClass, String methodName, Object... args) {
+        return testExistenceForValues(true, null,isStatic,returnTypeClass,methodName,args);
+    }
+
+    /*
+ Tests for the existence of a method matching the supplied criteria
+  */
+    public boolean testExistence(boolean isStatic, Class returnTypeClass, String methodName, Class... paramTypes) {
+        return testExistence(true, null,isStatic,returnTypeClass,methodName,paramTypes);
     }
 
 //    /**
@@ -159,8 +166,8 @@ public class MethodsTester<C> extends Tester {
      * @param args the arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public boolean testExistence(Class returnTypeClass, String methodName, Object... args){
-        return testExistence(null, returnTypeClass, methodName, args);
+    public boolean testExistenceForValues(Class returnTypeClass, String methodName, Object... args){
+        return testExistenceForValues(null, returnTypeClass, methodName, args);
     }
 
     /**
@@ -173,7 +180,7 @@ public class MethodsTester<C> extends Tester {
      * @return true if the method exists, false otherwise
      */
     public boolean testForExactReturnType(AccessModifier modifier, Class returnTypeClass, String methodName,Object... args){
-        return testExistence(false, modifier, null, returnTypeClass,methodName, args);
+        return testExistenceForValues(false, modifier, null, returnTypeClass,methodName, args);
     }
 
     /**
@@ -187,6 +194,14 @@ public class MethodsTester<C> extends Tester {
     public boolean testForExactReturnType(Class returnTypeClass, String methodName, Object... args){
         return testForExactReturnType(null,returnTypeClass,methodName,args);
     }
+
+
+    public boolean testExistenceForValues(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
+        final Class[] argTypes = Utilities.classesForArgs(args);
+        return testExistence(allowAutoboxing,accessModifier,isStatic,returnType,methodName,argTypes);
+
+    }
+
 
 
     /**
@@ -203,13 +218,14 @@ public class MethodsTester<C> extends Tester {
      * @param isStatic whether the method should be static, use null if not important. May be null
      * @param returnType the type of data returned by the class
      * @param methodName the name of the method
-     * @param args arguments for passing to the method (actual values, not types)
+     * @param paramTypes arguments for passing to the method (actual values, not types)
      */
-    public boolean testExistence(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
+    public boolean testExistence(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Class... paramTypes) {
 
         //Name
         if (!methodMatchingNameFound(methodName)){
             if (methodMatchingCaseInsensitiveNameFound(methodName)){
+
                 handler.wrongCaseName(methodName);
             } else {
                 handler.notFound(methodName);
@@ -227,25 +243,23 @@ public class MethodsTester<C> extends Tester {
         Set<Method> methods = helper.findMethods(allowAutoboxing, returnType,methodName);
         boolean matchedParameterCount = false;
         for (Method method : methods){
-            if (method.getParameterCount() == args.length){
+            if (method.getParameterCount() == paramTypes.length){
                 matchedParameterCount = true;
                 break;
             }
         }
         if (!matchedParameterCount){
-            handler.incorrectNumberOfParameters(methodName,args.length);
+            handler.incorrectNumberOfParameters(methodName,paramTypes.length);
             return false;
         }
 
         //found method with correct name, return type, but wrong type or order of params
 
 
-        final Class[] argTypes = Utilities.classesForArgs(args);
-
-        if (!methodFound(allowAutoboxing, returnType, methodName,argTypes)){
+        if (!methodFound(allowAutoboxing, returnType, methodName,paramTypes)){
             //not found an exact match
 
-            Set<Method> similarMethods = helper.methodsWithSignature(allowAutoboxing, returnType,false, argTypes);
+            Set<Method> similarMethods = helper.methodsWithSignature(allowAutoboxing, returnType,false, paramTypes);
             for (Method m: similarMethods){
                 if (!m.getName().equals(methodName)){
                     similarMethods.remove(m);
@@ -255,16 +269,16 @@ public class MethodsTester<C> extends Tester {
 
             if (!similarMethods.isEmpty()){
                 //found a method
-                handler.incorrectParamOrder(methodName,argTypes);
+                handler.incorrectParamOrder(methodName,paramTypes);
             }else {
-                handler.incorrectParameters(methodName, argTypes);
+                handler.incorrectParameters(methodName, paramTypes);
             }
             return false;
         }
 
 
         if (accessModifier != null){
-            if (!methodFound(accessModifier,returnType,methodName, argTypes)){
+            if (!methodFound(accessModifier,returnType,methodName, paramTypes)){
                 handler.accessModifierIncorrect(methodName,accessModifier);
                 return false;
             }
@@ -273,14 +287,14 @@ public class MethodsTester<C> extends Tester {
 
         //static not correct
         if (isStatic != null) {
-            if (!methodFound(accessModifier,isStatic,returnType,methodName,argTypes)){
+            if (!methodFound(accessModifier,isStatic,returnType,methodName,paramTypes)){
                 handler.staticDeclarationIncorrect(methodName,isStatic);
                 return false;
             }
         }
 
         //found method
-        String[] paramNames = helper.methodParamNames(returnType,methodName,argTypes);
+        String[] paramNames = helper.methodParamNames(returnType,methodName,paramTypes);
         for (String paramName: paramNames){
             if (!getConventionChecker().validVariableName(paramName)){
                 handler.paramNameUnconventional(methodName, paramName);

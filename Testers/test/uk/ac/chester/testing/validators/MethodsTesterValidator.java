@@ -29,7 +29,7 @@ public class MethodsTesterValidator {
     //region passing tests
     @Test
     public void staticMethodPass(){
-        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod");
+        tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod");
     }
 
     @Test
@@ -49,29 +49,29 @@ public class MethodsTesterValidator {
 
     @Test
     public void staticMethod(){
-        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"nonStaticMethod");
+        tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"nonStaticMethod");
     }
 
     @Test
     public void nonStaticMethod(){
-        tester.testExistence(true,AccessModifier.PACKAGE_PRIVATE,false,void.class,"staticMethod");
+        tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,false,void.class,"staticMethod");
     }
 
     @Test
     public void nonExistentMethod() {
         //noinspection ObviousNullCheck
-        Assert.assertNull(tester.testExistence(Void.class, "nonExistentMethod"));
+        Assert.assertNull(tester.testExistenceForValues(Void.class, "nonExistentMethod"));
     }
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void wrongCaseForMethodName() {
-        tester.testExistence(void.class, "RETURNSINTEGER");
+        tester.testExistenceForValues(void.class, "RETURNSINTEGER");
     }
 
     @Test
     public void wrongReturnType() {
-        tester.testExistence(String.class, "returnsInteger");
+        tester.testExistenceForValues(String.class, "returnsInteger");
     }
 
     @Test
@@ -81,34 +81,34 @@ public class MethodsTesterValidator {
 
     @Test
     public void wrongParamCount(){
-        tester.testExistence(void.class, "intParamStringParam");
+        tester.testExistenceForValues(void.class, "intParamStringParam");
     }
 
     @Test
     public void wrongParams(){
-        tester.testExistence(void.class,"oneIntParam","text");
+        tester.testExistenceForValues(void.class,"oneIntParam","text");
     }
 
     @Test
     public void wrongMultiParams(){
-        tester.testExistence(void.class,"intParamStringParam","text", 23.5);
+        tester.testExistenceForValues(void.class,"intParamStringParam","text", 23.5);
     }
 
     @Test
     public void wrongOrderParams(){
-        tester.testExistence(void.class,"intParamStringParam", "text", 5);
+        tester.testExistenceForValues(void.class,"intParamStringParam", "text", 5);
     }
 
 
 
     @Test
     public void paramConvention(){
-        tester.testExistence(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
+        tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
     }
 
     @Test
     public void accessModifier(){
-        tester.testExistence(AccessModifier.PUBLIC, void.class,"privateMethod" );
+        tester.testExistenceForValues(AccessModifier.PUBLIC, void.class,"privateMethod" );
     }
 
     @Test
