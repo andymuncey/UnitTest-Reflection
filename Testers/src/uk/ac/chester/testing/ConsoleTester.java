@@ -167,7 +167,7 @@ public class ConsoleTester<C> {
             if (out.toString().isEmpty()) {
                 completionHandler.noOutputGenerated(inputTokens);
             } else {
-                completionHandler.outputGenerated(inputTokens, out.toString().split("\n"));
+                completionHandler.outputGenerated(inputTokens, out.toString().split(System.lineSeparator()));
             }
         }
         return result;
