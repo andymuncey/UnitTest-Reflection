@@ -20,15 +20,15 @@ public class InstanceTester<C> {
      *
      * @param searchClass The class from which an object will be created
      * @param handler An instance of InstanceTester.EventHandler to handle errors
-     * @param args The arguments to pass to the constructor for the class
+     * @param constructorArgs The arguments to pass to the constructor for the class
      */
-    public InstanceTester(Class<C> searchClass, EventHandler handler, Object... args){
+    public InstanceTester(Class<C> searchClass, EventHandler handler, Object... constructorArgs){
 
         this.handler = handler;
         try {
-            helper = new InstanceReflectionHelper<>(searchClass, args);
+            helper = new InstanceReflectionHelper<>(searchClass, constructorArgs);
         } catch (Exception e) {
-            this.handler.cannotConstructWithArgs(searchClass.getSimpleName(), args);
+            this.handler.cannotConstructWithArgs(searchClass.getSimpleName(), constructorArgs);
         }
     }
 
