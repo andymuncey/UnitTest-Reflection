@@ -7,6 +7,7 @@ import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
+import uk.ac.chester.testing.reflection.PackageHelper;
 
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class TopDownValidator {
         }
 
         //get only item
-        Class aClass = (Class)classes.toArray()[0];
+        Class aClass = classes.iterator().next();
 
         //generic class member tests
         @SuppressWarnings("unchecked")
