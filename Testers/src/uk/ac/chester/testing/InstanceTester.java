@@ -43,7 +43,7 @@ public class InstanceTester<C> {
      * @param name the name of the method
      * @param args the args
      */
-    public void executeMethod(String name, Object... args){
+    public void executeNonReturningMethod(String name, Object... args){
         verifyConstructed();
         try {
             helper.invokeMethod(void.class, name, args);
