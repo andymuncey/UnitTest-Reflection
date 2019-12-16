@@ -16,10 +16,10 @@ public class InstanceReflectionHelper<C> {
     private Object instance;
 
     public InstanceReflectionHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        construct(args);
         fieldsHelper = new FieldsHelper<>(searchClass);
         constructorsHelper = new ConstructorsHelper<>(searchClass);
         methodsHelper = new MethodsHelper<>(searchClass);
+        construct(args);
     }
 
     private void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
