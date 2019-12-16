@@ -1,4 +1,4 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.reflection;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class PackageHelper {
      * @param packageName the name of the package to look in
      * @return An Optional containing the class, if found
      */
-    static Optional<Class> findClass(String className, String packageName) {
+    public static Optional<Class> findClass(String className, String packageName) {
         String fullyQualifiedClassName = packageName + "." + className;
         return classForName(fullyQualifiedClassName);
     }
@@ -65,7 +65,7 @@ public class PackageHelper {
      * @param fullyQualifiedName fully qualified class name, e.g. com.example.Widget
      * @return An Optional containing the class, if found
      */
-    private static Optional<Class> classForName(String fullyQualifiedName) {
+    public static Optional<Class> classForName(String fullyQualifiedName) {
         try {
             return Optional.of(Class.forName(fullyQualifiedName));
         } catch (ClassNotFoundException e) {

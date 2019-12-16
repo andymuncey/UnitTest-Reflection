@@ -3,11 +3,13 @@ package uk.ac.chester.testing.handlers;
 import org.junit.Assert;
 import uk.ac.chester.testing.ClassDescriber;
 import uk.ac.chester.testing.InstanceTester;
+import uk.ac.chester.testing.reflection.Utilities;
 
 public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, ClassDescriber {
     @Override
     public void cannotConstructWithArgs(String className, Object[] args) {
-        Assert.fail("Couldn't construct an instance of " + className + " with the supplied arguments");
+
+        Assert.fail("Couldn't construct an instance of " + className + " with the supplied arguments: " + Utilities.commaSeparatedArgList(args));
     }
 
     @Override

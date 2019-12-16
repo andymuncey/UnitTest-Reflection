@@ -95,9 +95,8 @@ public class InstanceReflectionHelper<C> {
                     return (T)(Object)((Short)result).shortValue();
                 }
 
+                return returnType.cast(result);
 
-                    return returnType.cast(result);
-                //}
             } catch (IllegalAccessException e) {
                 //method is not accessible (i.e. private etc.) - should not occur
                 System.err.println(e.getMessage());

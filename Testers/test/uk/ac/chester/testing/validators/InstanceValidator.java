@@ -26,7 +26,7 @@ public class InstanceValidator {
     @Test
     public void nonExistentMethod(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 1,2);
-        tester.executeMethod("nonExistentMethod", 1,2,3);
+        tester.executeNonReturningMethod("nonExistentMethod", 1,2,3);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class InstanceValidator {
     @Test
     public void property(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
-        tester.executeMethod("setX",5);
+        tester.executeNonReturningMethod("setX",5);
         Integer gotValue = tester.executeMethod(Integer.class, "getX");
         Assert.assertEquals(Integer.valueOf(5),gotValue);
     }

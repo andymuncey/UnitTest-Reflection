@@ -138,4 +138,27 @@ public class Utilities {
         return builder.toString();
     }
 
+
+    public static String commaSeparatedArgList(Object[] args) {
+        StringBuilder builder = new StringBuilder();
+
+        boolean first = true;
+        for (Object arg: args){
+            if (first){
+                first = false;
+            } else {
+                builder.append(", ");
+            }
+
+            if (arg instanceof String) {
+                builder.append("\"");
+            }
+            builder.append(arg.toString());
+            if (arg instanceof String) {
+                builder.append("\"");
+            }
+        }
+        return builder.toString();
+    }
+
 }

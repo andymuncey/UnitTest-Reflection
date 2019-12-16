@@ -1,7 +1,8 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.reflection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.ac.chester.testing.reflection.PackageHelper;
 
 import java.util.Set;
 
