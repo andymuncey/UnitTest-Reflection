@@ -70,30 +70,8 @@ public class InstanceReflectionHelper<C> {
             try {
                 Object result = m.invoke(instance, args);
 
-                if (result instanceof Boolean && returnType != Boolean.class) {
-                    return (T)(Object)((Boolean)result).booleanValue(); //cant cast directly to T, but can via object
-                }
-                if (result instanceof Byte && returnType != Byte.class){
-                    return (T)(Object)((Byte)result).byteValue();
-                }
-                if (result instanceof Character && returnType != Character.class){
-                    return (T)(Object)((Character)result).charValue();
-                }
-                if (result instanceof Double && returnType != Double.class){
-                    return (T)(Object)((Double)result).doubleValue();
-                }
-                if (result instanceof Float && returnType != Float.class){
-                    return (T)(Object)((Float)result).floatValue();
-                }
-                if (result instanceof Integer && returnType != Integer.class){
-                    return (T)(Object)((Integer)result).intValue();
-                }
-                if (result instanceof Long && returnType != Long.class){
-                    return (T)(Object)((Long)result).longValue();
-                }
-                if (result instanceof Short && returnType != Short.class){
-                    return (T)(Object)((Short)result).shortValue();
-                }
+                T possiblePrimitive = Utilities.unBox(returnType, result);
+                if (possiblePrimitive != null) return possiblePrimitive;
 
                 return returnType.cast(result);
 
@@ -126,7 +104,13 @@ public class InstanceReflectionHelper<C> {
             field.setAccessible(true);
             if (field.getType().equals(type)) {
                 try {
-                    return (T) field.get(instance);
+
+                    Object fieldValue = field.get(instance);
+
+                    T possiblePrimitive = Utilities.unBox(type, fieldValue);
+                    if (possiblePrimitive != null) return possiblePrimitive;
+
+                    return (T) fieldValue;
                 } catch (IllegalArgumentException ignored) {
                     //shouldn't happen as set accessible above
                 } catch (IllegalAccessException ignored){
