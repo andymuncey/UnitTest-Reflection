@@ -4,6 +4,7 @@ import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.Set;
 
 public class FieldsTester<T> extends Tester {
@@ -25,13 +26,30 @@ public class FieldsTester<T> extends Tester {
     }
 
     /**
-     * Tests a specific field
+     * Tests a specific field - autoboxing is not permitted
      * @param desiredModifier the expected access modifier for the field
      * @param name the name of the field to testExistence
      * @param desiredClass the type of the field
-     * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
      */
-    public void test(AccessModifier desiredModifier, String name, Class desiredClass, boolean allowAutoboxing){
+    public void test(AccessModifier desiredModifier, Class desiredClass, String name){
+        test(desiredModifier, desiredClass, name, false);
+    }
+
+
+
+    public void test(AccessModifier desiredAccessModifier, Class desiredClass, String name, boolean allowAutoboxing) {
+        test(desiredAccessModifier, null, desiredClass,name,allowAutoboxing);
+    }
+
+        /**
+         * Tests a specific field
+         * @param desiredAccessModifier the expected access modifier for the field
+         * @param desiredNonAccessModifiers any expected desired non access modifiers
+         * @param desiredClass the type of the field
+         * @param name the name of the field to testExistence
+         * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
+         */
+    public void test(AccessModifier desiredAccessModifier, Set<NonAccessModifier> desiredNonAccessModifiers ,Class desiredClass, String name, boolean allowAutoboxing){
 
         for (Field field : fields){
             if (field.getName().equals(name)){
@@ -47,14 +65,52 @@ public class FieldsTester<T> extends Tester {
                 }
                 //check correct access modifier
                 AccessModifier actualModifier = AccessModifier.accessModifier(field);
-                if (!actualModifier.equals(desiredModifier)){
-                    handler.fieldHasIncorrectModifier(name,desiredModifier,actualModifier );
+                if (!actualModifier.equals(desiredAccessModifier)){
+                    handler.fieldHasIncorrectModifier(name,desiredAccessModifier,actualModifier );
+                }
+
+                //check correct non-access modifiers
+                Set<NonAccessModifier> actualNonAccessModifiers = NonAccessModifier.nonAccessModifiers(field);
+                if (!actualNonAccessModifiers.equals(desiredNonAccessModifiers)){
+                    handler.fieldHasIncorrectNonAccessModifiers(name,desiredNonAccessModifiers,actualNonAccessModifiers);
                 }
 
                 return;
             }
         }
         handler.fieldNotFound(name);
+    }
+
+
+    public T getValue(Class<T> fieldType, String name, Object objectInstance) {
+//        Optional<Field> possibleField = fields.stream().filter(x -> x.getName().equals(name)).findFirst();
+//        if (possibleField.isPresent()){
+//            Field field = possibleField.get();
+//            Class actualClass = field.getType();
+//            field.setAccessible(true);
+//            try {
+//                Object fieldValue = field.get(objectInstance);
+//                return (T) fieldValue; //will be boxed as per documentation
+//            } catch (IllegalAccessException ignored) {
+//                //shouldn't occur, as accessible set true
+//            }
+//        }
+
+
+        for (Field field : fields) {
+            if (field.getName().equals(name)) {
+                Class actualClass = field.getType();
+                field.setAccessible(true);
+                try {
+                    Object fieldValue = field.get(objectInstance);
+                    return (T) fieldValue; //will be boxed as per documentation
+                } catch (IllegalAccessException ignored) {
+                    //shouldn't occur, as accessible set to true
+                }
+                break;
+            }
+        }
+        return null;
     }
 
     public interface EventHandler {
@@ -80,5 +136,14 @@ public class FieldsTester<T> extends Tester {
          * @param actualModifier the actual modifier
          */
         void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier);
+
+
+        /**
+         * Indicates that a field does not have the expected non-access modifier(s)
+         * @param name the name of the field
+         * @param desiredNonAccessModifiers expected modifiers
+         * @param actualNonAccessModifiers actual modifiers
+         */
+        void fieldHasIncorrectNonAccessModifiers(String name, Set<NonAccessModifier> desiredNonAccessModifiers, Set<NonAccessModifier> actualNonAccessModifiers);
     }
 }
