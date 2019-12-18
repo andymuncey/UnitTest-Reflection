@@ -40,7 +40,8 @@ public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
         if (modifiers.size() == 0) {
             return "no non-access modifiers";
         } else {
-            StringBuilder builder = new StringBuilder("the following modifiers: ");
+            String plural = modifiers.size() > 1 ? "s" : "";
+            StringBuilder builder = new StringBuilder("the following modifier"+ plural+": ");
             boolean first = true;
             for (NonAccessModifier modifier : modifiers) {
                 if (first) {
@@ -48,7 +49,9 @@ public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
                 } else {
                     builder.append(", ");
                 }
+                builder.append("'");
                 builder.append(modifier);
+                builder.append("'");
             }
             return builder.toString();
         }
