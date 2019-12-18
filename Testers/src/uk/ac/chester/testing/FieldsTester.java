@@ -70,9 +70,11 @@ public class FieldsTester<T> extends Tester {
                 }
 
                 //check correct non-access modifiers
-                Set<NonAccessModifier> actualNonAccessModifiers = NonAccessModifier.nonAccessModifiers(field);
-                if (!actualNonAccessModifiers.equals(desiredNonAccessModifiers)){
-                    handler.fieldHasIncorrectNonAccessModifiers(name,desiredNonAccessModifiers,actualNonAccessModifiers);
+                if (desiredNonAccessModifiers != null) {
+                    Set<NonAccessModifier> actualNonAccessModifiers = NonAccessModifier.nonAccessModifiers(field);
+                    if (!actualNonAccessModifiers.equals(desiredNonAccessModifiers)) {
+                        handler.fieldHasIncorrectNonAccessModifiers(name, desiredNonAccessModifiers, actualNonAccessModifiers);
+                    }
                 }
 
                 return;
