@@ -57,8 +57,8 @@ public class TopDownValidator {
         FieldsTester.EventHandler fieldHandler = new FieldsTestEventHandlerEN();
         @SuppressWarnings("unchecked")
         FieldsTester fieldsTester = new FieldsTester(aClass,fieldHandler);
-        fieldsTester.test(AccessModifier.PRIVATE,"regularIvar",int.class,false);
-        fieldsTester.test(AccessModifier.PUBLIC, "REGULAR_CONSTANT", int.class, false);
+        fieldsTester.test(AccessModifier.PRIVATE, int.class, "regularIvar", false);
+        fieldsTester.test(AccessModifier.PUBLIC, int.class, "REGULAR_CONSTANT", false);
 
         //testExistence specific methods
         MethodsTester.EventHandler methodHandler = new MethodTestEventHandlerEN();

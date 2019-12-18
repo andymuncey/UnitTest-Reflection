@@ -16,7 +16,7 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"myString",int.class,true);
+        t.test(AccessModifier.PRIVATE, int.class, "myString", true);
     }
 
 
@@ -27,7 +27,7 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"nonExistentField",String.class,true);
+        t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true);
     }
 
 
@@ -41,7 +41,7 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"myInteger",int.class,false);
+        t.test(AccessModifier.PRIVATE, int.class, "myInteger", false);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"myInteger",Integer.class,false);
+        t.test(AccessModifier.PRIVATE, Integer.class, "myInteger", false);
     }
     //end region
 
@@ -68,7 +68,7 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"myString",String.class,false);
+        t.test(AccessModifier.PRIVATE, String.class, "myString", false);
     }
 
 
@@ -84,8 +84,8 @@ public class FieldsTesterValidator {
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
         FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE,"myInteger",int.class,true);
-        t.test(AccessModifier.PRIVATE,"myInt",Integer.class,true);
+        t.test(AccessModifier.PRIVATE, int.class, "myInteger", true);
+        t.test(AccessModifier.PRIVATE, Integer.class, "myInt", true);
     }
 
 
