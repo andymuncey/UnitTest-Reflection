@@ -2,8 +2,7 @@ package uk.ac.chester.testing;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public enum NonAccessModifier {
 
@@ -56,8 +55,8 @@ public enum NonAccessModifier {
         }
     };
 
-    public static NonAccessModifier[] nonAccessModifiers(Member member) {
-        List<NonAccessModifier> nonAccessModifiers = new ArrayList<>();
+    public static Set<NonAccessModifier> nonAccessModifiers(Member member) {
+        Set<NonAccessModifier> nonAccessModifiers = new HashSet<>();
 
         int modifiers = member.getModifiers();
         if (Modifier.isStatic(modifiers)) {
@@ -85,6 +84,11 @@ public enum NonAccessModifier {
             nonAccessModifiers.add(VOLATILE);
         }
 
-        return nonAccessModifiers.toArray(new NonAccessModifier[0]);
+        return nonAccessModifiers;
+    }
+
+
+    public static Set<NonAccessModifier> modifiers(NonAccessModifier... modifiers){
+        return  new HashSet<>(Arrays.asList(modifiers));
     }
 }
