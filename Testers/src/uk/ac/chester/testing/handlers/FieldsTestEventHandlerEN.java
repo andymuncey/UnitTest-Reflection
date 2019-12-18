@@ -5,6 +5,8 @@ import uk.ac.chester.testing.FieldsTester;
 import org.junit.Assert;
 import uk.ac.chester.testing.NonAccessModifier;
 
+import java.util.Set;
+
 /**
  * English language implementation of FieldsTester.EventHandler
  */
@@ -26,14 +28,16 @@ public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
     }
 
     @Override
-    public void fieldHasIncorrectNonAccessModifiers(String name, NonAccessModifier[] desiredNonAccessModifiers, NonAccessModifier[] actualNonAccessModifiers) {
+    public void fieldHasIncorrectNonAccessModifiers(String name, Set<NonAccessModifier> desiredNonAccessModifiers, Set<NonAccessModifier> actualNonAccessModifiers) {
 
-        Assert.fail("The field '" + name + "' was expected to have " + nonAccessModifiersDescription(desiredNonAccessModifiers) + " but instead had " + nonAccessModifiersDescription(actualNonAccessModifiers));
+        Assert.fail("The field '" + name + "' was expected to have " +
+                nonAccessModifiersDescription(desiredNonAccessModifiers) + " but instead had " +
+                nonAccessModifiersDescription(actualNonAccessModifiers));
     }
 
-    private String nonAccessModifiersDescription(NonAccessModifier[] modifiers) {
+    private String nonAccessModifiersDescription(Set<NonAccessModifier> modifiers) {
 
-        if (modifiers.length == 0) {
+        if (modifiers.size() == 0) {
             return "no non-access modifiers";
         } else {
             StringBuilder builder = new StringBuilder("the following modifiers: ");
