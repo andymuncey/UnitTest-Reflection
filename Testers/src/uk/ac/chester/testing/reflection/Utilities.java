@@ -1,5 +1,7 @@
 package uk.ac.chester.testing.reflection;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -161,4 +163,39 @@ public class Utilities {
         return builder.toString();
     }
 
+    /**
+     * Attempts to
+     * @param returnType
+     * @param objectOrPrimitive
+     * @param <T>
+     * @return
+     */
+    @Nullable
+    static <T> T unBox(Class<T> returnType, Object objectOrPrimitive) {
+        if (objectOrPrimitive instanceof Boolean && returnType != Boolean.class) {
+            return (T)(Object)((Boolean)objectOrPrimitive).booleanValue(); //cant cast directly to T, but can via object
+        }
+        if (objectOrPrimitive instanceof Byte && returnType != Byte.class){
+            return (T)(Object)((Byte)objectOrPrimitive).byteValue();
+        }
+        if (objectOrPrimitive instanceof Character && returnType != Character.class){
+            return (T)(Object)((Character)objectOrPrimitive).charValue();
+        }
+        if (objectOrPrimitive instanceof Double && returnType != Double.class){
+            return (T)(Object)((Double)objectOrPrimitive).doubleValue();
+        }
+        if (objectOrPrimitive instanceof Float && returnType != Float.class){
+            return (T)(Object)((Float)objectOrPrimitive).floatValue();
+        }
+        if (objectOrPrimitive instanceof Integer && returnType != Integer.class){
+            return (T)(Object)((Integer)objectOrPrimitive).intValue();
+        }
+        if (objectOrPrimitive instanceof Long && returnType != Long.class){
+            return (T)(Object)((Long)objectOrPrimitive).longValue();
+        }
+        if (objectOrPrimitive instanceof Short && returnType != Short.class){
+            return (T)(Object)((Short)objectOrPrimitive).shortValue();
+        }
+        return null;
+    }
 }
