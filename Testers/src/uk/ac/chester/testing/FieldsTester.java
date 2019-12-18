@@ -44,7 +44,10 @@ public class FieldsTester<T> extends Tester {
         /**
          * Tests a specific field
          * @param desiredAccessModifier the expected access modifier for the field
+         *                              pass null if you don't care
          * @param desiredNonAccessModifiers any expected desired non access modifiers
+         *                                  pass null if you don't care
+         *                                  pass an empty set if you want to make sure there aren't any modifiers
          * @param desiredClass the type of the field
          * @param name the name of the field to testExistence
          * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
@@ -64,9 +67,11 @@ public class FieldsTester<T> extends Tester {
                     }
                 }
                 //check correct access modifier
-                AccessModifier actualModifier = AccessModifier.accessModifier(field);
-                if (!actualModifier.equals(desiredAccessModifier)){
-                    handler.fieldHasIncorrectModifier(name,desiredAccessModifier,actualModifier );
+                if (desiredAccessModifier != null) {
+                    AccessModifier actualModifier = AccessModifier.accessModifier(field);
+                    if (!actualModifier.equals(desiredAccessModifier)) {
+                        handler.fieldHasIncorrectModifier(name, desiredAccessModifier, actualModifier);
+                    }
                 }
 
                 //check correct non-access modifiers
