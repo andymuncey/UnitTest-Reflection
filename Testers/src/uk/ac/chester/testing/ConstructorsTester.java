@@ -111,7 +111,11 @@ public class ConstructorsTester<T> extends Tester {
     public interface EventHandler {
 
         /**
-         * A constructor has been found, but the parameters are not as required
+         * No constructor with the required parameters could be found
+         *
+         * there will always be a no-argument constructor unless a non-parameterless one is added
+         * There is no way (using reflection) to differentiate between an inherited no-argument constructor
+         * and one that has been created
          *
          * @param requiredParamTypes the required parameters for the constructor
          */
