@@ -12,11 +12,11 @@ public class ConstructorsTestEventHandlerEN implements ConstructorsTester.EventH
 
     @Override
     public void incorrectParameters(Class[] requiredParamTypes) {
-        String message = "A constructor was found";
+        String message;
         if (requiredParamTypes.length > 0) {
-            message += ", but it has the wrong parameters, expected parameters are " + describe(requiredParamTypes);
+            message = "No constructor with the correct parameters was found, expected parameters are " + describe(requiredParamTypes);
         } else {
-            message += ", but it has parameters, and a constructor with no parameters is expected";
+            message = "A constructor with parameters was found, but a constructor with no parameters was expected";
         }
         Assert.fail(message);
     }
