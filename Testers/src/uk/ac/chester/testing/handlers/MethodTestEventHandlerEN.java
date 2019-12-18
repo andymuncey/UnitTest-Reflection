@@ -11,8 +11,8 @@ import org.junit.Assert;
 public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, ClassDescriber {
 
     @Override
-    public void notFound(String methodName) {
-        Assert.fail("No method with the name \""+ methodName + "\" was found");
+    public void notFound(String methodName, Class searchClass) {
+        Assert.fail("No method with the name \""+ methodName + "\" was found in the class \"" + searchClass.getSimpleName() + "\"");
     }
 
     @Override
