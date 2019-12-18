@@ -18,6 +18,7 @@ public class MethodsTester<C> extends Tester {
 
     private final MethodsHelper<C> helper;
     private final EventHandler handler;
+    private final Class<C> searchClass;
 
     /**
      * The type parameters should be the type of the class that's being tests,
@@ -28,6 +29,7 @@ public class MethodsTester<C> extends Tester {
     public MethodsTester(Class<C> searchClass, EventHandler handler) {
         this.helper = new MethodsHelper<>(searchClass);
         this.handler = handler;
+        this.searchClass = searchClass;
     }
 
     /**
@@ -228,7 +230,7 @@ public class MethodsTester<C> extends Tester {
 
                 handler.wrongCaseName(methodName);
             } else {
-                handler.notFound(methodName);
+                handler.notFound(methodName, searchClass);
             }
             return false;
         }
@@ -313,7 +315,7 @@ public class MethodsTester<C> extends Tester {
          * Cannot find a method with the correct name
          * @param methodName the name of the method as it should be
          */
-        void notFound(String methodName);
+        void notFound(String methodName, Class searchClass);
 
         /**
          * A method with the correct name is found, but the case is wrong e.g. MyMethod instead of myMethod
