@@ -72,6 +72,11 @@ public class InstanceTester<C> {
         return null;
     }
 
+    public <T> boolean setFieldValue(Class<T> type, String name, T value){
+        verifyConstructed();
+        return helper.setFieldValue(type,name,value);
+    }
+
     public interface EventHandler {
 
         void cannotConstructWithArgs(String className, Object[] args);

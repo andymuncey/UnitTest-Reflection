@@ -121,4 +121,33 @@ public class InstanceReflectionHelper<C> {
         throw new TestingExecutionException("Field named " + name + "of type " + type.getSimpleName() + " not found");
     }
 
+
+    /**
+     * Sets a fields value with a given name and type
+     * @param type the class for the type of the field
+     * @param name the name of the field
+     * @param value the value to set for the field
+     * @param <T> the type of the field
+     * @return true if successful, false otherwise
+     */
+    public <T> boolean setFieldValue(Class<T> type, String name, T value) {
+
+        Optional<Field> optionalField = fieldsHelper.field(name);
+        if (optionalField.isPresent()) {
+            Field field = optionalField.get();
+            field.setAccessible(true);
+            if (field.getType().equals(type)) {
+                try {
+                    field.set(instance,value);
+                    return true;
+                } catch (IllegalArgumentException ignored) {
+                    //shouldn't happen as set accessible above
+                } catch (IllegalAccessException ignored) {
+                    //also shouldn't happen as type of field has been checked
+                }
+            }
+        }
+        return false;
+    }
+
 }
