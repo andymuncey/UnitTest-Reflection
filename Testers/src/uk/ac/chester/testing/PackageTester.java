@@ -9,7 +9,7 @@ import java.util.Set;
 public class PackageTester extends Tester {
 
 
-    private EventHandler handler;
+    private final EventHandler handler;
 
     public PackageTester(EventHandler handler){
         this.handler = handler;

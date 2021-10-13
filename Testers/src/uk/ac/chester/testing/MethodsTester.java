@@ -262,11 +262,7 @@ public class MethodsTester<C> extends Tester {
             //not found an exact match
 
             Set<Method> similarMethods = helper.methodsWithSignature(allowAutoboxing, returnType,false, paramTypes);
-            for (Method m: similarMethods){
-                if (!m.getName().equals(methodName)){
-                    similarMethods.remove(m);
-                }
-            }
+            similarMethods.removeIf(m -> !m.getName().equals(methodName));
 
 
             if (!similarMethods.isEmpty()){
@@ -308,7 +304,7 @@ public class MethodsTester<C> extends Tester {
 
     /**
      * Allows callbacks to indicate problems when attempting to testExistence methods that do not exist
-     * It is anticipated that Assert.fail will be used in the implementation of each method to provide a describe
+     * It is anticipated that <code>Assert.fail</code> will be used in the implementation of each method to provide a description
      */
     public interface EventHandler {
         /**
@@ -331,7 +327,7 @@ public class MethodsTester<C> extends Tester {
         void incorrectReturnType(String methodName, Class requiredReturnType);
 
         /**
-         * A method has been found but it does not have the expected number of parameters
+         * A method has been found, but it does not have the expected number of parameters
          * @param methodName the name of the method
          * @param expectedParamCount the number of parameters expected
          */

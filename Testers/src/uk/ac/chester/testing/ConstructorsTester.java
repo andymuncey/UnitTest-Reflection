@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * A class to testExistence Constructors for a class
  * Known issue:
- * * When using the testExistence() method to testExistence a method that returns a primitive type will result in a object type being
+ * * When using the testExistence() method to testExistence a method that returns a primitive type will result in an object type being
  * * returned which has to be cast as a primitive in order to be used in an assertion
  */
 public class ConstructorsTester<T> extends Tester {

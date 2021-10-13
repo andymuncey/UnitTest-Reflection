@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public class InstanceReflectionHelper<C> {
 
-    private FieldsHelper<C> fieldsHelper;
-    private ConstructorsHelper<C> constructorsHelper;
-    private MethodsHelper<C> methodsHelper;
+    private final FieldsHelper<C> fieldsHelper;
+    private final ConstructorsHelper<C> constructorsHelper;
+    private final MethodsHelper<C> methodsHelper;
     private Object instance;
 
     public InstanceReflectionHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {

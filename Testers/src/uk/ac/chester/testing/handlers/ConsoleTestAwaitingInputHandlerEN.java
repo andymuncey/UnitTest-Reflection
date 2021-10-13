@@ -6,7 +6,7 @@ import uk.ac.chester.testing.ConsoleTester;
 
 
 /**
- * A generic handler for testing console applications where the result of the tests should be the the application is awaiting user input
+ * A generic handler for testing console applications where the result of the tests should be the application is awaiting user input
  */
 public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler, ConsoleTester.CompletionHandler {
 

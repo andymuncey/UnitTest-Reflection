@@ -33,7 +33,7 @@ public class Utilities {
      * Classes that do not belong to primitive types will remain unmodified
      *
      * @param primitiveClass a primitive 'class' such as double.class
-     * @return the class of the boxed equivalent (e.g. char.class becomes Character.class)
+     * @return the class of the boxed equivalent (e.g. <code>char.class</code> becomes <code>Character.class</code>)
      */
     static Class classEquivalent(Class primitiveClass) {
 
@@ -173,7 +173,7 @@ public class Utilities {
     @Nullable
     static <T> T unBox(Class<T> returnType, Object objectOrPrimitive) {
         if (objectOrPrimitive instanceof Boolean && returnType != Boolean.class) {
-            return (T)(Object)((Boolean)objectOrPrimitive).booleanValue(); //cant cast directly to T, but can via object
+            return (T)(Object)((Boolean)objectOrPrimitive).booleanValue(); //can't cast directly to T, but can via object
         }
         if (objectOrPrimitive instanceof Byte && returnType != Byte.class){
             return (T)(Object)((Byte)objectOrPrimitive).byteValue();

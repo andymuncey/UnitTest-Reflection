@@ -4,7 +4,6 @@ import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 
 import java.lang.reflect.Field;
-import java.util.Optional;
 import java.util.Set;
 
 public class FieldsTester<T> extends Tester {
@@ -90,19 +89,6 @@ public class FieldsTester<T> extends Tester {
 
 
     public T getValue(Class<T> fieldType, String name, Object objectInstance) {
-//        Optional<Field> possibleField = fields.stream().filter(x -> x.getName().equals(name)).findFirst();
-//        if (possibleField.isPresent()){
-//            Field field = possibleField.get();
-//            Class actualClass = field.getType();
-//            field.setAccessible(true);
-//            try {
-//                Object fieldValue = field.get(objectInstance);
-//                return (T) fieldValue; //will be boxed as per documentation
-//            } catch (IllegalAccessException ignored) {
-//                //shouldn't occur, as accessible set true
-//            }
-//        }
-
 
         for (Field field : fields) {
             if (field.getName().equals(name)) {

@@ -154,7 +154,7 @@ public class MethodsHelper<C> {
      * Finds a method matching specified criteria
      * @param allowAutoboxing set to false if the parameter types / return types must match exactly or true if primitive and boxed types can be used interchangeably
      * @param returnType the type returned by the method
-     * @param name the name of the method (case sensitive)
+     * @param name the name of the method (case-sensitive)
      * @param paramTypes the types of the parameters accepted by the method
      * @return an Optional containing the method, if found
      */
@@ -258,11 +258,6 @@ public class MethodsHelper<C> {
             if (Modifier.isStatic(m.getModifiers())) {
                 try {
                     return (T)m.invoke(null, args);
-//                    Object result = m.invoke(null, args); //static methods do not require an instance of a class to be invoked
-//                    Class boxedReturnType = Utilities.classEquivalent(returnType.getClass());
-//                    if (boxedReturnType.isInstance(result.getClass())) {
-//                        return returnType.cast(result);
-//                    }
                 } catch (IllegalAccessException e) {
                     //method is not accessible (i.e. private etc.) - should not occur
                     System.err.println(e.getMessage());

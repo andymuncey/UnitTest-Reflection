@@ -28,6 +28,6 @@ public class PackageTestEventHandlerEN implements PackageTester.EventHandler {
     @Override
     public void foundWrongCaseAndPackage(String name, String foundName, String desiredPackage, String actualPackage) {
 
-        Assert.fail("A class with the name " + name + " was found, however the casng was incorrect, it should be named \" + desiredName, in addition, it is in the \" + actualPackage + \" package. It should be in the \" + desiredPackage + \" package\"");
+        Assert.fail("A class with the name " + name + " was found, however the casing was incorrect, it should be named \" + desiredName, in addition, it is in the \" + actualPackage + \" package. It should be in the \" + desiredPackage + \" package\"");
     }
 }

@@ -36,7 +36,7 @@ public class ClassTester<T> extends Tester {
 
     //region fields
     /*
-    Run tests against all fields to check non static fields are private,
+    Run tests against all fields to check non-static fields are private,
     static fields are declared as final and names conform to convention
      */
     public void checkFields(){
