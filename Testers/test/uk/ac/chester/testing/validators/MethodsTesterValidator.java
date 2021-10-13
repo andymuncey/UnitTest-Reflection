@@ -9,6 +9,7 @@ import uk.ac.chester.testing.MethodsTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
+import java.util.ArrayList;
 
 
 public class MethodsTesterValidator {
@@ -35,6 +36,16 @@ public class MethodsTesterValidator {
     @Test
     public void staticTest(){
         int result = tester.executeStatic(int.class,"staticInt");
+    }
+
+
+    @Test
+    public void staticTestReturningVoid () {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("abc");
+        strings.add("def");
+        tester.executeStatic(Void.class,"doubleArrayListContents",strings);
+        Assert.assertEquals(strings.size(), 4);
     }
 
     //endregion

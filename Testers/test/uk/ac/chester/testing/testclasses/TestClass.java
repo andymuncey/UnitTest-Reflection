@@ -1,5 +1,7 @@
 package uk.ac.chester.testing.testclasses;
 
+import java.util.ArrayList;
+
 public class TestClass {
 
 
@@ -70,6 +72,14 @@ public class TestClass {
     void paramNameNotLowerCamelCase(int Number){}
 
     void paramNameTooShort(int x){}
+
+    static void doubleArrayListContents(ArrayList<String> list)   {
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            list.add(list.get(i));
+        }
+    }
 
     @SuppressWarnings("divzero")
     void exceptionThrower(){
