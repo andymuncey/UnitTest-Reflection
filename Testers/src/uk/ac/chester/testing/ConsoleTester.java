@@ -83,27 +83,20 @@ public class ConsoleTester<C> {
         return new ByteArrayInputStream(sb.toString().getBytes());
     }
 
-    public void testWithTimeOut(int timeout, String... inputTokens) {
-
-        testWithTimeOut(timeout, Void.class, "main", inputTokens);
-
-    }
-
-
     /**
      * @param timeout seconds to wait for execution
      * @param inputTokens input for System.in
      */
-    public <T> T testWithTimeOut(int timeout, @NotNull Class<T> returnType, @NotNull String methodName, String[] inputTokens, Object... args) {
+    public void testWithTimeOut(int timeout, String... inputTokens) {
 
         //adapted from https://stackoverflow.com/questions/2275443/how-to-timeout-a-thread
-        Callable<T> callable = () -> {
-            return test(returnType, methodName, inputTokens, (Object)args);
-            //return null;
+        Callable<Void> callable = () -> {
+            test(inputTokens);
+            return null;
         };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<T> future = executor.submit(callable);
+        Future<Void> future = executor.submit(callable);
 
         try {
             future.get(timeout, TimeUnit.SECONDS);
@@ -127,7 +120,6 @@ public class ConsoleTester<C> {
             future.cancel(true);
         }
         executor.shutdown();
-        return null;
     }
 
 
