@@ -108,6 +108,49 @@ public class ConsoleTester<C> {
         executor.shutdown();
     }
 
+    public <T> boolean methodCompletesWithNonNullResult(int timeout, @NotNull Class<T> returnType, @NotNull String methodName, String[] inputTokens, Object... args ) {
+
+        //adapted from https://stackoverflow.com/questions/2275443/how-to-timeout-a-thread
+        Callable<T> callable = () -> {
+            T result = helper.invokeStaticMethod(true,returnType,methodName,inputTokens,args);
+           // test(inputTokens);
+            return result;
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<T> future = executor.submit(callable);
+
+        try {
+            T result = future.get(timeout, TimeUnit.SECONDS);
+            if (result != null) {
+                return true;
+            }
+
+        } catch (TimeoutException e) {
+            if (nonCompletionHandler != null) {
+                nonCompletionHandler.timeout(inputTokens, timeout);
+            }
+        } catch (InterruptedException ignored) {
+            //called if the current thread was interrupted while waiting, shouldn't happen
+        } catch (ExecutionException e) {
+            if (causedByNoSuchElementException(e)) {
+                if (nonCompletionHandler != null){
+                    nonCompletionHandler.stillAwaitingInput(inputTokens);
+                }
+            } else {
+                if (exceptionHandler != null){
+                    exceptionHandler.otherException(inputTokens, e);
+                }
+            }
+        } finally {
+            future.cancel(true);
+            executor.shutdown();
+        }
+        return false;
+
+    }
+
+
 
     /**
      * Tests the main method with an empty array of Strings
