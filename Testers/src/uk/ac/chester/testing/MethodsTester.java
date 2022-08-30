@@ -21,7 +21,7 @@ public class MethodsTester<C> extends Tester {
     private final Class<C> searchClass;
 
     /**
-     * The type parameters should be the type of the class that's being tests,
+     * The type parameters should be the type of the class that's being tested,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
      * @param searchClass     the class in which the method should be written
      * @param handler         a {@link EventHandler} for handling non-existent methods
