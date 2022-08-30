@@ -12,13 +12,13 @@ import java.util.concurrent.*;
 
 /**
  * KNOWN ISSUES:
- *  * the first instance of Scanner used will consume all input tokens, thus
+ *  * The first instance of Scanner for System.in used will consume all input tokens
+ *  * using a single static scanner is advisable
  * @param <C> the class to be tested (e.g. Main)
  */
 public class ConsoleTester<C> {
 
     private final MethodsHelper<C> helper;
-
     private CompletionHandler completionHandler;
     private NonCompletionHandler nonCompletionHandler;
     private ExceptionHandler exceptionHandler;
@@ -35,21 +35,7 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
-    private Class methodReturnType = void.class;
-    private String methodName = "main";
-    private Object[] args = new Object[]{new String[]{}};
 
-//    /**
-//     * specifies an alternate method for the tester to test
-//     * @param returnType return type of the method
-//     * @param methodName name of the method
-//     * @param args arguments to be passed to the method
-//     */
-//    public void setMethod(Class returnType, String methodName, Object...args){
-//        this.methodReturnType = returnType;
-//        this.methodName = methodName;
-//        this.args = args;
-//    }
 
     /*todo: Currently only facilitates testing static methods,
     consider inheriting from method tester so instance methods can be tested*/
@@ -133,7 +119,7 @@ public class ConsoleTester<C> {
 
     /**
      *
-     * @param returnType rh
+     * @param returnType the class of the type the method to be called returns
      * @param methodName name of the method to call
      * @param args parameters passed to the method (use an empty array if none)
      * @param inputTokens values for System.in
