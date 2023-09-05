@@ -4,7 +4,7 @@ package uk.ac.chester.testing;
  * Base Tester class for Constructor / Method / Field tester subclasses.
  * Allows user defined convention checkers to be used
  */
-class Tester {
+abstract class Tester {
 
     private ConventionChecker conventionChecker = new ConventionChecker(){};
 
