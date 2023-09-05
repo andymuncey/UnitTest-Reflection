@@ -1,10 +1,16 @@
 # Java Object-Oriented Feedback Tool (JOOFT)
 
-The Testers module within this repository contains various Tester classes, designed to provide feedback on Java Programming Exercises.
+The Testers module within this repository contains various Tester classes, designed to provide feedback on Java Programming Exercises, typically in conjunction with a unit testing framwork, such as JUnit.
 
-The testers facilitate, using Java's reflection capabilities, the creation of unit tests to test aspects of code which students are expected to write, 
-provided the class in which the code that will be tested exists at compile time. Default feedback on code can be provided though the use of one of the 
-pre-supplied interfaces, or bespoke feedback can be provided by implementing the corresponding interface(s) for the class.
+It is suggested that the Testers module is compiled to a jar file to be included in any project that requires the automation of feedback on Java programming exercises.
+
+An example [tutorial on the designing of a LibraryBook class](https://tutorials.tinyappco.com/java/classtaskautofeedback), indicates how it may be used and downloading the associate project and reviewing the supplied unit tests will allow the reader to explore how the tool is used in practice.
+
+The testers facilitate, using Java's reflection capabilities, the creation of unit tests, or other code, to test aspects of code which students are expected to write, provided the class in which the code that will be tested exists at compile time.
+
+No other aspect of the class needs to exist or be correct, simply the declaration (e.g., `class Foo {}`).
+
+Default feedback on code can be provided though the use of one of the pre-supplied interfaces, or bespoke feedback can be provided by implementing the corresponding interface(s) for the Tester class.
 
 The **InstanceTester** class is probably the most powerful and useful class in the repository, as it allows the writing of code to invoke methods prior to the methods themselves having been written, with minimal overhead. Prior evaluation of the class with the **MethodsTester** is suggested to provide feedback on any errors in declaring methods.
 
@@ -55,4 +61,6 @@ Allows the existance of instance methods to be checked, and various aspects of t
 It also allows static methods to be invoked (in much the same way as an instance tester, without the requirement for an instance of the class to be created)
 
 
+---
+## Note on usage
 Tests which check parameter names, for example, for conformance to convention require the compiler `-parameters` flag to be set to function.
