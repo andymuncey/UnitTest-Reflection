@@ -16,9 +16,10 @@ The **InstanceTester** class is probably the most powerful and useful class in t
 
 The below example shows how the InstanceTester could be used to call a method on a LibraryBook class which returns a boolean
 
-`InstanceTester<LibraryBook> instanceTester = new InstanceTester<>(LibraryBook.class, new InstanceTestEventHandlerEN(), "War and Peace",7,3);`
-
-`instanceTester.executeMethod(boolean.class,"checkOut");`
+```
+InstanceTester<LibraryBook> instanceTester = new InstanceTester<>(LibraryBook.class, new InstanceTestEventHandlerEN(), "War and Peace",7,3);
+instanceTester.executeMethod(boolean.class,"checkOut");
+```
 
 If the method called required parameters, these would be passed in to the executeMethod method as subsequent parameters (varargs). `InstanceTestEventHandlerEN` provides default feedback via unit test assertions if execution fails, but users can provide their own customised implementations of the `InstanceTester.EventHandler` interface to suit their needs
 
