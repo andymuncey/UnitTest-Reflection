@@ -23,6 +23,14 @@ instanceTester.executeMethod(boolean.class,"checkOut");
 
 If the method called required parameters, these would be passed in to the executeMethod method as subsequent parameters (varargs). `InstanceTestEventHandlerEN` provides default feedback via unit test assertions if execution fails, but users can provide their own customised implementations of the `InstanceTester.EventHandler` interface to suit their needs
 
+
+The methods tester can be used to execute static methods, example shown here:
+```
+MethodsTester<Main> methodsTester = new MethodsTester<>(Main.class, new MethodTestEventHandlerEN());
+int result = methodsTester.executeStatic(int.class,"getCurrentYear");
+assertEquals(result,new GregorianCalendar().get(Calendar.YEAR));
+```
+
 Key Testers are as follows:
 
 ## ClassTester
