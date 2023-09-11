@@ -44,7 +44,7 @@ public class MethodsTesterValidator {
      */
     @Test
     public void staticInt(){
-        int result = tester.executeStaticMatchingTestName(int.class);
+        int result = tester.executeStatic(int.class,null);
         Assert.assertEquals(1,result);
     }
 
