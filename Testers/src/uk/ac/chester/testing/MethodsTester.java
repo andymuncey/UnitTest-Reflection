@@ -101,28 +101,23 @@ public class MethodsTester<C> extends Tester {
     /**
      * Executes a static method, allowing autoboxing/unboxing, and any access modifier
      * @param returnType the expected return type of the method to be called
-     * @param methodName name of the method
+     * @param methodName name of the method (null to use the name of the calling method)
      * @param args args to pass to the method (must cast arrays as objects)
      * @param <T> the type of class returned
      * @return there result of executing the method
      */
     public <T> T executeStatic(Class<T> returnType, String methodName, Object... args){
+
+        //Finds the name of the calling method
+              if (methodName == null){
+                  //adapted from Nathan (2021) https://stackoverflow.com/questions/4065518/java-how-to-get-the-caller-function-name
+                  methodName = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+        }
+
         return executeStaticWithSpecifics(true,null,returnType,methodName,args);
     }
 
-    /**
-     * Executes a static method, where the name of the method name to be executed matches the name of the calling method
-     * @param returnType the expected return type of the method to be called
-     * @param args args to pass to the method (must cast arrays as objects)
-     * @param <T> the type of class returned
-     * @return there result of executing the method
-     */
-    public <T> T executeStaticMatchingTestName(Class<T> returnType, Object... args){
 
-        String methodName = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
-        return executeStaticWithSpecifics(true,null,returnType,methodName,args);
-
-    }
 
 
 //    /**

@@ -52,7 +52,23 @@ public class InstanceTester<C> {
         }
     }
 
+
+    /**
+     *
+     * @param returnType the class of the type the method to be called returns
+     * @param name the name of the method to call, pass null to use the name of the calling method
+     * @param args the parameters to pass to the method. Arrays must be cast to an object
+     * @return the result of executing the method, if successful, null otherwise
+     * @param <T> the type returned by the method to be called
+     */
     public <T> T executeMethod(Class<T> returnType, String name, Object... args){
+
+        //Finds the name of the calling method
+        //adapted from Nathan (2021) https://stackoverflow.com/questions/4065518/java-how-to-get-the-caller-function-name
+        if (name == null){
+            name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+        }
+
        verifyConstructed();
         try {
            return helper.invokeMethod( returnType, name, args);
@@ -61,6 +77,7 @@ public class InstanceTester<C> {
        }
        return null;
     }
+
 
     public <T> T getFieldValue(Class<T> type, String name){
         verifyConstructed();
