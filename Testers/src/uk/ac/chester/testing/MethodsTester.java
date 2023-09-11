@@ -100,7 +100,7 @@ public class MethodsTester<C> extends Tester {
 
     /**
      * Executes a static method, allowing autoboxing/unboxing, and any access modifier
-     * @param returnType Must be a boxed type for this to work
+     * @param returnType the expected return type of the method to be called
      * @param methodName name of the method
      * @param args args to pass to the method (must cast arrays as objects)
      * @param <T> the type of class returned
@@ -108,6 +108,20 @@ public class MethodsTester<C> extends Tester {
      */
     public <T> T executeStatic(Class<T> returnType, String methodName, Object... args){
         return executeStaticWithSpecifics(true,null,returnType,methodName,args);
+    }
+
+    /**
+     * Executes a static method, where the name of the method name to be executed matches the name of the calling method
+     * @param returnType the expected return type of the method to be called
+     * @param args args to pass to the method (must cast arrays as objects)
+     * @param <T> the type of class returned
+     * @return there result of executing the method
+     */
+    public <T> T executeStaticMatchingTestName(Class<T> returnType, Object... args){
+
+        String methodName = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+        return executeStaticWithSpecifics(true,null,returnType,methodName,args);
+
     }
 
 
