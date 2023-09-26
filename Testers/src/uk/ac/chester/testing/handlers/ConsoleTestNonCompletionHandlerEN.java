@@ -1,9 +1,10 @@
 package uk.ac.chester.testing.handlers;
 
-import org.junit.Assert;
+
 import uk.ac.chester.testing.ConsoleTester;
 
 import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -13,7 +14,7 @@ public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompl
 
     @Override
     public void stillAwaitingInput(String[] inputTokens) {
-        Assert.fail("The application should have finished given the input supplied, but would still be waiting for user input\n" +
+        fail("The application should have finished given the input supplied, but would still be waiting for user input\n" +
                 "This can happen if the method results in the creation of more than one instance of Scanner\n"+
                 "The input supplied was: " + Arrays.toString(inputTokens));
 
@@ -21,7 +22,7 @@ public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompl
 
     @Override
     public void timeout(String[] inputTokens, int seconds) {
-        Assert.fail("The application did not finish within the " + seconds + " seconds permitted");
+        fail("The application did not finish within the " + seconds + " seconds permitted");
 
     }
 }
