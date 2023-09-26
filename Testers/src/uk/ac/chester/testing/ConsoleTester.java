@@ -64,7 +64,7 @@ public class ConsoleTester<C> {
         final StringBuilder sb = new StringBuilder();
         for (String string : strings) {
             sb.append(string);
-            sb.append("\n");
+            sb.append(System.lineSeparator());
         }
         return new ByteArrayInputStream(sb.toString().getBytes());
     }
@@ -235,7 +235,7 @@ public class ConsoleTester<C> {
             executor.shutdown();
         }
         if (out.toString().length() > 0) {
-            return out.toString().split("\n");
+            return out.toString().split(System.lineSeparator());
         }
         return null;
     }

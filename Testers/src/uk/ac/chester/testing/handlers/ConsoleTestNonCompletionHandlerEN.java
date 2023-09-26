@@ -14,8 +14,8 @@ public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompl
 
     @Override
     public void stillAwaitingInput(String[] inputTokens) {
-        fail("The application should have finished given the input supplied, but would still be waiting for user input\n" +
-                "This can happen if the method results in the creation of more than one instance of Scanner\n"+
+        fail("The application should have finished given the input supplied, but would still be waiting for user input" + System.lineSeparator() +
+                "This can happen if the method results in the creation of more than one instance of Scanner"+ System.lineSeparator() +
                 "The input supplied was: " + Arrays.toString(inputTokens));
 
     }
