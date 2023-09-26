@@ -14,6 +14,23 @@ Default feedback on code can be provided though the use of one of the pre-suppli
 
 The **InstanceTester** class is probably the most powerful and useful class in the repository, as it allows the writing of code to invoke methods prior to the methods themselves having been written, with minimal overhead. Prior evaluation of the class with the **MethodsTester** is suggested to provide feedback on any errors in declaring methods.
 
+The below example shows how the InstanceTester could be used to call a method on a LibraryBook class which returns a boolean
+
+```
+InstanceTester<LibraryBook> instanceTester = new InstanceTester<>(LibraryBook.class, new InstanceTestEventHandlerEN(), "War and Peace",7,3);
+instanceTester.executeMethod(boolean.class,"checkOut");
+```
+
+If the method called required parameters, these would be passed in to the executeMethod method as subsequent parameters (varargs). `InstanceTestEventHandlerEN` provides default feedback via unit test assertions if execution fails, but users can provide their own customised implementations of the `InstanceTester.EventHandler` interface to suit their needs
+
+
+The methods tester can be used to execute static methods, example shown here:
+```
+MethodsTester<Main> methodsTester = new MethodsTester<>(Main.class, new MethodTestEventHandlerEN());
+int result = methodsTester.executeStatic(int.class,"getCurrentYear");
+assertEquals(result,new GregorianCalendar().get(Calendar.YEAR));
+```
+
 Key Testers are as follows:
 
 ## ClassTester

@@ -39,6 +39,16 @@ public class MethodsTesterValidator {
     }
 
 
+    /**
+     * This Method must be named the same as the method that is tested
+     */
+    @Test
+    public void staticInt(){
+        int result = tester.executeStatic(int.class,null);
+        Assert.assertEquals(1,result);
+    }
+
+
     @Test
     public void staticTestReturningVoid () {
         ArrayList<String> strings = new ArrayList<>();

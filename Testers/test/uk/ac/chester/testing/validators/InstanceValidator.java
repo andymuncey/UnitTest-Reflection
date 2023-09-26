@@ -44,6 +44,15 @@ public class InstanceValidator {
         Assert.assertEquals(Integer.valueOf(5),gotValue);
     }
 
+
+    @Test
+    public void getX(){
+        InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
+        tester.executeNonReturningMethod("setX",5);
+        Integer gotValue = tester.executeMethod(Integer.class, null);
+        Assert.assertEquals(Integer.valueOf(5),gotValue);
+    }
+
     @Test
     public void field(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,6);
