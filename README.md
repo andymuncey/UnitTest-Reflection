@@ -81,3 +81,7 @@ It also allows static methods to be invoked (in much the same way as an instance
 ---
 ## Note on usage
 Tests which check parameter names, for example, for conformance to convention require the compiler `-parameters` flag to be set to function.
+
+---
+##Research
+This tool forms part of the research presented as a poster. You can view the poster abstract here: [Towards automated feedback of aobject-oriented programming tasks in Java](https://dl.acm.org/doi/10.1145/3610969.3611129)
