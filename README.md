@@ -84,4 +84,4 @@ Tests which check parameter names, for example, for conformance to convention re
 
 ---
 ## Research
-This tool forms part of the research presented as a poster. You can view the poster abstract here: [Towards automated feedback of aobject-oriented programming tasks in Java](https://dl.acm.org/doi/10.1145/3610969.3611129)
+This tool forms part of the research presented as a poster. You can view the poster abstract here: [Towards automated feedback of object-oriented programming tasks in Java](https://dl.acm.org/doi/10.1145/3610969.3611129)
