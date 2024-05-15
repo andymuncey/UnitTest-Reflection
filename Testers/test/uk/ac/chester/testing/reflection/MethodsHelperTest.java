@@ -2,24 +2,26 @@ package uk.ac.chester.testing.reflection;
 
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 import uk.ac.chester.testing.testclasses.TestClass;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MethodsHelperTest {
 
     private MethodsHelper<TestClass> h;
 
-    @Before
+    @BeforeEach
     public void setUp()  {
         h = new MethodsHelper<>(TestClass.class);
     }
 
-    @After
+    @AfterEach
     public void tearDown()  {
         h = null;
     }
@@ -28,48 +30,49 @@ public class MethodsHelperTest {
     @Test
     public void typesForArgs() {
 
-        Assert.assertNotEquals(Integer.class, int.class); //just as a reminder
-        Assert.assertNotEquals(Void.class, void.class); //also a reminder
+        assertNotEquals(Integer.class, int.class); //just as a reminder
+        assertNotEquals(Void.class, void.class); //also a reminder
 
         Object[] args = {1, 5000000000L, 1.5F, 2.345, 'a', "text"};
         Class[] actualTypes = Utilities.classesForArgs(args);
         Class[] expectedTypes = {Integer.class, Long.class, Float.class, Double.class, Character.class, String.class};
-        Assert.assertArrayEquals(expectedTypes, actualTypes);
+        assertArrayEquals(expectedTypes, actualTypes);
 
         Class[] primitiveTypes = {int.class, long.class, float.class, double.class, char.class, String.class};
-        Assert.assertThat(primitiveTypes, IsNot.not(IsEqual.equalTo(actualTypes)));
+        assertNotEquals(primitiveTypes, actualTypes);
+        //assertThat(primitiveTypes, IsNot.not(IsEqual.equalTo(actualTypes)));
     }
 
 
     @Test
     public void findMethods() {
         //name and return type
-        Assert.assertFalse("Primitive int type", h.findMethods(int.class, "returnsPrimitiveInt").isEmpty());
-        Assert.assertTrue("Primitive int type", h.findMethods(Integer.class, "returnsPrimitiveInt").isEmpty());
+        assertFalse(h.findMethods(int.class, "returnsPrimitiveInt").isEmpty(), "Primitive int type");
+        assertTrue(h.findMethods(Integer.class, "returnsPrimitiveInt").isEmpty(), "Primitive int type");
 
-        Assert.assertFalse("Class Integer type", h.findMethods(Integer.class, "returnsInteger").isEmpty());
-        Assert.assertTrue("Class Integer type", h.findMethods(int.class, "returnsInteger").isEmpty());
+        assertFalse(h.findMethods(Integer.class, "returnsInteger").isEmpty(), "Class Integer type");
+        assertTrue(h.findMethods(int.class, "returnsInteger").isEmpty(), "Class Integer type");
     }
 
     @Test
     public void findMethodsNotStrict() {
-        Assert.assertFalse("Primitive int type", h.findMethods(true, Integer.class, "returnsPrimitiveInt").isEmpty());
-        Assert.assertFalse("Class Integer type", h.findMethods(true, int.class, "returnsInteger").isEmpty());
+        assertFalse(h.findMethods(true, Integer.class, "returnsPrimitiveInt").isEmpty(), "Primitive int type");
+        assertFalse(h.findMethods(true, int.class, "returnsInteger").isEmpty(), "Class Integer type");
     }
 
     @Test
     public void findMethod() {
-        Assert.assertTrue(h.findMethod(false, int.class, "returnsPrimitiveInt").isPresent());
-        Assert.assertFalse(h.findMethod(false, Integer.class, "returnsPrimitiveInt").isPresent());
-        Assert.assertTrue(h.findMethod(true, Integer.class, "returnsPrimitiveInt").isPresent());
+        assertTrue(h.findMethod(false, int.class, "returnsPrimitiveInt").isPresent());
+        assertFalse(h.findMethod(false, Integer.class, "returnsPrimitiveInt").isPresent());
+        assertTrue(h.findMethod(true, Integer.class, "returnsPrimitiveInt").isPresent());
 
-        Assert.assertTrue(h.findMethod(false, Integer.class, "returnsInteger").isPresent());
-        Assert.assertFalse(h.findMethod(false, int.class, "returnsInteger").isPresent());
-        Assert.assertTrue(h.findMethod(true, int.class, "returnsInteger").isPresent());
+        assertTrue(h.findMethod(false, Integer.class, "returnsInteger").isPresent());
+        assertFalse(h.findMethod(false, int.class, "returnsInteger").isPresent());
+        assertTrue(h.findMethod(true, int.class, "returnsInteger").isPresent());
 
-        Assert.assertTrue(h.findMethod(false, void.class, "noReturn").isPresent());
-        Assert.assertFalse(h.findMethod(false, Void.class, "noReturn").isPresent());
-        Assert.assertTrue(h.findMethod(true, Void.class, "noReturn").isPresent());
+        assertTrue(h.findMethod(false, void.class, "noReturn").isPresent());
+        assertFalse(h.findMethod(false, Void.class, "noReturn").isPresent());
+        assertTrue(h.findMethod(true, Void.class, "noReturn").isPresent());
 
     }
 
@@ -77,7 +80,7 @@ public class MethodsHelperTest {
     public void methodParamNames() {
     String[] paramNames = {"p0", "p1"};
     String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
-    Assert.assertArrayEquals(message, paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class));
+    assertArrayEquals(paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class), message);
     }
 
 //    @Test

@@ -1,25 +1,26 @@
 package uk.ac.chester.testing;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InstanceMethodsHelperTest {
 
 
     private InstanceReflectionHelper<PointTestClass> h;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IllegalAccessException, InvocationTargetException, InstantiationException {
            h = new InstanceReflectionHelper<>(PointTestClass.class, 2,3);
     }
 
-    @After
+    @AfterEach
     public void tearDown()  {
         h = null;
     }
@@ -33,7 +34,7 @@ public class InstanceMethodsHelperTest {
     @Test
     public void getFieldValue() throws TestingExecutionException {
         Integer result = h.fieldValue(int.class, "x");
-        Assert.assertEquals(Integer.valueOf(2), result);
+        assertEquals(Integer.valueOf(2), result);
     }
 
 }

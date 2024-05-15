@@ -1,9 +1,9 @@
 package uk.ac.chester.testing.validators;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.testclasses.TestClass;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
@@ -11,13 +11,13 @@ public class ConstructorsTesterValidator {
 
     private ConstructorsTester<TestClass> t;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         ConstructorsTestEventHandlerEN handler = new ConstructorsTestEventHandlerEN();
         t  = new ConstructorsTester<>(TestClass.class, handler);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         t = null;
     }

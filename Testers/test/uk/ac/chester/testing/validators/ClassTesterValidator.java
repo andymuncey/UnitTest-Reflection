@@ -1,6 +1,7 @@
 package uk.ac.chester.testing.validators;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;

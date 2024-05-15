@@ -1,6 +1,6 @@
 package uk.ac.chester.testing.validators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.FieldsTester;
 import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;

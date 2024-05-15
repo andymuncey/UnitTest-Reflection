@@ -1,7 +1,10 @@
 package uk.ac.chester.testing.reflection;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class UtilitiesTest {
 
@@ -12,24 +15,24 @@ public class UtilitiesTest {
         Class[] classes = {Integer.class, String.class, Double.class, Object.class};
         Class[] inferredClasses = Utilities.classesForArgs(args);
         for (int i = 0; i < inferredClasses.length; i++) {
-            Assert.assertEquals(classes[i],inferredClasses[i]);
+            assertEquals(classes[i],inferredClasses[i]);
         }
 
         int[] intArgs = {2,3};
         Class[] intClasses = {Integer.class, Integer.class};
         Class[] inferredIntClasses = Utilities.classesForArgs(args);
         for (Class inferredClass: inferredIntClasses) {
-            Assert.assertNotEquals("Int should be represented as the Integer class",inferredClass, int.class);
+            assertNotEquals(inferredClass, int.class, "Int should be represented as the Integer class");
         }
 
     }
 
     @Test
     public void classEquivalent() {
-        Assert.assertEquals(Integer.class, Utilities.classEquivalent(int.class));
-        Assert.assertEquals("Existing class data types unchanged", Double.class, Utilities.classEquivalent(Double.class));
-        Assert.assertEquals("Arrays of primitive types are already objects", int[].class, Utilities.classEquivalent(int[].class));
-        Assert.assertNotEquals("int[] and Integer[] are not the same", Integer[].class, Utilities.classEquivalent(int[].class));
+        assertEquals(Integer.class, Utilities.classEquivalent(int.class));
+        assertEquals(Double.class, Utilities.classEquivalent(Double.class), "Existing class data types unchanged");
+        assertEquals(int[].class, Utilities.classEquivalent(int[].class),"Arrays of primitive types are already objects");
+        assertNotEquals(Integer[].class, Utilities.classEquivalent(int[].class),"int[] and Integer[] are not the same");
     }
 
 

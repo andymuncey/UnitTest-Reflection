@@ -1,11 +1,12 @@
 package uk.ac.chester.testing.validators;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InstanceValidator {
 
@@ -41,7 +42,7 @@ public class InstanceValidator {
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
         tester.executeNonReturningMethod("setX",5);
         Integer gotValue = tester.executeMethod(Integer.class, "getX");
-        Assert.assertEquals(Integer.valueOf(5),gotValue);
+        assertEquals(Integer.valueOf(5),gotValue);
     }
 
 
@@ -50,14 +51,14 @@ public class InstanceValidator {
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
         tester.executeNonReturningMethod("setX",5);
         Integer gotValue = tester.executeMethod(Integer.class, null);
-        Assert.assertEquals(Integer.valueOf(5),gotValue);
+        assertEquals(Integer.valueOf(5),gotValue);
     }
 
     @Test
     public void field(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,6);
         int xValue = tester.getFieldValue(int.class, "x");
-        Assert.assertEquals(5,xValue);
+        assertEquals(5,xValue);
     }
     //endregion
 
