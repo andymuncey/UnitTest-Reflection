@@ -24,11 +24,7 @@ public class ConstructorsHelper<C> {
      * @return An Optional containing a matching constructor, if found
      */
     public Optional<Constructor<C>> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
-        @SuppressWarnings("unchecked") //casting declared constructors not of type, but constructors must be of the same type given the class in which they appear
-                Constructor<C>[] constructorsArray = (Constructor<C>[]) (includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors());
-
-        Set<Constructor<C>> constructors = new HashSet<>(Arrays.asList(constructorsArray));
-        constructors.removeIf(Constructor::isSynthetic);
+        Set<Constructor<C>> constructors = availableConstructors(includeNonPublic);
 
         if (!matchParamOrder){
             Utilities.sortParamsTypesByName(params); //todo: investigate if this could fail if autoboxing enabled and order of params varies based on name
@@ -47,6 +43,20 @@ public class ConstructorsHelper<C> {
             }
         }
         return Optional.empty();
+    }
+
+
+    /**
+     * Gets constructors for the specified class, excluding any synthetic constructors
+     * @param includeNonPublic whether to include private and protected constructors
+     * @return a set of Constructors
+     */
+    public Set<Constructor<C>> availableConstructors(boolean includeNonPublic){
+        @SuppressWarnings("unchecked") //casting declared constructors not of type, but constructors must be of the same type given the class in which they appear
+        Constructor<C>[] constructorsArray = (Constructor<C>[]) (includeNonPublic ? searchClass.getDeclaredConstructors() : searchClass.getConstructors());
+        Set<Constructor<C>> constructors = new HashSet<>(Arrays.asList(constructorsArray));
+        constructors.removeIf(Constructor::isSynthetic);
+        return constructors;
     }
 
 

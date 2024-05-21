@@ -108,12 +108,22 @@ public class ConstructorsTester<T> extends Tester {
         return helper.constructorForArgTypes(true, matchParamOrder, args).isPresent();
     }
 
+    public boolean constructorWithNoArgsExists(boolean includeNonPublic){
+        for (Constructor constructor: helper.availableConstructors(includeNonPublic)){
+            if (constructor.getParameterCount() == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     public interface EventHandler {
 
         /**
          * No constructor with the required parameters could be found
-         *
-         * there will always be a no-argument constructor unless a non-parameterless one is added
+         * There will always be a no-argument constructor unless a non-parameterless one is added
          * There is no way (using reflection) to differentiate between an inherited no-argument constructor
          * and one that has been created
          *
