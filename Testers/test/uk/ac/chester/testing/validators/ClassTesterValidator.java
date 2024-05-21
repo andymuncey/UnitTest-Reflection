@@ -29,6 +29,16 @@ public class ClassTesterValidator {
     }
 
     @Test
+    public void testSerialVersionUID() {
+        Object x = new Object(){
+            private static final long serialVersionUID = 1L;
+        };
+        ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
+        ClassTester t  = new ClassTester<>(x.getClass(),  handler);
+        t.checkFields();
+    }
+
+    @Test
     public void testFieldStaticButNotFinal() {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester t  = new ClassTester<>(TestClass.class,  handler);

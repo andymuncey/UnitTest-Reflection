@@ -80,6 +80,10 @@ public class ClassTester<T> extends Tester {
                     handler.fieldNameUnconventional(field.getName(), false);
                 }
             } else if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
+
+                if (isSerialVersionUID(field)){
+                    continue;
+                }
                 if (!getConventionChecker().validClassConstantName(field.getName())) {
                     handler.fieldNameUnconventional(field.getName(), true);
                 }
@@ -87,7 +91,12 @@ public class ClassTester<T> extends Tester {
         }
     }
 
+    private static boolean isSerialVersionUID(Field field) {
+        return field.getName().equals("serialVersionUID") && field.getType() == long.class;
+    }
+
     //endregion
+
 
 
     public void checkMethods(){
