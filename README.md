@@ -8,7 +8,7 @@ An example [tutorial on the designing of a LibraryBook class](https://tutorials.
 
 The testers facilitate, using Java's reflection capabilities, the creation of unit tests, or other code, to test aspects of code which students are expected to write, provided the class in which the code that will be tested exists at compile time.
 
-No other aspect of the class needs to exist or be correct, simply the declaration (e.g., `class Foo {}`).
+No other aspect of the class needs to exist or be correct, simply the declaration (e.g., `class Foo {}`), as long as the class would compile.
 
 Default feedback on code can be provided though the use of one of the pre-supplied interfaces, or bespoke feedback can be provided by implementing the corresponding interface(s) for the Tester class.
 
