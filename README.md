@@ -59,10 +59,11 @@ Tests that fields within a class are as expected, including
 - that the non access modifier(s) for a field are correct
 
 ## InstanceTester
-Allows the invocation of methods of a class (returning the result of invoking the method on a given object), and inspection of the values of fields in a class. It can also directluy set the value of a field (regardless of access modifiers). It can identify the following errors
+Allows the invocation of methods of a class (returning the result of invoking the method on a given object), and inspection of the values of fields in a class. It can also directly set the value of a field (regardless of access modifiers). It can identify the following errors
 - Where an instance cannot be constructed
 - Where a method cannot be invoked with a given set of arguments
-- Where a field does not exist 
+- Where a field does not exist
+- Where a field is not initialised after the constructor is called
 
 ## MethodsTester
 Allows the existance of instance methods to be checked, and various aspects of these to be verified, including:
