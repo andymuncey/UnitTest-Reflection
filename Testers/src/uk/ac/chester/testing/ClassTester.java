@@ -12,12 +12,15 @@ public class ClassTester<T> extends Tester {
     private final Set<Method> methods;
     private final Set<Constructor> constructors;
 
+    private final Class<T> clazz;
+
     /**
      * Creates a ClassTester for a specified class
      * @param theClass the class to testExistence the fields in
      * @param handler An implementation of EventHandler, likely containing unit testExistence assertions
      */
     public ClassTester(Class<T> theClass, EventHandler handler){
+        this.clazz = theClass;
         this.handler = handler;
 
         Set<Field> allFields = new HashSet<>(Arrays.asList(theClass.getDeclaredFields()));
@@ -145,6 +148,27 @@ public class ClassTester<T> extends Tester {
                 }
             }
         }
+    }
+
+
+    public boolean extendsSuperclass(Class superclass){
+        return extendsSuperclass(clazz,superclass);
+    }
+
+    private boolean extendsSuperclass(Class theClass, Class theSuperclass){
+        if (theClass.getSuperclass() == null){
+            return false;
+        }
+        if (theClass.getSuperclass().equals(theSuperclass)){
+            return true;
+        }
+        return extendsSuperclass(theClass.getSuperclass(), theSuperclass);
+    }
+
+    public boolean implementsInterface(Class anInterface){
+        assert(anInterface.isInterface());
+        return Arrays.asList(clazz.getInterfaces()).contains(anInterface);
+
     }
 
     public interface EventHandler {
