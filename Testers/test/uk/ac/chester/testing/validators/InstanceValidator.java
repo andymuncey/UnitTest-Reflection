@@ -36,6 +36,15 @@ public class InstanceValidator {
         tester.getFieldValue(int.class, "nonExistentField");
     }
 
+
+    @Test
+    public void uninitialisedField(){
+
+        InstanceTester<TestClass> tester = new InstanceTester<>(TestClass.class, new InstanceTestEventHandlerEN());
+
+        tester.verifyFieldsInitialised();
+    }
+
     //region passing tests
     @Test
     public void property(){

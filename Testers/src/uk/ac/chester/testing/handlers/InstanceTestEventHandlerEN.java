@@ -28,6 +28,13 @@ public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, 
         fail("Unable to retrieve value from field named '" + name + "' of type: " + type.getSimpleName());
     }
 
+    @Override
+    public void fieldNotInitialized(Class<?> type, String name) {
+        fail("After construction, the field named '"+ name + "' of type: " + type.getSimpleName()+ " has not been initialised" +
+                " (i.e. it is null). " + System.lineSeparator() +
+                "It's generally best to avoid fields having a null value, instead the value should be set by the constructor");
+    }
+
 //    @Override
 //    public void throwsException(Class returnType, String name, Object[] args, Exception e) {
 //

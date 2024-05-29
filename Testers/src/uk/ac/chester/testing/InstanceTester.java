@@ -1,6 +1,9 @@
 package uk.ac.chester.testing;
 
+import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
+
+import java.lang.reflect.Field;
 
 /**
  * This class is designed to be used to testExistence method calls and field values and will use an instance of the class passed to the constructor
@@ -16,6 +19,8 @@ public class InstanceTester<C> {
     private InstanceReflectionHelper<C> helper;
     private final EventHandler handler;
 
+    private final Class<C> searchClass;
+
     /**
      *
      * @param searchClass The class from which an object will be created
@@ -23,7 +28,7 @@ public class InstanceTester<C> {
      * @param constructorArgs The arguments to pass to the constructor for the class
      */
     public InstanceTester(Class<C> searchClass, EventHandler handler, Object... constructorArgs){
-
+        this.searchClass = searchClass;
         this.handler = handler;
         try {
             helper = new InstanceReflectionHelper<>(searchClass, constructorArgs);
@@ -94,6 +99,18 @@ public class InstanceTester<C> {
         return helper.setFieldValue(type,name,value);
     }
 
+
+    public void verifyFieldsInitialised(){
+        verifyConstructed();
+        FieldsHelper<C> fieldsHelper = new FieldsHelper<>(searchClass);
+        for (Field field: fieldsHelper.fields()){
+            Object fieldValue = getFieldValue(field.getType(), field.getName());
+            if (fieldValue == null){
+                handler.fieldNotInitialized(field.getType(), field.getName());
+            }
+        }
+    }
+
     public interface EventHandler {
 
         void cannotConstructWithArgs(String className, Object[] args);
@@ -103,6 +120,8 @@ public class InstanceTester<C> {
         void cannotInvokeMethod(Class returnType, String name, Object[] args);
 
         void cannotRetrieveFieldValue(Class type, String name);
+
+        void fieldNotInitialized(Class<?> type, String name);
     }
 
 }
