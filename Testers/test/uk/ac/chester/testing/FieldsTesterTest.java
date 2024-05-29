@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FieldsTesterTest {
 
-    FieldsTester<?> tester;
+    private FieldsTester<?> tester;
 
     @BeforeEach
     void setUp() {
@@ -20,12 +20,13 @@ class FieldsTesterTest {
             private static double myDouble;
         };
 
-        tester = new FieldsTester(x.getClass(),null);
+        tester = new FieldsTester<>(x.getClass(),null);
 
     }
 
     @AfterEach
     void tearDown() {
+        tester = null;
     }
 
     @Test
