@@ -50,6 +50,7 @@ public class TestClass {
         return 1;
     }
 
+    private String uninitialisedField;
 
     //bad param name
     public TestClass(double A){}

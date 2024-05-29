@@ -1,12 +1,14 @@
 package uk.ac.chester.testing.validators;
 
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InstanceValidator {
 
@@ -37,15 +39,19 @@ public class InstanceValidator {
     }
 
 
+    //region passing tests
+
     @Test
-    public void uninitialisedField(){
+    public void uninitialisedFields(){
 
         InstanceTester<TestClass> tester = new InstanceTester<>(TestClass.class, new InstanceTestEventHandlerEN());
 
-        tester.verifyFieldsInitialised();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class,
+                tester::verifyFieldsInitialised,
+                "Expected failure");
+        assert(thrown.getMessage().contains("avoid fields having a null value"));
     }
 
-    //region passing tests
     @Test
     public void property(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 0,0);
