@@ -4,6 +4,7 @@ import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
 public class FieldsTester<T> extends Tester {
@@ -104,6 +105,23 @@ public class FieldsTester<T> extends Tester {
             }
         }
         return null;
+    }
+
+
+    /**
+     * returns every type used for declaring fields
+     * @param ignoreStatic ignore fields with the static modifier
+     * @return the types used by the fields in the class
+     */
+    public Set<Class<?>> fieldTypes(boolean ignoreStatic){
+       Set<Class<?>> fieldTypes = new HashSet<>();
+        for (Field field: fields){
+            if (ignoreStatic && NonAccessModifier.nonAccessModifiers(field).contains(NonAccessModifier.STATIC)){
+                continue;
+            }
+            fieldTypes.add(field.getType());
+        }
+        return fieldTypes;
     }
 
     public interface EventHandler {
