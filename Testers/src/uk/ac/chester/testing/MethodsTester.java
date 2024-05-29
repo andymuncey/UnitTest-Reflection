@@ -352,8 +352,24 @@ public class MethodsTester<C> extends Tester {
 
         }
         return getters;
-
     }
+
+
+    public Set<Method> setters(){
+        FieldsHelper<C> fieldshelper = new FieldsHelper<>(searchClass);
+        Set<Field> fields = fieldshelper.fields();
+        Set<Method> setters = new HashSet<>();
+        for (Field field: fields){
+            String setterName = "set" + capitaliseFirstLetter(field.getName());
+            Optional<Method> method = helper.findMethod(AccessModifier.PUBLIC,false,void.class,setterName,true,field.getType());
+            if (method.isPresent()){
+                setters.add(method.get());
+                break;
+            }
+        }
+        return setters;
+    }
+
 
     private static String capitaliseFirstLetter(String word){
         if (word.isEmpty()) {

@@ -45,6 +45,18 @@ class MethodsTesterTest {
                 return 0F;
             }
 
+            public void setMyDouble(double value){ //valid setter
+                myDouble = value;
+            }
+
+            public void setSomeBool(double value){ //invalid setter - wrong parameter type
+                myDouble = value;
+            }
+
+            public String setMyString(String value){ //invalid setter - shouldn't return a value
+                myString = value;
+                return myString;
+            }
 
         };
 
@@ -67,5 +79,10 @@ class MethodsTesterTest {
             Set<Method> methods = tester.getters();
             assertEquals(2, methods.size());
         }
+    }
+
+    @Test
+    void setters() {
+        assertEquals(1,tester.setters().size());
     }
 }
