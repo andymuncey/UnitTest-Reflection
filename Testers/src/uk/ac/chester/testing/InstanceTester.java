@@ -100,13 +100,18 @@ public class InstanceTester<C> {
     }
 
 
+    /**
+     * Verifies that all private fields are initialized after the class has been constructed
+     */
     public void verifyFieldsInitialised(){
         verifyConstructed();
         FieldsHelper<C> fieldsHelper = new FieldsHelper<>(searchClass);
         for (Field field: fieldsHelper.fields()){
-            Object fieldValue = getFieldValue(field.getType(), field.getName());
-            if (fieldValue == null){
-                handler.fieldNotInitialized(field.getType(), field.getName());
+            if (AccessModifier.accessModifier(field).equals(AccessModifier.PRIVATE)) {
+                Object fieldValue = getFieldValue(field.getType(), field.getName());
+                if (fieldValue == null) {
+                    handler.fieldNotInitialized(field.getType(), field.getName());
+                }
             }
         }
     }
