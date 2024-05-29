@@ -48,7 +48,7 @@ public class ClassTester<T> extends Tester {
     /**
      * Tests that fields that are not static and are private
      */
-    private void checkNonStaticArePrivate() {
+    public void checkNonStaticArePrivate() {
         for (Field field: fields){
             int modifiers = field.getModifiers();
             if (!Modifier.isStatic(modifiers) && !Modifier.isPrivate(modifiers)) {
@@ -60,7 +60,7 @@ public class ClassTester<T> extends Tester {
     /**
      * Tests for the presence of static fields which are not declared as final
      */
-    private void checkStaticFieldsAreFinal() {
+    public void checkStaticFieldsAreFinal() {
         for (Field field: fields) {
             int modifiers = field.getModifiers();
             if (Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
@@ -72,7 +72,7 @@ public class ClassTester<T> extends Tester {
     /**
      * Tests that field names match Java naming conventions
      */
-    private void checkFieldNames() {
+    public void checkFieldNames() {
         for (Field field: fields){
             int modifiers = field.getModifiers();
             if (Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers)) {
