@@ -32,14 +32,19 @@ public class InstanceValidator {
         tester.executeNonReturningMethod("nonExistentMethod", 1,2,3);
     }
 
+
+    //region passing tests
     @Test
     public void nonExistentField(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 1,2);
-        tester.getFieldValue(int.class, "nonExistentField");
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class,
+                () -> tester.getFieldValue(int.class, "nonExistentField"),
+                "Expected failure");
+        assert(thrown.getMessage().contains("Unable to retrieve value from field"));
     }
 
 
-    //region passing tests
+
 
     @Test
     public void uninitialisedFields(){
