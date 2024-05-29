@@ -2,11 +2,13 @@ package uk.ac.chester.testing;
 
 
 import org.jetbrains.annotations.Nullable;
+import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.MethodsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tests methods which may not be implemented in a given class.
@@ -309,6 +311,61 @@ public class MethodsTester<C> extends Tester {
         }
         return true;
     }
+
+
+    /**
+     * Returns a set of methods where the method name matches a field name (first letter capitalised) prefixed with
+     * 'get' (for non-boolean types), or 'is' (for boolean types). If specified, alternate prefixes for booleans can be specified
+     * Will allow methods which return the boxed/unboxed type (e.g. the field could hold an int and the getter return Integer
+     * @param booleanPrefixes specify allowable prefixes for boolean, or null to use 'is' alone
+     * @return a set of methods which, due to the type returned and the name, are likely to be getters
+     */
+    public Set<Method> getters(String... booleanPrefixes){
+
+        if (booleanPrefixes.length == 0){
+            booleanPrefixes = new String[]{"is"};
+        }
+
+        FieldsHelper<C> fieldshelper = new FieldsHelper<>(searchClass);
+        Set<Field> fields = fieldshelper.fields();
+        Set<Method> getters = new HashSet<>();
+        for (Field field: fields){
+
+            if (field.getType() == Boolean.class || field.getType() == boolean.class){
+            for (String prefix:booleanPrefixes) {
+                String getterName = prefix + capitaliseFirstLetter(field.getName());
+                Optional<Method> method = helper.findMethod(AccessModifier.PUBLIC,false,field.getType(),getterName,true);
+                if (method.isPresent()){
+                    getters.add(method.get());
+                   break;
+                }
+            }
+            } else {
+                //not a boolean
+                String getterName = "get" + capitaliseFirstLetter(field.getName());
+                Optional<Method> method = helper.findMethod(AccessModifier.PUBLIC,false,field.getType(),getterName,true);
+                if (method.isPresent()){
+                    getters.add(method.get());
+                    break;
+                }
+            }
+
+        }
+        return getters;
+
+    }
+
+    private static String capitaliseFirstLetter(String word){
+        if (word.isEmpty()) {
+            return word;
+        }
+        if (word.length() == 1){
+            return word.toUpperCase(Locale.ROOT);
+        }
+        return word.substring(0, 1).toUpperCase(Locale.ROOT) + word.substring(1);
+    }
+
+
 
 
     /**
