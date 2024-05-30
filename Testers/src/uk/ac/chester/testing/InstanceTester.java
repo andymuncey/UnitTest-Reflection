@@ -102,8 +102,10 @@ public class InstanceTester<C> {
 
     /**
      * Verifies that all private fields are initialized after the class has been constructed
+     * Note that primitive types have default values (e.g. int defaults to 0),
+     * so this method does not check fields of primitive types are initialized
      */
-    public void verifyFieldsInitialised(){
+    public void verifyAllFieldsInitialised(){
         verifyConstructed();
         FieldsHelper<C> fieldsHelper = new FieldsHelper<>(searchClass);
         for (Field field: fieldsHelper.fields()){
@@ -122,9 +124,9 @@ public class InstanceTester<C> {
 
         void notConstructed();
 
-        void cannotInvokeMethod(Class returnType, String name, Object[] args);
+        void cannotInvokeMethod(Class<?> returnType, String name, Object[] args);
 
-        void cannotRetrieveFieldValue(Class type, String name);
+        void cannotRetrieveFieldValue(Class<?> type, String name);
 
         void fieldNotInitialized(Class<?> type, String name);
     }

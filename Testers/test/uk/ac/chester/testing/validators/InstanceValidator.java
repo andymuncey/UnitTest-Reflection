@@ -52,7 +52,7 @@ public class InstanceValidator {
         InstanceTester<TestClass> tester = new InstanceTester<>(TestClass.class, new InstanceTestEventHandlerEN());
 
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class,
-                tester::verifyFieldsInitialised,
+                tester::verifyAllFieldsInitialised,
                 "Expected failure");
         assert(thrown.getMessage().contains("avoid fields having a null value"));
     }
