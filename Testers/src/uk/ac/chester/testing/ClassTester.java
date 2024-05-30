@@ -10,7 +10,7 @@ public class ClassTester<T> extends Tester {
     private final EventHandler handler;
     private final Set<Field> fields;
     private final Set<Method> methods;
-    private final Set<Constructor> constructors;
+    private final Set<Constructor<?>> constructors;
 
     private final Class<T> clazz;
 
@@ -31,7 +31,7 @@ public class ClassTester<T> extends Tester {
         allMethods.removeIf(Method::isSynthetic);
         methods = allMethods;
 
-        Set<Constructor> allConstructors = new HashSet<>(Arrays.asList(theClass.getDeclaredConstructors()));
+        Set<Constructor<?>> allConstructors = new HashSet<>(Arrays.asList(theClass.getDeclaredConstructors()));
         allConstructors.removeIf(Constructor::isSynthetic);
         constructors = allConstructors;
     }
@@ -140,7 +140,7 @@ public class ClassTester<T> extends Tester {
      * Verifies that parameter names across all constructors follow convention
      */
     public void checkConstructorParameterNames(){
-        for (Constructor c: constructors){
+        for (Constructor<?> c: constructors){
             for (Parameter param : c.getParameters()){
                 String paramName = param.getName();
                 if (!getConventionChecker().validVariableName(paramName)) {
