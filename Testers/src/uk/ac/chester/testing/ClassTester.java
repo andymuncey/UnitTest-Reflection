@@ -151,11 +151,11 @@ public class ClassTester<T> extends Tester {
     }
 
 
-    public boolean extendsSuperclass(Class superclass){
+    public boolean extendsSuperclass(Class<?> superclass){
         return extendsSuperclass(clazz,superclass);
     }
 
-    private boolean extendsSuperclass(Class theClass, Class theSuperclass){
+    private boolean extendsSuperclass(Class<?> theClass, Class<?> theSuperclass){
         if (theClass.getSuperclass() == null){
             return false;
         }
@@ -165,7 +165,7 @@ public class ClassTester<T> extends Tester {
         return extendsSuperclass(theClass.getSuperclass(), theSuperclass);
     }
 
-    public boolean implementsInterface(Class anInterface){
+    public boolean implementsInterface(Class<?> anInterface){
         assert(anInterface.isInterface());
         return Arrays.asList(clazz.getInterfaces()).contains(anInterface);
 
