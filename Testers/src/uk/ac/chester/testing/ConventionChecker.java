@@ -5,7 +5,7 @@ import java.util.Arrays;
 public interface ConventionChecker {
 
     /**
-     * Indicates whether a variable name is valid as per the conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
+     * Indicates whether a variable name is valid as per the conventions at: <a href="https://www.oracle.com/technetwork/java/codeconventions-135099.html">...</a>
      * @param name a string representing the name of a variable
      * @return true or false
      */
@@ -22,7 +22,7 @@ public interface ConventionChecker {
 
     /**
      * Verifies that the String matches the convention for a class constant (i.e. UPPERCASE_WITH_UNDERSCORES)
-     * As per the conventions at: https://www.oracle.com/technetwork/java/codeconventions-135099.html
+     * As per the conventions at: <a href="https://www.oracle.com/technetwork/java/codeconventions-135099.html">...</a>
      * @param name the String to testExistence
      * @return true if all characters are either a capital or underscore and there are at least two characters in the string
      */
