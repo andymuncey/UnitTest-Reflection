@@ -10,7 +10,7 @@ class Tasks {
      */
      static int arraySum(int[] numbers){
         int total = 0;
-        for (double number: numbers)
+        for (int number: numbers)
         {
             total += number;
         }
