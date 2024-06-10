@@ -164,11 +164,11 @@ public class Utilities {
     }
 
     /**
-     * Attempts to
-     * @param returnType
-     * @param objectOrPrimitive
-     * @param <T>
-     * @return
+     * Attempts to unbox an object to a specified primitive type
+     * @param returnType the unboxed type corresponding to primitive equivalent of the object provided in the second parameter
+     * @param objectOrPrimitive the object to unbox
+     * @param <T> The type of object to unbox to
+     * @return the unboxed type of the object, where possible, null if the unboxing fails
      */
     @Nullable
     static <T> T unBox(Class<T> returnType, Object objectOrPrimitive) {
