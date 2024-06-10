@@ -234,7 +234,7 @@ public class ConsoleTester<C> {
             future.cancel(true);
             executor.shutdown();
         }
-        if (out.toString().length() > 0) {
+        if (!out.toString().isEmpty()) {
             return out.toString().split(System.lineSeparator());
         }
         return null;

@@ -12,13 +12,13 @@ public class ConstructorsTesterValidator {
     private ConstructorsTester<TestClass> t;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         ConstructorsTestEventHandlerEN handler = new ConstructorsTestEventHandlerEN();
         t  = new ConstructorsTester<>(TestClass.class, handler);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         t = null;
     }
 

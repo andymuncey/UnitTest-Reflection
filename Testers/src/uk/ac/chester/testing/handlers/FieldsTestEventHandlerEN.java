@@ -37,7 +37,7 @@ public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
 
     private String nonAccessModifiersDescription(Set<NonAccessModifier> modifiers) {
 
-        if (modifiers.size() == 0) {
+        if (modifiers.isEmpty()) {
             return "no non-access modifiers";
         } else {
             String plural = modifiers.size() > 1 ? "s" : "";

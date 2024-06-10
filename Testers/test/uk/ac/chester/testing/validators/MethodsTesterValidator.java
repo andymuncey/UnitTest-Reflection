@@ -20,12 +20,12 @@ public class MethodsTesterValidator {
     private MethodsTester<TestClass> tester;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp()  {
         tester = new MethodsTester<>(TestClass.class,  new MethodTestEventHandlerEN());
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown()  {
         tester = null;
     }
 
