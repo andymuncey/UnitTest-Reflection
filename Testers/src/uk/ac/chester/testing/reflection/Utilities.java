@@ -35,7 +35,7 @@ public class Utilities {
      * @param primitiveClass a primitive 'class' such as double.class
      * @return the class of the boxed equivalent (e.g. <code>char.class</code> becomes <code>Character.class</code>)
      */
-    static Class classEquivalent(Class primitiveClass) {
+    static Class<?> classEquivalent(Class<?> primitiveClass) {
 
         for (int i = 0; i < primitives.length; i++) {
             if (primitiveClass == primitives[i]) {
@@ -45,7 +45,7 @@ public class Utilities {
         return primitiveClass; //not actually a primitive
     }
 
-    static Class primitiveEquivalent(Class boxedType) {
+    static Class<?> primitiveEquivalent(Class<?> boxedType) {
         for (int i = 0; i < classes.length; i++) {
             if (boxedType == classes[i]) {
                 return primitives[i];
@@ -114,8 +114,8 @@ public class Utilities {
             return  false;
         }
         for (int i = 0; i < otherTypes.length; i++) {
-            Class type = allowAutoboxing ? classEquivalent(otherTypes[i]) : otherTypes[i];
-            Class otherType = allowAutoboxing ?  classEquivalent(types[i]) : types[i];
+            Class<?> type = allowAutoboxing ? classEquivalent(otherTypes[i]) : otherTypes[i];
+            Class<?> otherType = allowAutoboxing ?  classEquivalent(types[i]) : types[i];
             if (type != otherType){
                 return false;
             }
