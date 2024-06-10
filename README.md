@@ -1,6 +1,6 @@
 # Java Object-Oriented Feedback Tool (JOOFT)
 
-The Testers module within this repository contains various Tester classes, designed to provide feedback on Java Programming Exercises, typically in conjunction with a unit testing framwork, such as JUnit.
+The Testers module within this repository contains various Tester classes, designed to provide feedback on Java Programming Exercises, typically in conjunction with a unit testing framework, such as JUnit.
 
 It is suggested that the Testers module is compiled to a jar file to be included in any project that requires the automation of feedback on Java programming exercises.
 
@@ -39,7 +39,7 @@ Verifies typical conventions are followed when creating classes, for example tha
 - method names follow the lowerCamelCase convention
 - method and constructor parameter names follow use lowerCamelCase
 - private fields use lowerCamelCase convention
-- public static fields fields use UPPER_SNAKE_CASE
+- public static fields use UPPER_SNAKE_CASE
 
 
 ## ConstructorsTester
@@ -66,7 +66,7 @@ Allows the invocation of methods of a class (returning the result of invoking th
 - Where a field is not initialised after the constructor is called
 
 ## MethodsTester
-Allows the existance of instance methods to be checked, and various aspects of these to be verified, including:
+Allows the existence of instance methods to be checked, and various aspects of these to be verified, including:
 - whether any method with a given name exists
 - whether the correct naming convention for a method has been used
 - whether a method with a specific name exists with a specified return type
@@ -75,7 +75,7 @@ Allows the existance of instance methods to be checked, and various aspects of t
 - whether parameter types for a method are in a specified order
 - whether the naming convention for a parameter is correct
 - whether the access modifier for a method is correct
-- whether a method is or isnt correctly declared as static
+- whether a method is or isn't correctly declared as static
 It also allows static methods to be invoked (in much the same way as an instance tester, without the requirement for an instance of the class to be created)
 
 

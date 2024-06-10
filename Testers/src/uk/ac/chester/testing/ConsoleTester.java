@@ -178,7 +178,7 @@ public class ConsoleTester<C> {
         final ByteArrayInputStream stream = streamFromStrings(inputTokens);
         System.setIn(stream);
 
-        T result = null;
+        T result;
         try {
            result =  helper.invokeStaticMethod(true, returnType, methodName, args);
         } catch (Exception e){

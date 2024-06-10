@@ -113,6 +113,7 @@ public class MethodsTester<C> extends Tester {
         //Finds the name of the calling method
               if (methodName == null){
                   //adapted from Nathan (2021) https://stackoverflow.com/questions/4065518/java-how-to-get-the-caller-function-name
+                  //noinspection OptionalGetWithoutIsPresent
                   methodName = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
         }
 

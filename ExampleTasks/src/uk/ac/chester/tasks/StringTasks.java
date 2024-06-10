@@ -24,7 +24,7 @@ public class StringTasks {
 
     static String endOfPhrase(String input){
 
-        //if it has more than 10 characters print the just the last 5, otherwise, print all of them.
+        //if it has more than 10 characters print just the last 5, otherwise, print all of them.
 
         return "";
 

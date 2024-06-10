@@ -22,7 +22,7 @@ public class MethodsHelper<C> {
     /**
      * Finds methods matching a particular name
      *
-     * @param name method name (case sensitive), no brackets e.g. "myMethod"
+     * @param name method name (case-sensitive), no brackets e.g. "myMethod"
      * @param ignoreCase whether to ignore the case of the method name
      * @return Set of methods matching that name
      */

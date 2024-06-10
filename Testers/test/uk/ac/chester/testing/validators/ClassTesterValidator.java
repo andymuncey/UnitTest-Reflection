@@ -6,6 +6,8 @@ import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 
+import java.io.Serializable;
+
 public class ClassTesterValidator {
 
     @Test
@@ -30,7 +32,7 @@ public class ClassTesterValidator {
 
     @Test
     public void testSerialVersionUID() {
-        Object x = new Object(){
+        Object x = new Object() {
             private static final long serialVersionUID = 1L;
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();

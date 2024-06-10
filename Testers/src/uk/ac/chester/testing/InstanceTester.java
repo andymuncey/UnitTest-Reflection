@@ -71,6 +71,7 @@ public class InstanceTester<C> {
         //Finds the name of the calling method
         //adapted from Nathan (2021) https://stackoverflow.com/questions/4065518/java-how-to-get-the-caller-function-name
         if (name == null){
+            //noinspection OptionalGetWithoutIsPresent
             name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
         }
 

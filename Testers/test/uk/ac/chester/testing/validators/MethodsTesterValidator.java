@@ -127,7 +127,7 @@ public class MethodsTesterValidator {
 
     @Test
     public void paramConvention(){
-        tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
+        tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3); //should indicate the parameter doesn't follow naming convention
     }
 
     @Test
