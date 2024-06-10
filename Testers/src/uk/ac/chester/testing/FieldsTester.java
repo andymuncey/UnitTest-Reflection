@@ -31,13 +31,13 @@ public class FieldsTester<T> extends Tester {
      * @param name the name of the field to testExistence
      * @param desiredClass the type of the field
      */
-    public void test(AccessModifier desiredModifier, Class desiredClass, String name){
+    public void test(AccessModifier desiredModifier, Class<?> desiredClass, String name){
         test(desiredModifier, desiredClass, name, false);
     }
 
 
 
-    public void test(AccessModifier desiredAccessModifier, Class desiredClass, String name, boolean allowAutoboxing) {
+    public void test(AccessModifier desiredAccessModifier, Class<?> desiredClass, String name, boolean allowAutoboxing) {
         test(desiredAccessModifier, null, desiredClass,name,allowAutoboxing);
     }
 
@@ -52,11 +52,11 @@ public class FieldsTester<T> extends Tester {
          * @param name the name of the field to testExistence
          * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
          */
-    public void test(AccessModifier desiredAccessModifier, Set<NonAccessModifier> desiredNonAccessModifiers ,Class desiredClass, String name, boolean allowAutoboxing){
+    public void test(AccessModifier desiredAccessModifier, Set<NonAccessModifier> desiredNonAccessModifiers ,Class<?> desiredClass, String name, boolean allowAutoboxing){
 
         for (Field field : fields){
             if (field.getName().equals(name)){
-                Class actualClass = field.getType(); //careful not to use getClass() here (which will be Field!)
+                Class<?> actualClass = field.getType(); //careful not to use getClass() here (which will be Field!)
                 if (allowAutoboxing) {
                     if (!Utilities.equivalentType(actualClass,desiredClass)){
                         handler.fieldFoundButNotCorrectType(name,desiredClass,actualClass);
@@ -93,7 +93,7 @@ public class FieldsTester<T> extends Tester {
 
         for (Field field : fields) {
             if (field.getName().equals(name)) {
-                Class actualClass = field.getType();
+                Class<?> actualClass = field.getType();
                 field.setAccessible(true);
                 try {
                     Object fieldValue = field.get(objectInstance);
@@ -138,7 +138,7 @@ public class FieldsTester<T> extends Tester {
          * @param requiredType the expected type
          * @param actualType the actual type
          */
-        void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType);
+        void fieldFoundButNotCorrectType(String fieldName, Class<?> requiredType, Class<?> actualType);
 
         /**
          * Indicates that a field does not have the expected access modifier
