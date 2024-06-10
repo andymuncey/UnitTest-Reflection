@@ -27,8 +27,8 @@ class ClassTesterTest {
         assertFalse(tester.extendsSuperclass(Test.class));
 
         ClassTester<Book> bookClassTester = new ClassTester<>(Book.class, null);
-        assertTrue(tester.extendsSuperclass(Object.class));
-        assertFalse(tester.extendsSuperclass(Book.class));
+        assertTrue(bookClassTester.extendsSuperclass(Object.class));
+        assertFalse(bookClassTester.extendsSuperclass(Book.class));
     }
 
     @Test
