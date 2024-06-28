@@ -112,9 +112,8 @@ public class ConsoleTester<C> {
 
         //adapted from https://stackoverflow.com/questions/2275443/how-to-timeout-a-thread
         Callable<T> callable = () -> {
-            T result = helper.invokeStaticMethod(true,returnType,methodName,inputTokens,args);
-           // test(inputTokens);
-            return result;
+            // test(inputTokens);
+            return helper.invokeStaticMethod(true,returnType,methodName,inputTokens,args);
         };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
