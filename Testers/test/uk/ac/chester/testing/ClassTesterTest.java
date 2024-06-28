@@ -12,13 +12,7 @@ class ClassTesterTest {
 
     static class Book implements Serializable {}
 
-    @BeforeEach
-    void setUp() {
-    }
 
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void extendsSuperclass() {
