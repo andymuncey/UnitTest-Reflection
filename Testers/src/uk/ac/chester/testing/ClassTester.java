@@ -151,11 +151,23 @@ public class ClassTester<T> extends Tester {
     }
 
 
+    /**
+     * Determines whether the class being tested extends a specified superclass,
+     * either directly or through a chain of inheritance
+     * @param superclass a potential superclass
+     * @return true if the class extends the superclass, false otherwise
+     */
     public boolean extendsSuperclass(Class<?> superclass){
         return extendsSuperclass(clazz,superclass);
     }
 
-    private boolean extendsSuperclass(Class<?> theClass, Class<?> theSuperclass){
+    /**
+     * Determines if a class extends a specified superclass
+     * @param theClass the class to check
+     * @param theSuperclass the superclass to look for
+     * @return true if the class extends the superclass, false otherwise
+     */
+    private static boolean extendsSuperclass(Class<?> theClass, Class<?> theSuperclass){
         if (theClass.getSuperclass() == null){
             return false;
         }
@@ -165,6 +177,11 @@ public class ClassTester<T> extends Tester {
         return extendsSuperclass(theClass.getSuperclass(), theSuperclass);
     }
 
+    /**
+     * Determines if the class being tested extends a particular interface
+     * @param anInterface some interface
+     * @return true if the class extends the interface, false otherwise
+     */
     public boolean implementsInterface(Class<?> anInterface){
         assert(anInterface.isInterface());
         return Arrays.asList(clazz.getInterfaces()).contains(anInterface);
