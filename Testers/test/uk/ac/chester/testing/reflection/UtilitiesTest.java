@@ -12,16 +12,16 @@ public class UtilitiesTest {
     public void classesForArgs() {
 
         Object[] args = {1,"String", 2.3, new Object()};
-        Class[] classes = {Integer.class, String.class, Double.class, Object.class};
-        Class[] inferredClasses = Utilities.classesForArgs(args);
+        Class<?>[] classes = {Integer.class, String.class, Double.class, Object.class};
+        Class<?>[] inferredClasses = Utilities.classesForArgs(args);
         for (int i = 0; i < inferredClasses.length; i++) {
             assertEquals(classes[i],inferredClasses[i]);
         }
 
         int[] intArgs = {2,3};
-        Class[] intClasses = {Integer.class, Integer.class};
-        Class[] inferredIntClasses = Utilities.classesForArgs(args);
-        for (Class inferredClass: inferredIntClasses) {
+        Class<?>[] intClasses = {Integer.class, Integer.class};
+        Class<?>[] inferredIntClasses = Utilities.classesForArgs(args);
+        for (Class<?> inferredClass: inferredIntClasses) {
             assertNotEquals(inferredClass, int.class, "Int should be represented as the Integer class");
         }
 
