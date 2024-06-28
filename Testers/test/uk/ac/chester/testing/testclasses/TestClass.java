@@ -2,6 +2,7 @@ package uk.ac.chester.testing.testclasses;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("EmptyMethod")
 public class TestClass {
 
 
