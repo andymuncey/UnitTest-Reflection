@@ -25,7 +25,7 @@ public class FieldsHelper<C> {
     }
 
     /**
-     * Finds a field by name
+     * Finds a field in this class by name, excludes inherited fields
      * @param name the name of the field to search for
      * @return an Optional containing a field, if found
      */
