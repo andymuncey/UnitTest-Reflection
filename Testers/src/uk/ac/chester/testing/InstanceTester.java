@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  *      existence of the methods called (e.g. by using the MethodsTester class)
  *      existence of the fields tested (e.g. by using FieldsTester class)
  * Minimal error information is provided by this class if location of a method or field occurs
- * @param <C>
+ * @param <C> The class (i.e. type) of the class with which to work
  */
 public class InstanceTester<C> {
 
@@ -37,6 +37,10 @@ public class InstanceTester<C> {
         }
     }
 
+    /**
+     * Verify an instance of the class has been created using the arguments supplied to the constructor
+     * Calls the notConstructed method of the EventHandler if construction has failed
+     */
     private void verifyConstructed(){
         if (!helper.hasValidInstance()){
             handler.notConstructed();
