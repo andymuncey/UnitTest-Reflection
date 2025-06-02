@@ -56,7 +56,7 @@ public class MethodsTester<C> extends Tester {
      * @param allowAutoboxing whether the return type must be an exact match (Integer and int would not be considered an exact match)
      * @return true if found, else false
      */
-    private boolean methodMatchingNameAndReturnTypeFound(Class returnType, String methodName, boolean allowAutoboxing){
+    private boolean methodMatchingNameAndReturnTypeFound(Class<?> returnType, String methodName, boolean allowAutoboxing){
         return !helper.findMethods(allowAutoboxing, returnType, methodName).isEmpty();
     }
 
@@ -66,7 +66,7 @@ public class MethodsTester<C> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if the specified method exists, false otherwise
      */
-    private boolean methodFound(boolean allowAutoboxing, Class returnType, String methodName, Class[] paramTypes){
+    private boolean methodFound(boolean allowAutoboxing, Class<?> returnType, String methodName, Class<?>[] paramTypes){
         return helper.findMethod(allowAutoboxing, returnType, methodName,paramTypes).isPresent();
     }
 
@@ -77,7 +77,7 @@ public class MethodsTester<C> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if a method is found matching the specification
      */
-    private boolean methodFound(AccessModifier modifier, Class returnType, String methodName, Class[] paramTypes){
+    private boolean methodFound(AccessModifier modifier, Class<?> returnType, String methodName, Class<?>[] paramTypes){
          return helper.findMethod(modifier, null, returnType,  methodName,true,paramTypes).isPresent();
     }
 
@@ -89,7 +89,7 @@ public class MethodsTester<C> extends Tester {
      * @param paramTypes the parameter types of the method
      * @return true if a method is found matching the specification
      */
-    private boolean methodFound(AccessModifier modifier, Boolean isStatic, Class returnType, String methodName, Class[] paramTypes){
+    private boolean methodFound(AccessModifier modifier, Boolean isStatic, Class<?> returnType, String methodName, Class<?>[] paramTypes){
         return helper.findMethod(modifier, isStatic, returnType,  methodName,true,paramTypes).isPresent();
     }
 
@@ -139,7 +139,7 @@ public class MethodsTester<C> extends Tester {
     /*
     Tests for the existence of a method matching the supplied criteria
      */
-    public boolean testExistenceForValues(@Nullable AccessModifier modifier, Class returnTypeClass, String methodName, Object... args){
+    public boolean testExistenceForValues(@Nullable AccessModifier modifier, Class<?> returnTypeClass, String methodName, Object... args){
         return testExistenceForValues(true, modifier, null, returnTypeClass,methodName, args);
     }
 
@@ -147,14 +147,14 @@ public class MethodsTester<C> extends Tester {
     /*
     Tests for the existence of a method matching the supplied criteria
      */
-    public boolean testExistenceForValues(boolean isStatic, Class returnTypeClass, String methodName, Object... args) {
+    public boolean testExistenceForValues(boolean isStatic, Class<?> returnTypeClass, String methodName, Object... args) {
         return testExistenceForValues(true, null,isStatic,returnTypeClass,methodName,args);
     }
 
     /*
  Tests for the existence of a method matching the supplied criteria
   */
-    public boolean testExistence(boolean isStatic, Class returnTypeClass, String methodName, Class... paramTypes) {
+    public boolean testExistence(boolean isStatic, Class<?> returnTypeClass, String methodName, Class<?>... paramTypes) {
         return testExistence(true, null,isStatic,returnTypeClass,methodName,paramTypes);
     }
 
@@ -180,7 +180,7 @@ public class MethodsTester<C> extends Tester {
      * @param args the arguments to invoke the method with
      * @return the result of invoking the method (or null)
      */
-    public boolean testExistenceForValues(Class returnTypeClass, String methodName, Object... args){
+    public boolean testExistenceForValues(Class<?> returnTypeClass, String methodName, Object... args){
         return testExistenceForValues(null, returnTypeClass, methodName, args);
     }
 
@@ -193,7 +193,7 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return true if the method exists, false otherwise
      */
-    public boolean testForExactReturnType(AccessModifier modifier, Class returnTypeClass, String methodName,Object... args){
+    public boolean testForExactReturnType(AccessModifier modifier, Class<?> returnTypeClass, String methodName,Object... args){
         return testExistenceForValues(false, modifier, null, returnTypeClass,methodName, args);
     }
 
@@ -205,13 +205,13 @@ public class MethodsTester<C> extends Tester {
      * @param args arguments to invoke the method with
      * @return true if the method exists, false otherwise
      */
-    public boolean testForExactReturnType(Class returnTypeClass, String methodName, Object... args){
+    public boolean testForExactReturnType(Class<?> returnTypeClass, String methodName, Object... args){
         return testForExactReturnType(null,returnTypeClass,methodName,args);
     }
 
 
     public boolean testExistenceForValues(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
-        final Class[] argTypes = Utilities.classesForArgs(args);
+        final Class<?>[] argTypes = Utilities.classesForArgs(args);
         return testExistence(allowAutoboxing,accessModifier,isStatic,returnType,methodName,argTypes);
 
     }
