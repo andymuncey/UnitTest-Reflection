@@ -22,7 +22,6 @@ public class PackageTester extends Tester {
 
     public void testClassExists(String className, String packageName) {
 
-
         Optional<Class<?>> result = PackageHelper.findClass(className, packageName);
         if (result.isPresent()) {
             return;
@@ -53,6 +52,12 @@ public class PackageTester extends Tester {
     }
 
 
+    /**
+     * Returns (up to) three variants of a class name in UPPERCASE, lowercase and
+     * where the first letter has been made lowercase but preserving any other existing capitals
+     * @param name a possible class name
+     * @return an array of possible class names
+     */
     private String[] nameVariants(String name) {
 
         String[] names = new String[name.length()>1 ? 3 : 2];
@@ -61,7 +66,7 @@ public class PackageTester extends Tester {
         names[1] = name.toUpperCase(); //UPPERCASE
 
         if (name.length() > 1) {
-            names[2] = name.substring(0, 1).toLowerCase() + name.substring(1); //lowerCamelCase
+            names[2] = name.substring(0, 1).toLowerCase() + name.substring(1); //lowerCamelcase
         }
 
         return names;
