@@ -15,7 +15,7 @@ public class FieldsHelper<C> {
     }
 
     /**
-     * Gets all fields within the class
+     * Gets all fields within the class, excluding inherited fields
      * @return a Set of Field objects
      */
     public Set<Field> fields(){
