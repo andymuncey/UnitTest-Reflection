@@ -16,27 +16,27 @@ public class PackageTester extends Tester {
     }
 
     @Nullable
-    public Class getClass(String className, String packageName) {
+    public Class<?> getClass(String className, String packageName) {
         return PackageHelper.findClass(className, packageName).orElse(null);
     }
 
     public void testClassExists(String className, String packageName) {
 
 
-        Optional<Class> result = PackageHelper.findClass(className, packageName);
+        Optional<Class<?>> result = PackageHelper.findClass(className, packageName);
         if (result.isPresent()) {
             return;
         }
 
         //not found - check other packages
-        Set<Class> possibles = PackageHelper.findClasses(className);
+        Set<Class<?>> possibles = PackageHelper.findClasses(className);
         if (!possibles.isEmpty()) {
             handler.foundInWrongPackage(className, packageName, possibles.iterator().next().getPackage().getName());
         }
 
         //not found - check name variants in correct package
         for (String nameVariant : nameVariants(className)) {
-            Optional<Class> nameVariantResult = PackageHelper.findClass(nameVariant, packageName);
+            Optional<Class<?>> nameVariantResult = PackageHelper.findClass(nameVariant, packageName);
             if (nameVariantResult.isPresent()) {
                 handler.foundWrongCase(className, nameVariant);
             }
@@ -44,7 +44,7 @@ public class PackageTester extends Tester {
 
         //not found - check name variants in other packages
         for (String nameVariant : nameVariants(className)) {
-            Set<Class> possiblesWithWrongName = PackageHelper.findClasses(nameVariant);
+            Set<Class<?>> possiblesWithWrongName = PackageHelper.findClasses(nameVariant);
             if (!possiblesWithWrongName.isEmpty()){
                 handler.foundWrongCaseAndPackage(className, nameVariant, packageName, possiblesWithWrongName.iterator().next().getPackage().getName());            }
 

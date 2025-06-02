@@ -32,15 +32,15 @@ public class PackageHelper {
      * @param name the name (not qualified) of the class to find
      * @return all classes matching that name
      */
-    public static Set<Class> findClasses(String name) {
+    public static Set<Class<?>> findClasses(String name) {
 
-        Set<Class> classes = new HashSet<>();
+        Set<Class<?>> classes = new HashSet<>();
 
         for (Package p : Package.getPackages()) {
             final String packageName = p.getName();
             if (!isIgnoredPackage(packageName)) {
                 final String fullyQualifiedClassName = packageName + "." + name;
-                final Optional<Class> foundClass = classForName(fullyQualifiedClassName);
+                final Optional<Class<?>> foundClass = classForName(fullyQualifiedClassName);
                 if (foundClass.isPresent()){
                     classes.add(foundClass.get());
                 }
@@ -55,7 +55,7 @@ public class PackageHelper {
      * @param packageName the name of the package to look in
      * @return An Optional containing the class, if found
      */
-    public static Optional<Class> findClass(String className, String packageName) {
+    public static Optional<Class<?>> findClass(String className, String packageName) {
         String fullyQualifiedClassName = packageName + "." + className;
         return classForName(fullyQualifiedClassName);
     }
@@ -65,7 +65,7 @@ public class PackageHelper {
      * @param fullyQualifiedName fully qualified class name, e.g. com.example.Widget
      * @return An Optional containing the class, if found
      */
-    public static Optional<Class> classForName(String fullyQualifiedName) {
+    public static Optional<Class<?>> classForName(String fullyQualifiedName) {
         try {
             return Optional.of(Class.forName(fullyQualifiedName));
         } catch (ClassNotFoundException e) {

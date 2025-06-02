@@ -20,7 +20,7 @@ public class TopDownValidator {
         //Looking for a class named TestClass, package unknown
         String className = "TestClass";
 
-        Set<Class> classes = PackageHelper.findClasses(className);
+        Set<Class<?>> classes = PackageHelper.findClasses(className);
 
         if (classes.isEmpty()) {
             fail("No class named " + className + " found. Class names are case sensitive");
@@ -31,11 +31,11 @@ public class TopDownValidator {
         }
 
         //get only item
-        Class aClass = classes.iterator().next();
+        Class<?> aClass = classes.iterator().next();
 
         //generic class member tests
         @SuppressWarnings("unchecked")
-        ClassTester classTester = new ClassTester(aClass,new ClassTestEventHandlerEN());
+        ClassTester<?> classTester = new ClassTester(aClass,new ClassTestEventHandlerEN());
         classTester.checkFields();
         classTester.checkMethods();
         classTester.checkConstructorParameterNames();

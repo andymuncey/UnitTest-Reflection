@@ -12,7 +12,7 @@ public class PackageHelperTest {
 
     @Test
     public void findClasses() {
-        Set<Class> classes = PackageHelper.findClasses("TestClass");
+        Set<Class<?>> classes = PackageHelper.findClasses("TestClass");
         assertFalse(classes.isEmpty());
     }
 
