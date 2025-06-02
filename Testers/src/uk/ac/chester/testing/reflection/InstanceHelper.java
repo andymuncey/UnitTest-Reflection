@@ -8,14 +8,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-public class InstanceReflectionHelper<C> {
+public class InstanceHelper<C> {
 
     private final FieldsHelper<C> fieldsHelper;
     private final ConstructorsHelper<C> constructorsHelper;
     private final MethodsHelper<C> methodsHelper;
     private Object instance;
 
-    public InstanceReflectionHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public InstanceHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         fieldsHelper = new FieldsHelper<>(searchClass);
         constructorsHelper = new ConstructorsHelper<>(searchClass);
         methodsHelper = new MethodsHelper<>(searchClass);

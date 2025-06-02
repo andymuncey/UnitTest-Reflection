@@ -1,7 +1,7 @@
 package uk.ac.chester.testing;
 
 import uk.ac.chester.testing.reflection.FieldsHelper;
-import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
+import uk.ac.chester.testing.reflection.InstanceHelper;
 
 import java.lang.reflect.Field;
 
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  */
 public class InstanceTester<C> {
 
-    private InstanceReflectionHelper<C> helper;
+    private InstanceHelper<C> helper;
     private final EventHandler handler;
 
     private final Class<C> searchClass;
@@ -31,7 +31,7 @@ public class InstanceTester<C> {
         this.searchClass = searchClass;
         this.handler = handler;
         try {
-            helper = new InstanceReflectionHelper<>(searchClass, constructorArgs);
+            helper = new InstanceHelper<>(searchClass, constructorArgs);
         } catch (Exception e) {
             this.handler.cannotConstructWithArgs(searchClass.getSimpleName(), constructorArgs);
         }

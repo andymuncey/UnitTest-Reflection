@@ -3,7 +3,7 @@ package uk.ac.chester.testing;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.ac.chester.testing.reflection.InstanceReflectionHelper;
+import uk.ac.chester.testing.reflection.InstanceHelper;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class InstanceMethodsHelperTest {
 
 
-    private InstanceReflectionHelper<PointTestClass> h;
+    private InstanceHelper<PointTestClass> h;
 
     @BeforeEach
     public void setUp() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-           h = new InstanceReflectionHelper<>(PointTestClass.class, 2,3);
+           h = new InstanceHelper<>(PointTestClass.class, 2,3);
     }
 
     @AfterEach
