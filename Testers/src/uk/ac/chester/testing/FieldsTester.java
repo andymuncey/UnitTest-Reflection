@@ -20,9 +20,7 @@ public class FieldsTester<T> extends Tester {
     public FieldsTester(Class<T> theClass, EventHandler handler){
         FieldsHelper<T> helper = new FieldsHelper<>(theClass);
         this.handler = handler;
-        Set<Field> allFields = helper.fields();
-        allFields.removeIf(Field::isSynthetic);
-        fields = allFields;
+        fields = helper.fields();
     }
 
     /**
