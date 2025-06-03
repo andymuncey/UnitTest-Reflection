@@ -88,14 +88,14 @@ public class ConstructorsTester<T> extends Tester {
         return true;
     }
 
-    private void checkModifier(AccessModifier modifier, Constructor c) {
+    private void checkModifier(AccessModifier modifier, Constructor<T> c) {
         AccessModifier actualModifier = AccessModifier.accessModifier(c);
         if (!modifier.equals(actualModifier)) {
             handler.wrongAccessModifier(actualModifier, modifier);
         }
     }
 
-    private void checkParameterNames(Constructor c) {
+    private void checkParameterNames(Constructor<T> c) {
         String[] paramNames = Utilities.parameterNames(c);
         for (String name : paramNames) {
             if (!getConventionChecker().validVariableName(name)) {
@@ -109,7 +109,7 @@ public class ConstructorsTester<T> extends Tester {
     }
 
     public boolean constructorWithNoArgsExists(boolean includeNonPublic){
-        for (Constructor constructor: helper.availableConstructors(includeNonPublic)){
+        for (Constructor<T> constructor: helper.availableConstructors(includeNonPublic)){
             if (constructor.getParameterCount() == 0){
                 return true;
             }
@@ -129,14 +129,14 @@ public class ConstructorsTester<T> extends Tester {
          *
          * @param requiredParamTypes the required parameters for the constructor
          */
-        void incorrectParameters(Class[] requiredParamTypes);
+        void incorrectParameters(Class<?>[] requiredParamTypes);
 
         /**
          * Correct parameters exist for the constructor, but not in the required order
          *
          * @param requiredParams the order the parameters should be in
          */
-        void incorrectParamOrder(Class[] requiredParams);
+        void incorrectParamOrder(Class<?>[] requiredParams);
 
         /**
          * Correct parameters exist for the constructor, but don't match the naming convention for Java parameters
