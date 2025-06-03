@@ -18,7 +18,7 @@ public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
     }
 
     @Override
-    public void fieldFoundButNotCorrectType(String fieldName, Class requiredType, Class actualType) {
+    public void fieldFoundButNotCorrectType(String fieldName, Class<?> requiredType, Class<?> actualType) {
         fail("The field '" + fieldName + "' should be of type " + requiredType.getSimpleName() + ", however, it is declared as " + actualType.getSimpleName());
     }
 

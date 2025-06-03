@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class ConstructorsTestEventHandlerEN implements ConstructorsTester.EventHandler, ClassDescriber {
 
     @Override
-    public void incorrectParameters(Class[] requiredParamTypes) {
+    public void incorrectParameters(Class<?>[] requiredParamTypes) {
         String message;
         if (requiredParamTypes.length > 0) {
             message = "No constructor with the correct parameters was found, expected parameters are " + describe(requiredParamTypes);
@@ -22,7 +22,7 @@ public class ConstructorsTestEventHandlerEN implements ConstructorsTester.EventH
     }
 
     @Override
-    public void incorrectParamOrder(Class[] requiredParams) {
+    public void incorrectParamOrder(Class<?>[] requiredParams) {
         fail("Constructor found, but parameters are not in the correct order: "+ describe(requiredParams));
     }
 

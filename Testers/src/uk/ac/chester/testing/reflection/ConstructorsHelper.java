@@ -23,7 +23,7 @@ public class ConstructorsHelper<C> {
      * @param params the type of params the constructor should take
      * @return An Optional containing a matching constructor, if found
      */
-    public Optional<Constructor<C>> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class... params){
+    public Optional<Constructor<C>> constructorForParamTypes(boolean includeNonPublic, boolean allowAutoboxing, boolean matchParamOrder, Class<?>... params){
         Set<Constructor<C>> constructors = availableConstructors(includeNonPublic);
 
         if (!matchParamOrder){
@@ -33,7 +33,7 @@ public class ConstructorsHelper<C> {
         for (Constructor<C> c: constructors) {
             if (params.length == c.getParameterCount()){
 
-                Class[] actualParamTypes = c.getParameterTypes();
+                Class<?>[] actualParamTypes = c.getParameterTypes();
                 if (!matchParamOrder){
                     Utilities.sortParamsTypesByName(actualParamTypes);
                 }
@@ -69,7 +69,7 @@ public class ConstructorsHelper<C> {
      * @return An Optional containing a matching constructor, if found
      */
     public Optional<Constructor<C>> constructorForArgTypes(boolean includeNonPublic, boolean matchParamOrder, Object... args ){
-        Class[] desiredParamTypes = Utilities.classesForArgs(args);
+        Class<?>[] desiredParamTypes = Utilities.classesForArgs(args);
         return constructorForParamTypes(includeNonPublic,true,matchParamOrder,desiredParamTypes);
     }
 

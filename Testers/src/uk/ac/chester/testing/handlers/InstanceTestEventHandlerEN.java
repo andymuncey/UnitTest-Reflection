@@ -18,13 +18,13 @@ public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, 
     }
 
     @Override
-    public void cannotInvokeMethod(Class returnType, String name, Object[] args) {
+    public void cannotInvokeMethod(Class<?> returnType, String name, Object[] args) {
 
         fail("Unable to invoke method " + name);
     }
 
     @Override
-    public void cannotRetrieveFieldValue(Class type, String name) {
+    public void cannotRetrieveFieldValue(Class<?> type, String name) {
         fail("Unable to retrieve value from field named '" + name + "' of type: " + type.getSimpleName());
     }
 

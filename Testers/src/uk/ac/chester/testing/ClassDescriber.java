@@ -6,7 +6,7 @@ public interface ClassDescriber {
      * Returns class names in the form "String, Double, Object & Integer"
      * @param classes array of class objects
      * @return the names, separated by commas, with the final two separated by ampersand  */
-    default String describe(Class[] classes){
+    default String describe(Class<?>[] classes){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < classes.length; i++) {
             sb.append(classes[i].getSimpleName());

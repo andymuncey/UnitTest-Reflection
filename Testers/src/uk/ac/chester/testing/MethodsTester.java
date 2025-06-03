@@ -234,7 +234,7 @@ public class MethodsTester<C> extends Tester {
      * @param methodName the name of the method
      * @param paramTypes arguments for passing to the method (actual values, not types)
      */
-    public boolean testExistence(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Class... paramTypes) {
+    public boolean testExistence(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Class<?>... paramTypes) {
 
         //Name
         if (!methodMatchingNameFound(methodName)){
@@ -394,7 +394,7 @@ public class MethodsTester<C> extends Tester {
          * Cannot find a method with the correct name
          * @param methodName the name of the method as it should be
          */
-        void notFound(String methodName, Class searchClass);
+        void notFound(String methodName, Class<?> searchClass);
 
         /**
          * A method with the correct name is found, but the case is wrong e.g. MyMethod instead of myMethod
@@ -407,7 +407,7 @@ public class MethodsTester<C> extends Tester {
          * @param methodName the name of the method
          * @param requiredReturnType the type the methods is expected to return
          */
-        void incorrectReturnType(String methodName, Class requiredReturnType);
+        void incorrectReturnType(String methodName, Class<?> requiredReturnType);
 
         /**
          * A method has been found, but it does not have the expected number of parameters
@@ -420,14 +420,14 @@ public class MethodsTester<C> extends Tester {
          * A method has been found, but the parameters are not as required
          * @param methodName the name of the method
          */
-        void incorrectParameters(String methodName, Class[] requiredParamTypes);
+        void incorrectParameters(String methodName, Class<?>[] requiredParamTypes);
 
         /**
          * Correct parameters exist for the method, but not in the required order
          * @param methodName the name of the method
          * @param requiredParams the order the parameters should be in
          */
-        void incorrectParamOrder(String methodName, Class[] requiredParams);
+        void incorrectParamOrder(String methodName, Class<?>[] requiredParams);
 
         /**
          * Correct parameters exist for the method, but don't match the naming convention for Java parameters

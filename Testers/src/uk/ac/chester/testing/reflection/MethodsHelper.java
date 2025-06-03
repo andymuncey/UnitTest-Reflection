@@ -92,7 +92,7 @@ public class MethodsHelper<C> {
 
         //must copy to avoid argTypes being reordered
         Class<?>[] desiredParamTypes = !allowAutoboxing ? argTypes.clone() : Utilities.classEquivalents(argTypes);
-        Class desiredReturnType = !allowAutoboxing ? returnType : classEquivalent(returnType);
+        Class<?> desiredReturnType = !allowAutoboxing ? returnType : classEquivalent(returnType);
 
         if (!matchParamOrder){
             Utilities.sortParamsTypesByName(desiredParamTypes);
@@ -131,12 +131,12 @@ public class MethodsHelper<C> {
      * @param paramTypes the types of the parameters the method should have
      * @return An Optional, containing the method if found, or empty if not found
      */
-    public Optional<Method> findMethod(Class returnType, String name, Class... paramTypes) {
+    public Optional<Method> findMethod(Class<?> returnType, String name, Class<?>... paramTypes) {
         return findMethod(true, returnType, name, paramTypes);
     }
 
 
-    public Optional<Method> findMethod(@Nullable AccessModifier modifier, @Nullable Boolean isStatic, Class returnType, String name, boolean allowAutoboxing, Class... paramTypes){
+    public Optional<Method> findMethod(@Nullable AccessModifier modifier, @Nullable Boolean isStatic, Class<?> returnType, String name, boolean allowAutoboxing, Class<?>... paramTypes){
         Optional<Method> method = findMethod(allowAutoboxing, returnType, name, paramTypes);
         if (method.isPresent()) {
             Method actualMethod = method.get();
@@ -158,9 +158,9 @@ public class MethodsHelper<C> {
      * @param paramTypes the types of the parameters accepted by the method
      * @return an Optional containing the method, if found
      */
-    public Optional<Method> findMethod(boolean allowAutoboxing, Class returnType, String name, Class... paramTypes) {
+    public Optional<Method> findMethod(boolean allowAutoboxing, Class<?> returnType, String name, Class<?>... paramTypes) {
         Set<Method> methods = findMethods(allowAutoboxing, returnType, name);
-        Class[] desiredParamTypes = !allowAutoboxing ? paramTypes : Utilities.classEquivalents(paramTypes);
+        Class<?>[] desiredParamTypes = !allowAutoboxing ? paramTypes : Utilities.classEquivalents(paramTypes);
 
         for (Method m : methods) {
             m.setAccessible(true); //allows evaluation of private method
@@ -190,7 +190,7 @@ public class MethodsHelper<C> {
         return Optional.empty();
     }
 
-     Optional<Method> methodForParams(boolean allowAutoboxing, Class returnType, String methodName, Object... args) {
+     Optional<Method> methodForParams(boolean allowAutoboxing, Class<?> returnType, String methodName, Object... args) {
          final Set<Method> possibleMethods = findMethods(allowAutoboxing, returnType, methodName);
 
          for (Method m : possibleMethods) {
@@ -223,7 +223,7 @@ public class MethodsHelper<C> {
       * @param paramTypes the types of the parameters the method should have
       * @return an array of Strings with the names of the parameters
       */
-     public String[] methodParamNames(Class returnType, String name, Class... paramTypes){
+     public String[] methodParamNames(Class<?> returnType, String name, Class<?>... paramTypes){
          Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
          if (possibleMethod.isPresent()){
              return Utilities.parameterNames(possibleMethod.get());

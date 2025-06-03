@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, ClassDescriber {
 
     @Override
-    public void notFound(String methodName, Class searchClass) {
+    public void notFound(String methodName, Class<?> searchClass) {
         fail("No method with the name \""+ methodName + "\" was found in the class \"" + searchClass.getSimpleName() + "\"");
     }
 
@@ -22,7 +22,7 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     }
 
     @Override
-    public void incorrectReturnType(String methodName, Class requiredReturnType) {
+    public void incorrectReturnType(String methodName, Class<?> requiredReturnType) {
         fail("A method named \"" + methodName + "\" was found, but it does not return the expected type of: " + requiredReturnType.getSimpleName());
     }
 
@@ -32,14 +32,14 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     }
 
     @Override
-    public void incorrectParameters(String methodName, Class[] requiredParamTypes) {
+    public void incorrectParameters(String methodName, Class<?>[] requiredParamTypes) {
         String plural = requiredParamTypes.length == 1 ? "": "s";
         String isOrAre = requiredParamTypes.length == 1 ? "is": "are";
         fail("A method \"" + methodName + "\" was found, but it has the wrong parameter type"+plural+", expected parameter type"+plural +" " +isOrAre+" "+ describe(requiredParamTypes));
     }
 
     @Override
-    public void incorrectParamOrder(String methodName, Class[] requiredParams){
+    public void incorrectParamOrder(String methodName, Class<?>[] requiredParams){
         fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
     }
 

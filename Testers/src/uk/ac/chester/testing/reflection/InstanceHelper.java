@@ -25,7 +25,7 @@ public class InstanceHelper<C> {
     private void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Optional<Constructor<C>> possibleConstructor = constructorsHelper.constructorForArgTypes(true, true, args);
         if (possibleConstructor.isPresent()) {
-            Constructor constructor = possibleConstructor.get();
+            Constructor<C> constructor = possibleConstructor.get();
             constructor.setAccessible(true); //ensures private classes can be tested
             instance = constructor.newInstance(args);
         }

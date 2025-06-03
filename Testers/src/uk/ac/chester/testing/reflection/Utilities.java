@@ -18,14 +18,14 @@ public class Utilities {
      * @param args an array of values of any type
      * @return an array of Class objects
      */
-    public static Class[] classesForArgs(Object[] args) {
-        List<Class> params = new ArrayList<>();
+    public static Class<?>[] classesForArgs(Object[] args) {
+        List<Class<?>> params = new ArrayList<>();
         Arrays.asList(args).forEach((arg) -> params.add(arg.getClass()));
         return params.toArray(new Class[args.length]);
     }
 
-    private static final Class[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
-    private static final Class[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
+    private static final Class<?>[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
+    private static final Class<?>[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
 
 
     /**
@@ -60,8 +60,8 @@ public class Utilities {
      * @param primitiveClasses an array of Class object, which should include the class for some Primitive types
      * @return an array of Class, each corresponding to an object type
      */
-    static Class[] classEquivalents(Class[] primitiveClasses) {
-        Class[] classClasses = new Class[primitiveClasses.length];
+    static Class<?>[] classEquivalents(Class<?>[] primitiveClasses) {
+        Class<?>[] classClasses = new Class[primitiveClasses.length];
         for (int i = 0; i < primitiveClasses.length; i++) {
             classClasses[i] = classEquivalent(primitiveClasses[i]);
         }
@@ -74,7 +74,7 @@ public class Utilities {
      * @param classB the second class
      * @return true if types are equal, or one is the boxed equivalent of the other, false otherwise
      */
-    public static boolean equivalentType(Class classA, Class classB){
+    public static boolean equivalentType(Class<?> classA, Class<?> classB){
         return classEquivalent(classA) == classEquivalent(classB);
     }
 
@@ -109,7 +109,7 @@ public class Utilities {
      * @param otherTypes an Array of types
      * @return true or false
      */
-    static boolean typesMatch(boolean allowAutoboxing, Class[] types, Class[] otherTypes) {
+    static boolean typesMatch(boolean allowAutoboxing, Class<?>[] types, Class<?>[] otherTypes) {
         if (types.length != otherTypes.length){
             return  false;
         }
@@ -130,7 +130,7 @@ public class Utilities {
      */
     static String commaSeparatedTypeList(Object[] args) {
         StringBuilder builder = new StringBuilder();
-        Class[] paramClasses = classesForArgs(args);
+        Class<?>[] paramClasses = classesForArgs(args);
         for (int i = 0; i < paramClasses.length; i++) {
             if (i > 0) {
                 builder.append(", ");
