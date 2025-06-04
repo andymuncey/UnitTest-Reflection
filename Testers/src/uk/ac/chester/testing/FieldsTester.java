@@ -87,7 +87,7 @@ public class FieldsTester<T> extends Tester {
     }
 
 
-    public T getValue(Class<T> fieldType, String name, Object objectInstance) {
+    public <F> F getValue(Class<F> fieldType, String name, Object objectInstance) {
 
         for (Field field : fields) {
             if (field.getName().equals(name)) {
@@ -95,7 +95,8 @@ public class FieldsTester<T> extends Tester {
                 field.setAccessible(true);
                 try {
                     Object fieldValue = field.get(objectInstance);
-                    return (T) fieldValue; //will be boxed as per documentation
+
+                    return (F) fieldValue; //will be boxed as per documentation
                 } catch (IllegalAccessException ignored) {
                     //shouldn't occur, as accessible set to true
                 }
