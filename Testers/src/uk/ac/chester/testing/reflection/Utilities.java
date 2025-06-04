@@ -24,8 +24,8 @@ public class Utilities {
         return params.toArray(new Class[args.length]);
     }
 
-    private static final Class<?>[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class};
-    private static final Class<?>[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class};
+    private static final Class<?>[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class}; //do not change order, must match below
+    private static final Class<?>[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class}; // do not change order, must match above
 
 
     /**
@@ -165,37 +165,34 @@ public class Utilities {
 
     /**
      * Attempts to unbox an object to a specified primitive type
+     * will return null if the return type is not primitive to start with or the types do not match
+     * This method doesn't really unbox the type as you cannot know at runtime whether a type is boxed
      * @param returnType the unboxed type corresponding to primitive equivalent of the object provided in the second parameter
      * @param objectOrPrimitive the object to unbox
      * @param <T> The type of object to unbox to
      * @return the unboxed type of the object, where possible, null if the unboxing fails
      */
     @Nullable
+    @SuppressWarnings("unchecked") //Must do this as alternative is to call cast on return type
+                                    //which you can't do as you cant cast Integer to int for example
     static <T> T unBox(Class<T> returnType, Object objectOrPrimitive) {
-        if (objectOrPrimitive instanceof Boolean && returnType != Boolean.class) {
-            return (T)(Object)((Boolean)objectOrPrimitive).booleanValue(); //can't cast directly to T, but can via object
+
+        if (!returnType.isPrimitive()){
+            throw new IllegalArgumentException("Only primitive return types permitted");
         }
-        if (objectOrPrimitive instanceof Byte && returnType != Byte.class){
-            return (T)(Object)((Byte)objectOrPrimitive).byteValue();
+
+        if (objectOrPrimitive instanceof Boolean && returnType == boolean.class
+            || objectOrPrimitive instanceof Byte && returnType == byte.class
+            || objectOrPrimitive instanceof Character && returnType == char.class
+            ||objectOrPrimitive instanceof Double && returnType == double.class
+            ||objectOrPrimitive instanceof Float && returnType == float.class
+            ||objectOrPrimitive instanceof Integer && returnType == int.class
+            ||objectOrPrimitive instanceof Long && returnType == long.class
+            ||objectOrPrimitive instanceof Short && returnType == short.class){
+            return (T)objectOrPrimitive;
+        } else {
+            throw new IllegalArgumentException("return type and object type must match");
         }
-        if (objectOrPrimitive instanceof Character && returnType != Character.class){
-            return (T)(Object)((Character)objectOrPrimitive).charValue();
-        }
-        if (objectOrPrimitive instanceof Double && returnType != Double.class){
-            return (T)(Object)((Double)objectOrPrimitive).doubleValue();
-        }
-        if (objectOrPrimitive instanceof Float && returnType != Float.class){
-            return (T)(Object)((Float)objectOrPrimitive).floatValue();
-        }
-        if (objectOrPrimitive instanceof Integer && returnType != Integer.class){
-            return (T)(Object)((Integer)objectOrPrimitive).intValue();
-        }
-        if (objectOrPrimitive instanceof Long && returnType != Long.class){
-            return (T)(Object)((Long)objectOrPrimitive).longValue();
-        }
-        if (objectOrPrimitive instanceof Short && returnType != Short.class){
-            return (T)(Object)((Short)objectOrPrimitive).shortValue();
-        }
-        return null;
+
     }
 }
