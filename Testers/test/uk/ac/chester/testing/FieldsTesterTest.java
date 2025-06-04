@@ -49,7 +49,8 @@ class FieldsTesterTest {
         assertEquals(testObject.myInt,tester.getValue(int.class, "myInt",testObject) );
         assertEquals(testObject.myString,tester.getValue(String.class, "myString",testObject) );
         assertNull(tester.getValue(String.class,"nullString",testObject));
-
+        assertThrows(IllegalArgumentException.class, () ->
+                tester.getValue(String.class, "myInt", "Not the right object"));
     }
 
     @Test

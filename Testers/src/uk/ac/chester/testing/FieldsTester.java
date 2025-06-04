@@ -11,6 +11,7 @@ public class FieldsTester<T> extends Tester {
 
     private final EventHandler handler;
     private final Set<Field> fields;
+    private final Class<T> clazz;
 
     /**
      * Creates a FieldsTester for a specified class
@@ -21,6 +22,7 @@ public class FieldsTester<T> extends Tester {
         FieldsHelper<T> helper = new FieldsHelper<>(theClass);
         this.handler = handler;
         fields = helper.fields();
+        clazz = theClass;
     }
 
     /**
@@ -96,6 +98,10 @@ public class FieldsTester<T> extends Tester {
      * @param <F> The type of the field
      */
     public <F> F getValue(Class<F> fieldType, String name, Object objectInstance) {
+
+        if (objectInstance.getClass() != clazz){
+            throw new IllegalArgumentException("Instance of object must match type of FieldsTester");
+        }
 
         for (Field field : fields) {
             if (field.getName().equals(name)) {
