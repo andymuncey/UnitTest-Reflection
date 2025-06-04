@@ -87,18 +87,28 @@ public class FieldsTester<T> extends Tester {
     }
 
 
+    /**
+     * Gets a field's value, assuming the type and name match, regardless of access modifier
+     * @param fieldType the type of the field
+     * @param name the name of the field
+     * @param objectInstance the object from which you want to get a field's value
+     * @return the value of the field, or null if the field can't be found
+     * @param <F> The type of the field
+     */
     public <F> F getValue(Class<F> fieldType, String name, Object objectInstance) {
 
         for (Field field : fields) {
             if (field.getName().equals(name)) {
-                Class<?> actualClass = field.getType();
-                field.setAccessible(true);
-                try {
-                    Object fieldValue = field.get(objectInstance);
-
-                    return (F) fieldValue; //will be boxed as per documentation
-                } catch (IllegalAccessException ignored) {
-                    //shouldn't occur, as accessible set to true
+                if (field.getType().equals(fieldType)) {
+                    field.setAccessible(true);
+                    try {
+                        Object fieldValue = field.get(objectInstance);
+                        @SuppressWarnings("unchecked") //fieldValue be boxed as per documentation
+                        F result = (F)fieldValue;
+                        return result;
+                    } catch (IllegalAccessException ignored) {
+                        //shouldn't occur, as accessible set to true
+                    }
                 }
                 break;
             }
@@ -109,6 +119,7 @@ public class FieldsTester<T> extends Tester {
 
     /**
      * returns every type used for declaring fields
+     * excludes inherited and synthetic fields
      * @param ignoreStatic ignore fields with the static modifier
      * @return the types used by the fields in the class
      */
