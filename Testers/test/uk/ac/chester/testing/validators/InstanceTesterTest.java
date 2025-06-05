@@ -9,7 +9,6 @@ import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
 
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,7 +18,7 @@ public class InstanceTesterTest {
     private InstanceTester<PointTestClass> tester;
 
     @BeforeEach
-    public void setUp() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void setUp()  {
         tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,0);
 
     }
@@ -52,9 +51,9 @@ public class InstanceTesterTest {
     @Test
     public void nonExistentMethod(){
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 1,2);
-        Throwable error = assertThrows(AssertionFailedError.class, () -> {
-            tester.executeNonReturningMethod("nonExistentMethod", 1, 2, 3);
-        });
+        Throwable error = assertThrows(AssertionFailedError.class, () ->
+                tester.executeNonReturningMethod("nonExistentMethod", 1, 2, 3)
+        );
         assertEquals("Unable to invoke method nonExistentMethod", error.getMessage());
     }
 
