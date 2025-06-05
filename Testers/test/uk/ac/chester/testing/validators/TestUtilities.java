@@ -9,7 +9,7 @@ public class TestUtilities {
      * @param stackTrace a stack trace
      * @return the name of a method
      */
-    static String firstNonTestingMethod(StackTraceElement[] stackTrace){
+    static String firstNonTestingMethodName(StackTraceElement[] stackTrace){
         for (StackTraceElement stackTraceElement : stackTrace){
             if (stackTraceElement.getClassName().startsWith("org.junit")){
                 continue;
