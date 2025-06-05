@@ -11,7 +11,7 @@ import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ConstructorsTesterValidator {
+public class ConstructorsTesterTest {
 
     private ConstructorsTester<TestClass> t;
 

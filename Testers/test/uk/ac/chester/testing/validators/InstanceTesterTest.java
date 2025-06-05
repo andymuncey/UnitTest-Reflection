@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class InstanceValidator {
+public class InstanceTesterTest {
 
     private InstanceTester<PointTestClass> tester;
 
