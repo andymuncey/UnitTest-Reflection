@@ -1,13 +1,16 @@
 package uk.ac.chester.testing.validators;
 
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.FieldsTester;
 import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;
 
-public class FieldsTesterValidator {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-    //region failing tests - These tests are meant to fail!
+public class FieldsTesterTest {
+
 
     @Test
     public void testFieldType(){
@@ -15,8 +18,12 @@ public class FieldsTesterValidator {
             private String myString;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE, int.class, "myString", true);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
+            t.test(AccessModifier.PRIVATE, int.class, "myString", true);
+        });
+        assertEquals("fieldFoundButNotCorrectType", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
 
@@ -26,8 +33,13 @@ public class FieldsTesterValidator {
             private String myString;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
+            t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true);
+        });
+        assertEquals("fieldNotFound", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+
     }
 
 
@@ -40,8 +52,12 @@ public class FieldsTesterValidator {
             private Integer myInteger;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE, int.class, "myInteger", false);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
+            t.test(AccessModifier.PRIVATE, int.class, "myInteger", false);
+        });
+        assertEquals("fieldFoundButNotCorrectType", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+
     }
 
     @Test
@@ -50,13 +66,14 @@ public class FieldsTesterValidator {
             Integer myInteger;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
-        t.test(AccessModifier.PRIVATE, Integer.class, "myInteger", false);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
+            t.test(AccessModifier.PRIVATE, Integer.class, "myInteger", false);
+        });
+        assertEquals("fieldHasIncorrectModifier", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+
     }
-    //end region
-
-
-    //region passing tests
 
     /**
      * Tests that a field exists with the name myString
@@ -88,7 +105,5 @@ public class FieldsTesterValidator {
         t.test(AccessModifier.PRIVATE, Integer.class, "myInt", true);
     }
 
-
-    //endregion
 
 }
