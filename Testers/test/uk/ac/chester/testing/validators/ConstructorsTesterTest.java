@@ -8,8 +8,7 @@ import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ConstructorsTesterTest {
 
@@ -30,59 +29,67 @@ public class ConstructorsTesterTest {
 
     @Test
     public void testIncorrectParameters() {
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-        t.test(AccessModifier.PUBLIC,"str1", "Str2");
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () ->
+                t.test(AccessModifier.PUBLIC,"str1", "Str2"));
         assertEquals("incorrectParameters", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
     @Test
     public void testWrongOrderParameters() {
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-        t.test(AccessModifier.PUBLIC,"str1", 4);
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PUBLIC,"str1", 4));
         assertEquals("incorrectParamOrder", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
     @Test
     public void testUnconventionalParamNames(){
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-        t.test(AccessModifier.PUBLIC, 3.2);
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PUBLIC, 3.2));
         assertEquals("paramNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
     @Test
     public void testWrongAccessModifierMethodIsPrivate() {
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PUBLIC, 's', "Hello", 's');
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PUBLIC, 's', "Hello", 's'));
         assertEquals("wrongAccessModifier", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
     @Test
     public void testWrongAccessModifierMethodIsPublic(){
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PRIVATE, 4, "str");
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PRIVATE, 4, "str"));
         assertEquals("wrongAccessModifier", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
     @Test
     public void testExceptionThrowingConstructor(){
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () ->{
-            t.test(AccessModifier.PUBLIC, 3.2F);
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PUBLIC, 3.2F));
         assertEquals("constructionFails", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
     @Test
     public void rightOrderParameters(){
         t.test(AccessModifier.PUBLIC,4, "str");
+    }
+
+    @Test
+    public void constructorWithNoArgsExistsTest(){
+
+       assertTrue(t.constructorWithNoArgsExists(true));
+       assertTrue(t.constructorWithNoArgsExists(false));
+
+        ConstructorsTestEventHandlerEN handler = new ConstructorsTestEventHandlerEN();
+
+        Object x = new Object(){
+            @SuppressWarnings("unused")
+            private String MY_STRING;
+        };
+
+        ConstructorsTester<?> tester = new ConstructorsTester<>(x.getClass(), handler);
+        assertFalse(tester.constructorWithNoArgsExists(true));
+        assertFalse(tester.constructorWithNoArgsExists(false));
+
     }
 
 
