@@ -11,35 +11,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FieldsTesterTest {
 
+    @SuppressWarnings("unused")
+    static class SimpleTestClass {
+        private String myString;
+        private Integer myInteger;
+        private int myInt;
+    }
 
     @Test
     public void testFieldType(){
-        Object x = new Object(){
-            private String myString;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
 
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PRIVATE, int.class, "myString", true);
-        });
+        //correct field type
+        t.test(AccessModifier.PRIVATE,String.class,"myString");
+
+        //incorrect field type
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class,
+                () -> t.test(AccessModifier.PRIVATE, int.class, "myString", true));
         assertEquals("fieldFoundButNotCorrectType", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
 
+    /**
+     * Tests that the fieldNotFound method in the handler is called if the specified field does not exist in the tested class
+     */
     @Test
     public void testFieldName(){
-        Object x = new Object(){
-            private String myString;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
-
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true);
-        });
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true));
         assertEquals("fieldNotFound", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
-
     }
 
 
@@ -48,29 +50,18 @@ public class FieldsTesterTest {
      */
     @Test
     public void testFieldTypeNoBoxing(){
-        Object x = new Object(){
-            private Integer myInteger;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PRIVATE, int.class, "myInteger", false);
-        });
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PRIVATE, int.class, "myInteger", false));
         assertEquals("fieldFoundButNotCorrectType", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
-
     }
 
     @Test
     public void testWrongAccessModifier(){
-        Object x = new Object(){
-            Integer myInteger;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
 
-        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> {
-            t.test(AccessModifier.PRIVATE, Integer.class, "myInteger", false);
-        });
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> t.test(AccessModifier.PROTECTED, Integer.class, "myInteger", false));
         assertEquals("fieldHasIncorrectModifier", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
@@ -80,27 +71,20 @@ public class FieldsTesterTest {
      */
     @Test
     public void testExistingFieldName(){
-        Object x = new Object(){
-            private String myString;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
         t.test(AccessModifier.PRIVATE, String.class, "myString", false);
     }
 
 
     /**
      * Tests that if autoboxing is permitted, a field of type Integer is acceptable
-     * when type int is requested, and vice-versa
+     * when type int is requested, and vice versa
      */
     @Test
     public void testFieldTypeBoxed(){
-        Object x = new Object(){
-            private Integer myInteger;
-            private int myInt;
-        };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<SimpleTestClass> t = new FieldsTester<>(SimpleTestClass.class, handler);
         t.test(AccessModifier.PRIVATE, int.class, "myInteger", true);
         t.test(AccessModifier.PRIVATE, Integer.class, "myInt", true);
     }
