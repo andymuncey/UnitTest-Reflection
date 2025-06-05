@@ -63,7 +63,7 @@ public class InstanceTester<C> {
 
 
     /**
-     *
+     * Attempts to execute an instance method with a given name, and parameters
      * @param returnType the class of the type the method to be called returns
      * @param name the name of the method to call, pass null to use the name of the calling method
      * @param args the parameters to pass to the method. Arrays must be cast to an object
@@ -76,7 +76,12 @@ public class InstanceTester<C> {
         //adapted from Nathan (2021) https://stackoverflow.com/questions/4065518/java-how-to-get-the-caller-function-name
         if (name == null){
             //noinspection OptionalGetWithoutIsPresent
-            name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+            name = StackWalker.getInstance()
+                    .walk(frames -> frames
+                            .skip(1)
+                            .findFirst()
+                            .get())
+                    .getMethodName();
         }
 
        verifyConstructed();
@@ -87,6 +92,20 @@ public class InstanceTester<C> {
        }
        return null;
     }
+
+
+    /**
+     * Calls an instance method with the name matching that of the calling method
+     * @param returnType the return type of the method
+     * @param args the arguments for the method (Arrays must be cast to an object)
+     * @return the result of executing the method, null if unsuccessful
+     * @param <T> the return type of the method being called
+     */
+    public <T> T executeMethodMatchingCaller(Class<T> returnType, Object... args) {
+        String name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+        return executeMethod(returnType,name,args);
+    }
+
 
 
     public <T> T getFieldValue(Class<T> type, String name){
