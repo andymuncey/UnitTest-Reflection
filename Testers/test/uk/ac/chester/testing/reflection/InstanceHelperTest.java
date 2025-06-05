@@ -1,16 +1,16 @@
-package uk.ac.chester.testing;
+package uk.ac.chester.testing.reflection;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.ac.chester.testing.reflection.InstanceHelper;
+import uk.ac.chester.testing.TestingExecutionException;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InstanceMethodsHelperTest {
+public class InstanceHelperTest {
 
 
     private InstanceHelper<PointTestClass> h;
@@ -36,5 +36,7 @@ public class InstanceMethodsHelperTest {
         Integer result = h.fieldValue(int.class, "x");
         assertEquals(Integer.valueOf(2), result);
     }
+
+
 
 }
