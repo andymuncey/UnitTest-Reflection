@@ -19,7 +19,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(), handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
-        assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
@@ -32,7 +32,7 @@ public class ClassTesterTest {
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
 
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
-        assertEquals("fieldNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("fieldNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(TestClass.class,  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
-        assertEquals("fieldStaticButNotFinal", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("fieldStaticButNotFinal", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethods);
-        assertEquals("methodNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("methodNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
@@ -74,7 +74,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethodParameterNames);
-        assertEquals("methodParameterNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("methodParameterNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
@@ -87,7 +87,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkConstructorParameterNames);
-        assertEquals("constructorParameterNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+        assertEquals("constructorParameterNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
 
