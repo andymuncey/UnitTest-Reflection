@@ -1,8 +1,6 @@
 package uk.ac.chester.testing.reflection;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class PackageHelper {
 
@@ -14,7 +12,9 @@ public class PackageHelper {
             "org.hamcrest",
             "org.jetbrains",
             "org.junit",
-            "sun"
+            "org.opentest4j",
+            "sun",
+            "org.apiguardian"
     };
 
     private static boolean isIgnoredPackage(String name){
@@ -36,15 +36,29 @@ public class PackageHelper {
 
         Set<Class<?>> classes = new HashSet<>();
 
-        for (Package p : Package.getPackages()) {
+
+        Package[] packages = Package.getPackages();
+
+
+        List<Package> relevantPackages = new ArrayList<>();
+        for (Package p : packages) {
             final String packageName = p.getName();
             if (!isIgnoredPackage(packageName)) {
+                relevantPackages.add(p);
+            }
+        }
+
+
+
+        for (Package p : relevantPackages) {
+            final String packageName = p.getName();
+
                 final String fullyQualifiedClassName = packageName + "." + name;
                 final Optional<Class<?>> foundClass = classForName(fullyQualifiedClassName);
                 if (foundClass.isPresent()){
                     classes.add(foundClass.get());
                 }
-            }
+
         }
         return classes;
     }
