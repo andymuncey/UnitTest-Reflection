@@ -2,13 +2,14 @@ package uk.ac.chester.testing.validators;
 
 
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 
-import java.io.Serializable;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ClassTesterValidator {
+public class ClassTesterTest {
 
     @Test
     public void testPublicField() {
@@ -17,7 +18,9 @@ public class ClassTesterValidator {
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(), handler);
-        t.checkFields();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
+        assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+
     }
 
     @Test
@@ -27,7 +30,9 @@ public class ClassTesterValidator {
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
-        t.checkFields();
+
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
+        assertEquals("fieldNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
     }
 
     @Test
@@ -44,7 +49,8 @@ public class ClassTesterValidator {
     public void testFieldStaticButNotFinal() {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(TestClass.class,  handler);
-        t.checkFields();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
+        assertEquals("fieldStaticButNotFinal", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
     }
 
     @Test
@@ -54,7 +60,9 @@ public class ClassTesterValidator {
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
-        t.checkMethods();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethods);
+        assertEquals("methodNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+
     }
 
 
@@ -65,7 +73,9 @@ public class ClassTesterValidator {
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
-        t.checkMethodParameterNames();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethodParameterNames);
+        assertEquals("methodParameterNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
+
     }
 
 
@@ -76,7 +86,8 @@ public class ClassTesterValidator {
     public void testConstructorParamName(){
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
-        t.checkConstructorParameterNames();
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkConstructorParameterNames);
+        assertEquals("constructorParameterNameUnconventional", TestUtilities.firstNonTestingMethod(thrown.getStackTrace()));
     }
 
 
