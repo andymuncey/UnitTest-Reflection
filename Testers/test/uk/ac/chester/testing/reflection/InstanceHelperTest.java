@@ -9,6 +9,7 @@ import uk.ac.chester.testing.testclasses.PointTestClass;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InstanceHelperTest {
 
@@ -29,6 +30,10 @@ public class InstanceHelperTest {
     public void invokeMethod() throws TestingExecutionException {
             assertEquals(Integer.valueOf(2), h.invokeMethod(Integer.class, "getX"));
             assertEquals(Integer.valueOf(3), h.invokeMethod(Integer.class, "getY"));
+
+            assertEquals(2, h.invokeMethod(false,int.class,"getX"));
+
+            assertThrows(TestingExecutionException.class,() -> h.invokeMethod(false, Integer.class, "getX"));
     }
 
     @Test
