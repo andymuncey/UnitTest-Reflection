@@ -225,10 +225,7 @@ public class MethodsHelper<C> {
       */
      public String[] methodParamNames(Class<?> returnType, String name, Class<?>... paramTypes){
          Optional<Method> possibleMethod = findMethod(returnType,name,paramTypes);
-         if (possibleMethod.isPresent()){
-             return Utilities.parameterNames(possibleMethod.get());
-         }
-         return new String[0];
+         return possibleMethod.map(Utilities::parameterNames).orElseGet(() -> new String[0]);
      }
 
     //endregion
@@ -251,7 +248,7 @@ public class MethodsHelper<C> {
      @SuppressWarnings("unchecked")
      public <T> T invokeStaticMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) {
 
-         final Optional<Method> optionalMethod = findMethod(true, returnType,methodName, Utilities.classesForArgs(args));
+         final Optional<Method> optionalMethod = findMethod(allowAutoboxing, returnType,methodName, Utilities.classesForArgs(args));
 
          if (optionalMethod.isPresent()) {
              final Method m = optionalMethod.get();

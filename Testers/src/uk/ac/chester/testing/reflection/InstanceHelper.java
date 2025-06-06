@@ -62,7 +62,7 @@ public class InstanceHelper<C> {
      */
     <T> T invokeMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) throws TestingExecutionException {
 
-        final Optional<Method> optionalMethod = methodsHelper.findMethod(true, returnType, methodName, Utilities.classesForArgs(args));
+        final Optional<Method> optionalMethod = methodsHelper.findMethod(allowAutoboxing, returnType, methodName, Utilities.classesForArgs(args));
 
         if (optionalMethod.isPresent()) {
             final Method m = optionalMethod.get();
