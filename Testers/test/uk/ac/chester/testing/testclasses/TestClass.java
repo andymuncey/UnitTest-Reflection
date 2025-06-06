@@ -51,6 +51,10 @@ public class TestClass {
         return 1;
     }
 
+    static String staticString(int repeats){
+        return "text".repeat(repeats);
+    }
+
     private String uninitialisedField;
 
     //bad param name
