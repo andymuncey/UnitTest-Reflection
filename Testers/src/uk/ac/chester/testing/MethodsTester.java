@@ -120,6 +120,18 @@ public class MethodsTester<C> extends Tester {
         return executeStaticWithSpecifics(true,null,returnType,methodName,args);
     }
 
+    /**
+     * Calls a static method with the name matching that of the calling method
+     * @param returnType the return type of the method
+     * @param args the arguments for the method (Arrays must be cast to an object)
+     * @return the result of executing the method, null if unsuccessful
+     * @param <T> the return type of the method being called
+     */
+    public <T> T executeStaticMethodMatchingCaller(Class<T> returnType, Object... args) {
+        String name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
+        return executeStatic(returnType,name,args);
+    }
+
 
 
 
