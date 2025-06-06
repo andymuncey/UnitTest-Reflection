@@ -45,6 +45,12 @@ public class Utilities {
         return primitiveClass; //not actually a primitive
     }
 
+
+    /**
+     * returns the primitive equivalent for a boxed type, or, if there is no equivalent, returns the original type
+     * @param boxedType e.g. Integer.class or Double.class
+     * @return the unboxed type, e.g. int.class or double.class
+     */
     static Class<?> primitiveEquivalent(Class<?> boxedType) {
         for (int i = 0; i < classes.length; i++) {
             if (boxedType == classes[i]) {
@@ -202,24 +208,6 @@ public class Utilities {
             return (T)objectOrPrimitive;
         }
         return null;
-
-//        if (!(returnType.isPrimitive() || returnType == Void.class)){
-//            throw new IllegalArgumentException("Only primitive return types permitted");
-//        }
-//
-//        if (objectOrPrimitive instanceof Boolean && returnType == boolean.class
-//            || objectOrPrimitive instanceof Byte && returnType == byte.class
-//            || objectOrPrimitive instanceof Character && returnType == char.class
-//            || objectOrPrimitive instanceof Double && returnType == double.class
-//            || objectOrPrimitive instanceof Float && returnType == float.class
-//            || objectOrPrimitive instanceof Integer && returnType == int.class
-//            || objectOrPrimitive instanceof Long && returnType == long.class
-//            || objectOrPrimitive instanceof Short && returnType == short.class
-//            || returnType == void.class || returnType == Void.class){
-//            return (T)objectOrPrimitive;
-//        } else {
-//            throw new IllegalArgumentException("return type and object type must match");
-//        }
 
     }
 }
