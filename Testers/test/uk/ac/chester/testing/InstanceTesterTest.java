@@ -51,7 +51,7 @@ public class InstanceTesterTest {
         Throwable error = assertThrows(AssertionFailedError.class, () ->
                 tester.executeNonReturningMethod("nonExistentMethod", 1, 2, 3)
         );
-        assertEquals("Unable to invoke method nonExistentMethod", error.getMessage());
+        assertEquals("cannotInvokeMethod",TestUtilities.firstNonTestingMethodName(error.getStackTrace()));
     }
 
 
