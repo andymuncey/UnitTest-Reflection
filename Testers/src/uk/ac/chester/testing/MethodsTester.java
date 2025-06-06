@@ -128,8 +128,13 @@ public class MethodsTester<C> extends Tester {
      * @param <T> the return type of the method being called
      */
     public <T> T executeStaticMethodMatchingCaller(Class<T> returnType, Object... args) {
-        String name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
-        return executeStatic(returnType,name,args);
+        Optional<StackWalker.StackFrame> frame =  StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst());
+        if (frame.isPresent()) {
+            String name = frame.get().getMethodName();
+            return executeStatic(returnType,name,args);
+        } else {
+            throw new RuntimeException("Unable to traverse call stack");
+        }
     }
 
 
