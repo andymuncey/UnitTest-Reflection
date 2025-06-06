@@ -1,9 +1,9 @@
-package uk.ac.chester.testing.validators;
+package uk.ac.chester.testing;
 
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 
@@ -27,7 +27,7 @@ public class ClassTesterTest {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
         ClassTester<?> t  = new ClassTester<>(x.getClass(), handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
-        assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+        Assertions.assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
