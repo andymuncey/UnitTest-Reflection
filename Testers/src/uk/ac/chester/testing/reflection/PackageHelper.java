@@ -39,26 +39,23 @@ public class PackageHelper {
 
         Package[] packages = Package.getPackages();
 
-
         List<Package> relevantPackages = new ArrayList<>();
         for (Package p : packages) {
             final String packageName = p.getName();
             if (!isIgnoredPackage(packageName)) {
                 relevantPackages.add(p);
             }
+
+
         }
 
 
 
         for (Package p : relevantPackages) {
             final String packageName = p.getName();
-
-                final String fullyQualifiedClassName = packageName + "." + name;
-                final Optional<Class<?>> foundClass = classForName(fullyQualifiedClassName);
-                if (foundClass.isPresent()){
-                    classes.add(foundClass.get());
-                }
-
+            final String fullyQualifiedClassName = packageName + "." + name;
+            final Optional<Class<?>> foundClass = classForName(fullyQualifiedClassName);
+            foundClass.ifPresent(classes::add);
         }
         return classes;
     }
@@ -82,7 +79,7 @@ public class PackageHelper {
     public static Optional<Class<?>> classForName(String fullyQualifiedName) {
         try {
             return Optional.of(Class.forName(fullyQualifiedName));
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e ) {
             return Optional.empty();
         }
     }
