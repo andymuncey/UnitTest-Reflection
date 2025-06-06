@@ -178,26 +178,30 @@ public class MethodsTesterTest {
     private static class LocalTestClass {
 
             @SuppressWarnings("FieldCanBeLocal")
+
+            //good fields
             private String myString;
             private String anotherString;
             private int myInt;
+
+            //bad fields
             private static double myDouble;
-
             private static boolean someBool;
-
             private static boolean aBool;
 
+
+            // proper getters
             public int getMyInt(){ //valid getter
             return myInt;
         }
-
-            public boolean isABool(){
-            return aBool;
-        }
-
             public boolean hasSomeBool(){
             return someBool;
         }
+
+            //invalid getter (field is static)
+            public boolean isABool(){
+                return aBool;
+            }
 
             @SuppressWarnings("SameReturnValue")
             public String getInvalidString(){ //no matching field
@@ -231,10 +235,10 @@ public class MethodsTesterTest {
     public void getters(){
         MethodsTester<LocalTestClass> localTester = new MethodsTester<>(LocalTestClass.class, null);
         Set<Method> isHasMethods = localTester.getters("is","has");
-        assertEquals(3, isHasMethods.size());
+        assertEquals(2, isHasMethods.size());
 
-        Set<Method> methods = localTester.getters();
-        assertEquals(2, methods.size());
+        Set<Method> methods = localTester.getters(); //uses is and get as prefixes - only one match
+        assertEquals(1, methods.size());
     }
 
 
