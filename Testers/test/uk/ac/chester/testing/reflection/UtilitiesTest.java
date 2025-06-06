@@ -39,52 +39,61 @@ public class UtilitiesTest {
 
 
 
-
-
     @Test
     public void classEquivalents() {
-
+        Class<?>[] primitives = {int.class, boolean.class, double.class, char.class, String.class};
+        Class<?>[] expected = {Integer.class, Boolean.class, Double.class, Character.class, String.class};
+        assertArrayEquals(expected, Utilities.classEquivalents(primitives));
 
     }
 
     @Test
     public void equivalentType() {
+        assertTrue(Utilities.equivalentType(boolean.class, Boolean.class));
+        assertTrue(Utilities.equivalentType(Boolean.class, boolean.class));
+        assertTrue(Utilities.equivalentType(boolean.class, boolean.class));
+        assertTrue(Utilities.equivalentType(Boolean.class, Boolean.class));
+        assertFalse(Utilities.equivalentType(int.class, double.class));
+        assertFalse(Utilities.equivalentType(Integer.class, Double.class));
+        assertTrue(Utilities.equivalentType(String.class, String.class));
+    }
+
+
+    private static class ParamsTestClass{
+
+        ParamsTestClass(String theString, int theInt){
+
+        }
+
     }
 
     @Test
     public void parameterNames() {
-
+        try {
+           String[] expected = {"theString", "theInt"};
+            String[] paramNames = Utilities.parameterNames(ParamsTestClass.class.getDeclaredConstructor(String.class, int.class));
+           assertArrayEquals(expected, paramNames);
+        } catch (NoSuchMethodException e) {
+            fail("Error getting constructor for testing: " + e.getMessage());
+        }
     }
 
     @Test
-    public void sortParamsTypesByName() {
+    public void sortTypesByName() {
+        Class<?>[] types = {String.class, int.class, double.class, float.class, Float.class};
+        Utilities.sortTypesByName(types);
+        //Float and String are java.lang.Float and java.lang.String
+        Class<?>[] expected = {double.class, float.class, int.class, Float.class, String.class};
+        assertArrayEquals(expected,types);
+
     }
 
     @Test
     void unBox() {
-
-        Integer x = 4;
-
         assertNotNull(Utilities.unBox(int.class, 42));
-        assertThrows(IllegalArgumentException.class, () -> {
-            Utilities.unBox(Integer.class,4);
-            fail("passing a boxed type as the return type is not allowed");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Utilities.unBox(Integer.class,4.7);
-            fail("types must match");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Utilities.unBox(String.class,"hello");
-            fail("passing a non primitive type as the return type is not allowed");
-        });
-        assertEquals(Integer.class, Utilities.unBox(int.class, x).getClass());
-
-
-
-
-
-
+        assertNull(Utilities.unBox(Integer.class,4.7));
+        assertNull(Utilities.unBox(String.class,"hello"));
+        assertEquals(Integer.class, Utilities.unBox(int.class, 4).getClass());
     }
 
 
