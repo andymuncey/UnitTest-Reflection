@@ -49,6 +49,9 @@ public class PackageTester extends Tester {
 
         }
 
+        //not found at all
+        handler.notFound(className);
+
     }
 
 
@@ -60,13 +63,14 @@ public class PackageTester extends Tester {
      */
     private String[] nameVariants(String name) {
 
-        String[] names = new String[name.length()>1 ? 3 : 2];
+        String[] names = new String[name.length()>1 ? 4 : 2];
 
         names[0] = name.toLowerCase(); //lowercase
         names[1] = name.toUpperCase(); //UPPERCASE
 
         if (name.length() > 1) {
-            names[2] = name.substring(0, 1).toLowerCase() + name.substring(1); //lowerCamelcase
+            names[2] = name.substring(0, 1).toLowerCase() + name.substring(1); //lowerCamelCase
+            names[3] = name.substring(0,1).toUpperCase() + name.substring(1); //UpperCamelCase
         }
 
         return names;
