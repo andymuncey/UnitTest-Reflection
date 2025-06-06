@@ -95,7 +95,7 @@ public class MethodsHelper<C> {
         Class<?> desiredReturnType = !allowAutoboxing ? returnType : classEquivalent(returnType);
 
         if (!matchParamOrder){
-            Utilities.sortParamsTypesByName(desiredParamTypes);
+            Utilities.sortTypesByName(desiredParamTypes);
         }
         HashSet<Method> methods = new HashSet<>();
 
@@ -109,7 +109,7 @@ public class MethodsHelper<C> {
                 Class<?>[] actualParamTypes = !allowAutoboxing ? method.getParameterTypes() : Utilities.classEquivalents(method.getParameterTypes());
 
                 if (!matchParamOrder) {
-                    Utilities.sortParamsTypesByName(actualParamTypes);
+                    Utilities.sortTypesByName(actualParamTypes);
                 }
 
 
