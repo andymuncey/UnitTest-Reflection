@@ -69,7 +69,7 @@ public class ClassTesterTest {
     @Test
     public void testMethodNameInvalid(){
         Object x = new Object(){
-            @SuppressWarnings("unused")
+            @SuppressWarnings({"unused", "SameReturnValue"})
             private String BadMethodName(){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
@@ -83,7 +83,7 @@ public class ClassTesterTest {
     @Test
     public void testMethodParamNameInvalid(){
         Object x = new Object(){
-            @SuppressWarnings("unused")
+            @SuppressWarnings({"unused", "SameReturnValue"})
             private String someMethod(String BadName){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
@@ -104,6 +104,29 @@ public class ClassTesterTest {
         ClassTester<?> t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkConstructorParameterNames);
         assertEquals("constructorParameterNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+    }
+
+
+    static class Book implements Serializable {}
+
+
+
+    @Test
+    void extendsSuperclass() {
+        ClassTester<String> tester = new ClassTester<>(String.class, null);
+        assertTrue(tester.extendsSuperclass(Object.class));
+        assertFalse(tester.extendsSuperclass(Test.class));
+
+        ClassTester<Book> bookClassTester = new ClassTester<>(Book.class, null);
+        assertTrue(bookClassTester.extendsSuperclass(Object.class));
+        assertFalse(bookClassTester.extendsSuperclass(Book.class));
+    }
+
+    @Test
+    void implementsInterface() {
+        ClassTester<Book> bookClassTester = new ClassTester<>(Book.class, null);
+        assertTrue(bookClassTester.implementsInterface(Serializable.class));
+        assertFalse(bookClassTester.implementsInterface(Comparable.class));
     }
 
 
