@@ -87,8 +87,4 @@ public enum NonAccessModifier {
         return nonAccessModifiers;
     }
 
-
-    public static Set<NonAccessModifier> modifiers(NonAccessModifier... modifiers){
-        return  new HashSet<>(Arrays.asList(modifiers));
-    }
 }
