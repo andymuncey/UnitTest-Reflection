@@ -15,6 +15,7 @@ public class PackageHelperTest {
     public void findClasses() {
 
         //need to declare class here as package will not be loaded otherwise
+        @SuppressWarnings("unused")
         TestClass c = new TestClass();
 
         Set<Class<?>> classes = PackageHelper.findClasses("TestClass");
