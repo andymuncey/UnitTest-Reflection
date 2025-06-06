@@ -1,22 +1,181 @@
 package uk.ac.chester.testing;
 
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+import uk.ac.chester.testing.testclasses.TestClass;
+import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MethodsTesterTest {
 
-    MethodsTester<?> tester;
+public class MethodsTesterTest {
+
+    private MethodsTester<TestClass> tester;
 
     @BeforeEach
-    void setUp() {
-        @SuppressWarnings({"SameReturnValue"})
-        Object x = new Object(){
+    public void setUp()  {
+        tester = new MethodsTester<>(TestClass.class,  new MethodTestEventHandlerEN());
+    }
+
+    @AfterEach
+    public void tearDown()  {
+        tester = null;
+    }
+
+
+    @Test
+    public void staticMethodPass(){
+        tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod");
+    }
+
+    @Test
+    public void staticTest(){
+        int result = tester.executeStatic(int.class, "staticInt");
+        assertEquals(1,result);
+    }
+
+    /**
+     * This Method must be named the same as the method that is tested
+     */
+    @Test
+    public void staticInt(){
+        int result = tester.executeStatic(int.class,null);
+        assertEquals(1,result);
+
+    }
+
+    /**
+     * This Method must be named the same as the method that is tested
+     */
+    @Test
+    public void staticString(){
+        String result = tester.executeStaticMethodMatchingCaller(String.class,2);
+        assertEquals("texttext",result);
+    }
+
+
+    @Test
+    public void staticTestReturningVoid () {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("abc");
+        strings.add("def");
+        tester.executeStatic(Void.class,"doubleArrayListContents",strings);
+        assertEquals(4, strings.size());
+    }
+
+    //endregion
+
+
+    //region failing tests
+
+    /**
+     * The tests in the section should FAIL - it's designed to verify expected failures occur and appropriate error messages are displayed
+     */
+
+
+    @Test
+    public void staticMethod(){
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () -> tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"nonStaticMethod"));
+        Assertions.assertEquals("staticDeclarationIncorrect", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+    }
+
+    @Test
+    public void nonStaticMethod(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("staticDeclarationIncorrect", () ->
+                tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,false,void.class,"staticMethod")
+        );
+    }
+
+    @Test
+    public void nonExistentMethod() {
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("notFound", () ->
+               tester.testExistenceForValues(Void.class, "nonExistentMethod")
+        );
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    @Test
+    public void wrongCaseForMethodName() {
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("wrongCaseName", () ->
+        tester.testExistenceForValues(void.class, "RETURNSINTEGER")
+                );
+    }
+
+    @Test
+    public void wrongReturnType() {
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectReturnType", () ->
+                tester.testExistenceForValues(String.class, "returnsInteger")
+        );
+    }
+
+    @Test
+    public void strictReturnType() {
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectReturnType", () ->
+                        tester.testExistenceForValues(String.class, "returnsInteger")
+
+        );
+    }
+
+    @Test
+    public void wrongParamCount(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectNumberOfParameters", () ->
+                tester.testExistenceForValues(void.class, "intParamStringParam")
+        );
+    }
+
+    @Test
+    public void wrongParams(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectParameters", () ->
+                tester.testExistenceForValues(void.class,"oneIntParam","text")
+        );
+    }
+
+    @Test
+    public void wrongMultiParams(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectParameters", () ->
+                tester.testExistenceForValues(void.class,"intParamStringParam","text", 23.5)
+        );
+    }
+
+    @Test
+    public void wrongOrderParams(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("incorrectParamOrder", () ->
+                tester.testExistenceForValues(void.class,"intParamStringParam", "text", 5));
+    }
+
+    @Test
+    public void paramConvention(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("paramNameUnconventional", () ->
+                tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3)
+        ); //should indicate the parameter doesn't follow naming convention
+    }
+
+    @Test
+    public void accessModifier(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("accessModifierIncorrect", () ->
+        tester.testExistenceForValues(AccessModifier.PUBLIC, void.class,"privateMethod")
+        );
+    }
+
+    @Test
+    public void returnedValue(){
+        TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("staticDeclarationIncorrect", () -> {
+            int result = tester.executeStatic(Integer.class, "returnsPrimitiveInt"); //Either cast the result to an object, or ensure that the methods tester is typed
+            assertEquals(2, result, "The method (deliberately) returns the wrong value");
+        });
+    }
+
+
+    private class LocalTestClass {
+
             @SuppressWarnings("FieldCanBeLocal")
             private String myString;
             private String anotherString;
@@ -28,63 +187,59 @@ class MethodsTesterTest {
             private static boolean aBool;
 
             public int getMyInt(){ //valid getter
-                return myInt;
-            }
+            return myInt;
+        }
 
             public boolean isABool(){
-                return aBool;
-            }
+            return aBool;
+        }
 
             public boolean hasSomeBool(){
-                return someBool;
-            }
+            return someBool;
+        }
 
             public String getInvalidString(){ //no matching field
-                return "not a valid getter";
-            }
+            return "not a valid getter";
+        }
 
             public float getMyDouble(){ //invalid getter: wrong type
-                return 0F;
-            }
+            return 0F;
+        }
 
             public void setMyDouble(double value){ //valid setter
-                myDouble = value;
-            }
+            myDouble = value;
+        }
 
             public void setSomeBool(double value){ //invalid setter - wrong parameter type
-                myDouble = value;
-            }
+            myDouble = value;
+        }
 
             public String setMyString(String value){ //invalid setter - shouldn't return a value
-                myString = value;
-                return myString;
-            }
+            myString = value;
+            return myString;
+        }
 
-        };
-
-        tester = new MethodsTester<>(x.getClass(),null);
 
     }
 
-    @AfterEach
-    void tearDown() {
-        tester = null;
-    }
+
 
     @Test
-    void getters() {
-        {
-            Set<Method> methods = tester.getters("is", "has");
-            assertEquals(3, methods.size());
-        }
-        {
-            Set<Method> methods = tester.getters();
-            assertEquals(2, methods.size());
-        }
+    public void getters(){
+        MethodsTester<LocalTestClass> localTester = new MethodsTester<>(LocalTestClass.class, null);
+        Set<Method> isHasMethods = localTester.getters("is","has");
+        assertEquals(3, isHasMethods.size());
+
+        Set<Method> methods = localTester.getters();
+        assertEquals(2, methods.size());
     }
+
 
     @Test
     void setters() {
-        assertEquals(1,tester.setters().size());
+        MethodsTester<LocalTestClass> localTester = new MethodsTester<>(LocalTestClass.class, null);
+
+        assertEquals(1, localTester.setters().size());
     }
+
 }
