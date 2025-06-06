@@ -23,6 +23,7 @@ class FieldsHelperTest {
 
     @AfterEach
     void tearDown() {
+        helper = null;
     }
 
     @Test
