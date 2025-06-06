@@ -24,7 +24,7 @@ public class UtilitiesTest {
         Class<?>[] intClasses = {Integer.class, Integer.class};
         Class<?>[] inferredIntClasses = Utilities.classesForArgs(args);
         for (Class<?> inferredClass: inferredIntClasses) {
-            assertNotEquals(inferredClass, int.class, "Int should be represented as the Integer class");
+            assertNotEquals(int.class, inferredClass, "Int should be represented as the Integer class");
         }
 
     }
