@@ -95,10 +95,10 @@ public class Utilities {
 
     /**
      * Sorts an array of Class by canonical name (i.e. including package name)
-     * @param paramTypes an array of types
+     * @param types an array of types
      */
-    static void sortParamsTypesByName(Class<?>[] paramTypes){
-        Arrays.sort(paramTypes, Comparator.comparing(Class::getCanonicalName));
+    static void sortTypesByName(Class<?>[] types){
+        Arrays.sort(types, Comparator.comparing(Class::getCanonicalName));
     }
 
 
@@ -165,7 +165,7 @@ public class Utilities {
 
     /**
      * Attempts to unbox an object to a specified primitive type
-     * will return null if the return type is not primitive to start with or the types do not match
+     * will return null if the types do not match
      * This method doesn't really unbox the type as you cannot know at runtime whether a type is boxed
      * @param returnType the unboxed type corresponding to primitive equivalent of the object provided in the second parameter
      * @param objectOrPrimitive the object to unbox
