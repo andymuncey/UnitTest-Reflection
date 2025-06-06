@@ -174,6 +174,7 @@ public class MethodsTesterTest {
     }
 
 
+    @SuppressWarnings("unused")
     private static class LocalTestClass {
 
             @SuppressWarnings("FieldCanBeLocal")
@@ -198,10 +199,12 @@ public class MethodsTesterTest {
             return someBool;
         }
 
+            @SuppressWarnings("SameReturnValue")
             public String getInvalidString(){ //no matching field
             return "not a valid getter";
         }
 
+            @SuppressWarnings("SameReturnValue")
             public float getMyDouble(){ //invalid getter: wrong type
             return 0F;
         }

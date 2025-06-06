@@ -1,5 +1,6 @@
 package uk.ac.chester.testing.testclasses;
 
+@SuppressWarnings("ALL")
 public class PointTestClass {
 
     private int x;

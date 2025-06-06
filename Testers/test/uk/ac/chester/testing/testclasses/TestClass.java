@@ -2,7 +2,7 @@ package uk.ac.chester.testing.testclasses;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("EmptyMethod")
+@SuppressWarnings("ALL")
 public class TestClass {
 
 
