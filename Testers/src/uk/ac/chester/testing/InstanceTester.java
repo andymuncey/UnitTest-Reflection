@@ -4,6 +4,7 @@ import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.InstanceHelper;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
  * This class is designed to be used to testExistence method calls and field values and will use an instance of the class passed to the constructor
@@ -102,8 +103,14 @@ public class InstanceTester<C> {
      * @param <T> the return type of the method being called
      */
     public <T> T executeMethodMatchingCaller(Class<T> returnType, Object... args) {
-        String name = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().get()).getMethodName();
-        return executeMethod(returnType,name,args);
+        Optional<StackWalker.StackFrame> frame =  StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst());
+        if (frame.isPresent()) {
+            String name = frame.get().getMethodName();
+            return executeMethod(returnType,name,args);
+        } else {
+            throw new RuntimeException("Unable to traverse call stack");
+        }
+
     }
 
 
