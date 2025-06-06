@@ -27,7 +27,7 @@ public class ConstructorsHelper<C> {
         Set<Constructor<C>> constructors = availableConstructors(includeNonPublic);
 
         if (!matchParamOrder){
-            Utilities.sortParamsTypesByName(params); //todo: investigate if this could fail if autoboxing enabled and order of params varies based on name
+            Utilities.sortTypesByName(params); //todo: investigate if this could fail if autoboxing enabled and order of params varies based on name
         }
 
         for (Constructor<C> c: constructors) {
@@ -35,7 +35,7 @@ public class ConstructorsHelper<C> {
 
                 Class<?>[] actualParamTypes = c.getParameterTypes();
                 if (!matchParamOrder){
-                    Utilities.sortParamsTypesByName(actualParamTypes);
+                    Utilities.sortTypesByName(actualParamTypes);
                 }
                 if (Utilities.typesMatch(allowAutoboxing, actualParamTypes, params)) {
                     return Optional.of(c);
