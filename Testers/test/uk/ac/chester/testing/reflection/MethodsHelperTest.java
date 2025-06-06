@@ -27,9 +27,6 @@ public class MethodsHelperTest {
     @Test
     public void typesForArgs() {
 
-        assertNotEquals(Integer.class, int.class); //just as a reminder
-        assertNotEquals(Void.class, void.class); //also a reminder
-
         Object[] args = {1, 5000000000L, 1.5F, 2.345, 'a', "text"};
         Class<?>[] actualTypes = Utilities.classesForArgs(args);
         Class<?>[] expectedTypes = {Integer.class, Long.class, Float.class, Double.class, Character.class, String.class};
@@ -79,16 +76,6 @@ public class MethodsHelperTest {
     String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
     assertArrayEquals(paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class), message);
     }
-
-//    @Test
-//    public void constructorAutoBoxing(){
-//
-//        Optional<Constructor<TestClass>> c = h.constructorForParamTypes(true,false,true,int.class);
-//        Assert.assertTrue(c.isPresent());
-//
-//        Optional<Constructor<TestClass>> nonExistentC = h.constructorForArgTypes(true,false,true, Integer.class);
-//        Assert.assertFalse(nonExistentC.isPresent());
-//    }
 
 
 }
