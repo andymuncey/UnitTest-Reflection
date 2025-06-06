@@ -1,10 +1,9 @@
-package uk.ac.chester.testing.validators;
+package uk.ac.chester.testing;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
@@ -106,6 +105,20 @@ public class InstanceTesterTest {
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,6);
         int xValue = tester.getFieldValue(int.class, "x");
         assertEquals(5,xValue);
+    }
+
+    @Test
+    void setFieldValue() {
+        InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,6);
+        int[] values = {42,7};
+        for (int number :values ) {
+            tester.setFieldValue(int.class,"x",number);
+            int xValue = tester.getFieldValue(int.class, "x");
+            assertEquals(number,xValue);
+        }
+
+
+
     }
     //endregion
 
