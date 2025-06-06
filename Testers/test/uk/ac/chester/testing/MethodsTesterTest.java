@@ -15,7 +15,9 @@ class MethodsTesterTest {
 
     @BeforeEach
     void setUp() {
+        @SuppressWarnings({"SameReturnValue"})
         Object x = new Object(){
+            @SuppressWarnings("FieldCanBeLocal")
             private String myString;
             private String anotherString;
             private int myInt;
