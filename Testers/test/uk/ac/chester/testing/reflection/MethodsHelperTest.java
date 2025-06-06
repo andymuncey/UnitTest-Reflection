@@ -31,11 +31,11 @@ public class MethodsHelperTest {
         assertNotEquals(Void.class, void.class); //also a reminder
 
         Object[] args = {1, 5000000000L, 1.5F, 2.345, 'a', "text"};
-        Class[] actualTypes = Utilities.classesForArgs(args);
-        Class[] expectedTypes = {Integer.class, Long.class, Float.class, Double.class, Character.class, String.class};
+        Class<?>[] actualTypes = Utilities.classesForArgs(args);
+        Class<?>[] expectedTypes = {Integer.class, Long.class, Float.class, Double.class, Character.class, String.class};
         assertArrayEquals(expectedTypes, actualTypes);
 
-        Class[] primitiveTypes = {int.class, long.class, float.class, double.class, char.class, String.class};
+        Class<?>[] primitiveTypes = {int.class, long.class, float.class, double.class, char.class, String.class};
         assertNotEquals(primitiveTypes, actualTypes);
         //assertThat(primitiveTypes, IsNot.not(IsEqual.equalTo(actualTypes)));
     }
