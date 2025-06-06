@@ -178,28 +178,28 @@ public class Utilities {
     static <T> T unBox(Class<T> returnType, Object objectOrPrimitive) {
 
         if (objectOrPrimitive instanceof Boolean && returnType == boolean.class){
-            return (T)(Object)((Boolean)objectOrPrimitive).booleanValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Byte && returnType == byte.class){
-            return (T)(Object)((Byte)objectOrPrimitive).byteValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Character && returnType == char.class){
-            return (T)(Object)((Character)objectOrPrimitive).charValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Double && returnType == double.class){
-            return (T)(Object)((Double)objectOrPrimitive).doubleValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Float && returnType == float.class){
-            return (T)(Object)((Float)objectOrPrimitive).floatValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Integer && returnType == int.class){
-             return (T)(Object)((Integer)objectOrPrimitive).intValue();
+             return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Long && returnType == long.class){
-            return (T)(Object)((Long)objectOrPrimitive).longValue();
+            return (T)objectOrPrimitive;
         }
         if (objectOrPrimitive instanceof Short && returnType == short.class){
-            return (T)(Object)((Short)objectOrPrimitive).shortValue();
+            return (T)objectOrPrimitive;
         }
         return null;
 
