@@ -47,6 +47,7 @@ public class TestClass {
     void nonStaticMethod(){}
     static void staticMethod(){}
 
+    @SuppressWarnings("SameReturnValue")
     static int staticInt(){
         return 1;
     }
@@ -63,8 +64,10 @@ public class TestClass {
 
     //do not change these - they are used by unit tests
 
+    @SuppressWarnings("SameReturnValue")
     int returnsPrimitiveInt(){ return 1; }
 
+    @SuppressWarnings("SameReturnValue")
     Integer returnsInteger(){ return 1; }
 
     void noReturn(){ }
