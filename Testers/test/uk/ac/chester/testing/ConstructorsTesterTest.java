@@ -1,11 +1,11 @@
-package uk.ac.chester.testing.validators;
+package uk.ac.chester.testing;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import uk.ac.chester.testing.testclasses.TestClass;
-import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +31,7 @@ public class ConstructorsTesterTest {
     public void testIncorrectParameters() {
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, () ->
                 t.test(AccessModifier.PUBLIC,"str1", "Str2"));
-        assertEquals("incorrectParameters", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
+        Assertions.assertEquals("incorrectParameters", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
 
     }
 
