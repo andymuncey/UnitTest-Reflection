@@ -13,6 +13,7 @@ class FieldsTesterTest {
 
     private FieldsTester<?> tester;
 
+    @SuppressWarnings("unused")
     private static class TestClass{
         private final String myString = "Hello";
         private String nullString;
