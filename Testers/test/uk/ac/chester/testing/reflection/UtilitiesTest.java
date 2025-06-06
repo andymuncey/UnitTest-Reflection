@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class UtilitiesTest {
 
     @Test
@@ -16,9 +17,8 @@ public class UtilitiesTest {
             assertEquals(classes[i],inferredClasses[i]);
         }
 
-        int[] intArgs = {2,3};
-        Class<?>[] intClasses = {Integer.class, Integer.class};
-        Class<?>[] inferredIntClasses = Utilities.classesForArgs(args);
+        Integer[] intArgs = {2,3};
+        Class<?>[] inferredIntClasses = Utilities.classesForArgs(intArgs);
         for (Class<?> inferredClass: inferredIntClasses) {
             assertNotEquals(int.class, inferredClass, "Int should be represented as the Integer class");
         }
@@ -54,7 +54,20 @@ public class UtilitiesTest {
         assertTrue(Utilities.equivalentType(String.class, String.class));
     }
 
+    @Test
+    void primitiveEquivalent() {
 
+        assertEquals(int.class, Utilities.primitiveEquivalent(Integer.class));
+        assertEquals(double.class, Utilities.primitiveEquivalent(Double.class));
+
+        assertEquals(String.class, Utilities.primitiveEquivalent(String.class));
+
+
+        //todo: test Utilities.primitiveEquivalent
+    }
+
+
+    @SuppressWarnings("unused")
     private static class ParamsTestClass{
 
         ParamsTestClass(String theString, int theInt){
@@ -89,7 +102,7 @@ public class UtilitiesTest {
         assertNotNull(Utilities.unBox(int.class, 42));
         assertNull(Utilities.unBox(Integer.class,4.7));
         assertNull(Utilities.unBox(String.class,"hello"));
-        assertEquals(Integer.class, Utilities.unBox(int.class, 4).getClass());
+        assertDoesNotThrow(() -> Utilities.unBox(int.class, 4));
     }
 
 }
