@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.handlers.PackageTestEventHandlerEN;
-import uk.ac.chester.testing.validators.TestUtilities;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +12,7 @@ class PackageTesterTest {
     PackageTester tester;
     PackageTestEventHandlerEN handler;
 
-    String thisPackageName = this.getClass().getPackage().getName();
+    private final String thisPackageName = this.getClass().getPackage().getName();
 
     @BeforeEach
     void setUp() {
