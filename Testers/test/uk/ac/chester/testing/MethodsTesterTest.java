@@ -174,7 +174,7 @@ public class MethodsTesterTest {
     }
 
 
-    private class LocalTestClass {
+    private static class LocalTestClass {
 
             @SuppressWarnings("FieldCanBeLocal")
             private String myString;
