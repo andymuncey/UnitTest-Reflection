@@ -19,8 +19,7 @@ public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, 
 
     @Override
     public void cannotInvokeMethod(Class<?> returnType, String name, Object[] args) {
-
-        fail("Unable to invoke method " + name);
+        fail("Unable to invoke method " + name +" with return type '"+returnType.getSimpleName()+"' using the arguments: " + describe(args));
     }
 
     @Override
@@ -33,6 +32,18 @@ public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, 
         fail("After construction, the field named '"+ name + "' of type: " + type.getSimpleName()+ " has not been initialised" +
                 " (i.e. it is null). " + System.lineSeparator() +
                 "It's generally best to avoid fields having a null value, instead the value should be set by the constructor");
+    }
+
+    static String describe(Object[] args){
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0){
+                builder.append(", ");
+            }
+            builder.append(args[i]);
+        }
+
+        return builder.toString();
     }
 
 }
