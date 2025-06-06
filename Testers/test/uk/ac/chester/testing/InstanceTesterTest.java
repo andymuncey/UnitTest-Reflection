@@ -8,9 +8,7 @@ import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InstanceTesterTest {
 
@@ -112,7 +110,8 @@ public class InstanceTesterTest {
         InstanceTester<PointTestClass> tester = new InstanceTester<>(PointTestClass.class,  new InstanceTestEventHandlerEN(), 5,6);
         int[] values = {42,7};
         for (int number :values ) {
-            tester.setFieldValue(int.class,"x",number);
+            boolean isSet = tester.setFieldValue(int.class,"x",number);
+            assertTrue(isSet);
             int xValue = tester.getFieldValue(int.class, "x");
             assertEquals(number,xValue);
         }
