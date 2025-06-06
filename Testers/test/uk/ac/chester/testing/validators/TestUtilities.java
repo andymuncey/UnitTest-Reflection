@@ -1,5 +1,11 @@
 package uk.ac.chester.testing.validators;
 
+import org.junit.jupiter.api.function.Executable;
+import org.opentest4j.AssertionFailedError;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class TestUtilities {
 
 
@@ -17,6 +23,12 @@ public class TestUtilities {
             return stackTraceElement.getMethodName();
         }
         return null;
+    }
+
+
+    static void assertMethodCallThrowsAssertionErrorInMethod(String methodName, Executable executable){
+        AssertionFailedError thrown = assertThrows(AssertionFailedError.class, executable);
+        assertEquals(methodName,TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
 }
