@@ -70,7 +70,8 @@ public class ConstructorsTesterTest {
 
     @Test
     public void rightOrderParameters(){
-        t.test(AccessModifier.PUBLIC,4, "str");
+       TestClass instance = t.test(AccessModifier.PUBLIC,4, "str");
+       assertNotNull(instance);
     }
 
     @Test
