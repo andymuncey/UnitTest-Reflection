@@ -1,4 +1,4 @@
-package uk.ac.chester.testing.validators;
+package uk.ac.chester.testing;
 
 import org.junit.jupiter.api.function.Executable;
 import org.opentest4j.AssertionFailedError;
@@ -15,7 +15,7 @@ public class TestUtilities {
      * @param stackTrace a stack trace
      * @return the name of a method
      */
-    static String firstNonTestingMethodName(StackTraceElement[] stackTrace){
+    public static String firstNonTestingMethodName(StackTraceElement[] stackTrace){
         for (StackTraceElement stackTraceElement : stackTrace){
             if (stackTraceElement.getClassName().startsWith("org.junit")){
                 continue;
@@ -26,7 +26,7 @@ public class TestUtilities {
     }
 
 
-    static void assertMethodCallThrowsAssertionErrorInMethod(String methodName, Executable executable){
+    public static void assertMethodCallThrowsAssertionErrorInMethod(String methodName, Executable executable){
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, executable);
         assertEquals(methodName,TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
