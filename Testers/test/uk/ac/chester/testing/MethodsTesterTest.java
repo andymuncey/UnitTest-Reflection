@@ -32,8 +32,33 @@ public class MethodsTesterTest {
 
 
     @Test
-    public void staticMethodPass(){
-        tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod");
+    public void testExistenceForValues(){
+
+        //with access modifier
+        assertTrue(tester.testExistenceForValues(true,AccessModifier.PACKAGE_PRIVATE,true,void.class,"staticMethod"));
+
+        //without access modifier
+        assertTrue(tester.testExistenceForValues(true,void.class,"staticMethod"));
+    }
+
+    @Test
+    public void testExistence(){
+        assertTrue(tester.testExistence(false, int.class,"returnsPrimitiveInt"));
+
+        //without access modifier - needs non-throwing handler
+        tester = new MethodsTester<>(TestClass.class,  new NonThrowingHandler());
+        assertFalse((tester.testExistence(false,void.class,"doesNotExist", int.class)));
+
+    }
+
+    @Test public void testForExactReturnType(){
+
+        //no modifier specified
+        assertTrue(tester.testForExactReturnType(int.class,"returnsPrimitiveInt"));
+
+        //without access modifier - needs non-throwing handler
+        tester = new MethodsTester<>(TestClass.class,  new NonThrowingHandler());
+        assertFalse(tester.testForExactReturnType(Integer.class,"returnsPrimitiveInt"));
     }
 
     @Test
@@ -70,15 +95,6 @@ public class MethodsTesterTest {
         tester.executeStatic(Void.class,"doubleArrayListContents",strings);
         assertEquals(4, strings.size());
     }
-
-    //endregion
-
-
-    //region failing tests
-
-    /**
-     * The tests in the section should FAIL - it's designed to verify expected failures occur and appropriate error messages are displayed
-     */
 
 
     @Test
@@ -161,7 +177,7 @@ public class MethodsTesterTest {
     @Test
     public void accessModifier(){
         TestUtilities.assertMethodCallThrowsAssertionErrorInMethod("accessModifierIncorrect", () ->
-        tester.testExistenceForValues(AccessModifier.PUBLIC, void.class,"privateMethod")
+            tester.testExistenceForValues(AccessModifier.PUBLIC, void.class,"privateMethod")
         );
     }
 
@@ -247,6 +263,55 @@ public class MethodsTesterTest {
         MethodsTester<LocalTestClass> localTester = new MethodsTester<>(LocalTestClass.class, null);
 
         assertEquals(1, localTester.setters().size());
+    }
+
+
+    private static class NonThrowingHandler implements MethodsTester.EventHandler {
+
+        @Override
+        public void notFound(String methodName, Class<?> searchClass) {
+
+        }
+
+        @Override
+        public void wrongCaseName(String methodName) {
+
+        }
+
+        @Override
+        public void incorrectReturnType(String methodName, Class<?> requiredReturnType) {
+
+        }
+
+        @Override
+        public void incorrectNumberOfParameters(String methodName, int expectedParamCount) {
+
+        }
+
+        @Override
+        public void incorrectParameters(String methodName, Class<?>[] requiredParamTypes) {
+
+        }
+
+        @Override
+        public void incorrectParamOrder(String methodName, Class<?>[] requiredParams) {
+
+        }
+
+        @Override
+        public void paramNameUnconventional(String methodName, String paramName) {
+
+        }
+
+        @Override
+        public void accessModifierIncorrect(String methodName, AccessModifier requiredModifier) {
+
+        }
+
+        @Override
+        public void staticDeclarationIncorrect(String methodName, boolean requiredStatic) {
+
+        }
     }
 
 }
