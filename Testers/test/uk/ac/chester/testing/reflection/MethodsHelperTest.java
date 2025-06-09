@@ -7,6 +7,10 @@ import uk.ac.chester.testing.reflection.MethodsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
 import uk.ac.chester.testing.testclasses.TestClass;
 
+import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MethodsHelperTest {
@@ -75,6 +79,39 @@ public class MethodsHelperTest {
     String[] paramNames = {"p0", "p1"};
     String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
     assertArrayEquals(paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class), message);
+    }
+
+    @Test
+    public  void methodForParams(){
+        {
+            Optional<Method> optionalMethod = h.methodForParams(true, void.class, "twoIntParams", 2, 3);
+            assert (optionalMethod.isPresent());
+            assertEquals("twoIntParams", optionalMethod.get().getName());
+        }
+        {
+            Optional<Method> optionalMethod = h.methodForParams(false, Integer.class, "returnsInteger");
+            assert (optionalMethod.isPresent());
+            assertEquals("returnsInteger", optionalMethod.get().getName());
+        }
+        {
+            Optional<Method> optionalMethod = h.methodForParams(true, int.class, "returnsInteger");
+            assert (optionalMethod.isPresent());
+            assertEquals("returnsInteger", optionalMethod.get().getName());
+        }
+        {
+            Optional<Method> optionalMethod = h.methodForParams(false, int.class, "returnsInteger");
+            assert (optionalMethod.isEmpty());
+        }
+
+    }
+
+
+    @Test
+    void methodsWithSignature(){
+        Set<Method> methods = h.methodsWithSignature(void.class, int.class, String.class);
+        assertTrue(methods.stream().findFirst().isPresent());
+        assertEquals("intParamStringParam",methods.stream().findFirst().get().getName());
+
     }
 
 
