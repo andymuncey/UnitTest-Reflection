@@ -18,7 +18,7 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
     @Override
     public void wrongCaseName(String methodName) {
         fail("The case required for the method is not correct - check which letters should be uppercase, and which should be lower. " +
-                "Method names in java use lowerCamelCase");
+                "Method names in java use lowerCamelCase, so this method should be written as " + methodName);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
 
     @Override
     public void incorrectParamOrder(String methodName, Class<?>[] requiredParams){
-        fail("Method \"" + methodName + "\" found, but parameters are not in the correct order");
+        fail("Method \"" + methodName + "\" found, but parameters are not in the correct order. The expected order is as follows: " + typesToString(requiredParams));
     }
 
     @Override
@@ -59,5 +59,16 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
         final String should = requiredStatic ? "should" : "should not";
         final String isNot = requiredStatic ? "is not" : "is";
         fail("Method '" + methodName + "' " + should + " be marked as static but it " + isNot);
+    }
+
+    public String typesToString(Class<?>[] types){
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < types.length; i++) {
+            if (i > 0){
+                builder.append(", ");
+            }
+            builder.append(types[i].getSimpleName());
+        }
+        return builder.toString();
     }
 }
