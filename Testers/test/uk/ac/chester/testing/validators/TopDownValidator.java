@@ -28,7 +28,7 @@
 //        Set<Class<?>> classes = PackageHelper.findClasses(className);
 //
 //        if (classes.isEmpty()) {
-//            fail("No class named " + className + " found. Class names are case sensitive");
+//            fail("No class named " + className + " found. Class names are case-sensitive");
 //        }
 //
 //        if (classes.size() > 1) {
