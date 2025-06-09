@@ -32,7 +32,7 @@ public class Utilities {
      * Given the 'class' of a primitive type (e.g. int.class returns the class of the corresponding boxed type, e.g. Integer.class)
      * Classes that do not belong to primitive types will remain unmodified
      *
-     * @param primitiveClass a primitive 'class' such as double.class
+     * @param primitiveClass a primitive 'class' such as double.class.
      * @return the class of the boxed equivalent (e.g. <code>char.class</code> becomes <code>Character.class</code>)
      */
     static Class<?> classEquivalent(Class<?> primitiveClass) {
@@ -49,7 +49,7 @@ public class Utilities {
     /**
      * returns the primitive equivalent for a boxed type, or, if there is no equivalent, returns the original type
      * @param boxedType e.g. Integer.class or Double.class
-     * @return the unboxed type, e.g. int.class or double.class
+     * @return the unboxed type, e.g. int.class or double.class.
      */
     static Class<?> primitiveEquivalent(Class<?> boxedType) {
         for (int i = 0; i < classes.length; i++) {
