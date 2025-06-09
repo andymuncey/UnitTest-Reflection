@@ -81,6 +81,7 @@ public class ConsoleTester<C> {
             return null;
         };
 
+        //noinspection resource - AutoCloseable not implemented until Java 19
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Void> future = executor.submit(callable);
 
@@ -116,6 +117,7 @@ public class ConsoleTester<C> {
             return helper.invokeStaticMethod(true,returnType,methodName,inputTokens,args);
         };
 
+        //noinspection resource - AutoCloseable not implemented until Java 19
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<T> future = executor.submit(callable);
 
@@ -222,6 +224,7 @@ public class ConsoleTester<C> {
             return null;
         };
 
+        //noinspection resource - AutoCloseable not implemented until Java 19
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Void> future = executor.submit(callable);
 
