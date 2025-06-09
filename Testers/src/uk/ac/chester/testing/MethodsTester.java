@@ -177,7 +177,7 @@ public class MethodsTester<C> extends Tester {
 
 
     /**
-     * If the method exists, method is invoked, and the value returned. Return type may be autoboxed/unboxed
+     * If the method exists, method is invoked, and the value returned. Return type may be auto-boxed/unboxed
      * If the method is not found, an appropriate {@link EventHandler} event will fire and null is returned
      * Access modifiers are ignored
      * @param returnTypeClass the type the method is expected to return
