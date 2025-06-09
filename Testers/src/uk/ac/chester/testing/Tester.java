@@ -12,6 +12,7 @@ abstract class Tester {
         return conventionChecker;
     }
 
+    @SuppressWarnings("unused")
     public void setConventionChecker(ConventionChecker conventionChecker) {
         this.conventionChecker = conventionChecker;
     }
