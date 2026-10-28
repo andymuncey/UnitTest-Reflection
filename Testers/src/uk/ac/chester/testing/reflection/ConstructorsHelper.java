@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Helper class for finding constructors
+ * @param <C> The class in which to look for constructors
+ */
 public class ConstructorsHelper<C> {
 
     final private Class<C> searchClass;

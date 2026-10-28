@@ -6,6 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+/**
+ * Allows for the getting and setting of field values of an object as well as invoking methods
+ * @param <C>
+ */
 public class InstanceHelper<C> {
 
     private final FieldsHelper<C> fieldsHelper;

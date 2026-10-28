@@ -2,6 +2,9 @@ package uk.ac.chester.testing.reflection;
 
 import java.util.*;
 
+/**
+ * Helps to find class within packages, but ignoring common pre-existing packages
+ */
 public class PackageHelper {
 
     private static final String[] ignoredPackages = {

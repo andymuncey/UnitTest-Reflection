@@ -8,6 +8,11 @@ import java.util.*;
 
 import static uk.ac.chester.testing.reflection.Utilities.classEquivalent;
 
+/**
+ * Allows for the finding of methods within a class that match certain criteria
+ * Allows for the execution of static method within the class
+ * @param <C> The class which is being introspected
+ */
 public class MethodsHelper<C> {
 
     final private Class<C> searchClass;
@@ -135,7 +140,17 @@ public class MethodsHelper<C> {
         return findMethod(true, returnType, name, paramTypes);
     }
 
-
+    /**
+     * Finds a method with a given access modifier, return type, name and parameter types.
+     * The caller can decide whether to allow autoboxing, and to specify if the method is static
+     * @param modifier The desired access modifier, or null if any access modifier is permitted
+     * @param isStatic Whether the method should be static or not, or null if either is permitted
+     * @param returnType The return type of the method
+     * @param name The method name
+     * @param allowAutoboxing Whether to allow primitives and boxed types to be used interchangeably
+     * @param paramTypes the types for the parameters
+     * @return a method matching the requirements, or an empty optional if there is no match
+     */
     public Optional<Method> findMethod(@Nullable AccessModifier modifier, @Nullable Boolean isStatic, Class<?> returnType, String name, boolean allowAutoboxing, Class<?>... paramTypes){
         Optional<Method> method = findMethod(allowAutoboxing, returnType, name, paramTypes);
         if (method.isPresent()) {
@@ -190,6 +205,14 @@ public class MethodsHelper<C> {
         return Optional.empty();
     }
 
+    /**
+     * Find method which could be called with a specified set of parameters
+     * @param allowAutoboxing whether boxed types can be used interchangeable with the corresponding primitives
+     * @param returnType the return type of the method
+     * @param methodName the name of the method
+     * @param args values for which the method would need parameters of the same type in the same order
+     * @return An optional containing the method, if there is a match, empty otherwise
+     */
      Optional<Method> methodForParams(boolean allowAutoboxing, Class<?> returnType, String methodName, Object... args) {
          final Set<Method> possibleMethods = findMethods(allowAutoboxing, returnType, methodName);
 

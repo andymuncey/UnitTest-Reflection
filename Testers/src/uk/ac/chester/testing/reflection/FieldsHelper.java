@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Gets or locates fields within a class
+ * @param <C> The class in which fields should be located
+ */
 public class FieldsHelper<C> {
 
     final private Class<C> searchClass;
