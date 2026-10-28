@@ -3,7 +3,6 @@ package uk.ac.chester.testing.reflection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.ac.chester.testing.TestingExecutionException;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 
 import java.lang.reflect.InvocationTargetException;

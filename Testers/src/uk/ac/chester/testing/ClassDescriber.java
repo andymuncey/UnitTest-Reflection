@@ -1,5 +1,10 @@
 package uk.ac.chester.testing;
 
+/**
+ * Allows for descriptions classes to be provided.
+ * The default implementation provides the short name for each class separated by commas,
+ * with the final two separated by ampersand
+ */
 public interface ClassDescriber {
 
     /**

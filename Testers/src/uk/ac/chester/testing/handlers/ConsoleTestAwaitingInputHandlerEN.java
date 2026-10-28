@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
- * A generic handler for testing console applications where the result of the tests should be the application is awaiting user input
+ * English language implementation of the ConsoleTester.ExceptionHandler interface
  */
 public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler, ConsoleTester.CompletionHandler {
 

@@ -6,6 +6,10 @@ import uk.ac.chester.testing.reflection.PackageHelper;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Allows for checking the instance of a class within a package, and retrieving that class
+ * Also allows for identifying that a class exists in a different package
+ */
 public class PackageTester extends Tester {
 
 
@@ -77,7 +81,9 @@ public class PackageTester extends Tester {
 
     }
 
-
+    /**
+     * Allows for custom logic when a class does not exist, or exists with the correct name but incorrect casing
+     */
     public interface EventHandler {
 
         /**

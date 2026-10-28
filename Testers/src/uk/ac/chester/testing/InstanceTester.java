@@ -2,12 +2,14 @@ package uk.ac.chester.testing;
 
 import uk.ac.chester.testing.reflection.FieldsHelper;
 import uk.ac.chester.testing.reflection.InstanceHelper;
+import uk.ac.chester.testing.reflection.TestingExecutionException;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
 
 /**
- * This class is designed to be used to testExistence method calls and field values and will use an instance of the class passed to the constructor
+ * Used to test method calls and field values and will use an instance of the class passed to the constructor
+ * Can also be used to set field values
  * It is important that checks have already been made as to the:
  *      existence of a constructor that takes the required parameters
  *      existence of the methods called (e.g. by using the MethodsTester class)
@@ -114,7 +116,13 @@ public class InstanceTester<C> {
     }
 
 
-
+    /**
+     * Gets the value of a field
+     * @param type the class for the type of the field
+     * @param name the name of the field
+     * @return the field's value (null if the field does not exist)
+     * @param <T> the type of the field
+     */
     public <T> T getFieldValue(Class<T> type, String name){
         verifyConstructed();
         try {
@@ -125,6 +133,14 @@ public class InstanceTester<C> {
         return null;
     }
 
+    /**
+     * Sets the value of a field
+     * @param type the class for the type of the field
+     * @param name the field's name
+     * @param value the value to set the field to
+     * @return true if successful, false otherwsie
+     * @param <T> the type of the field
+     */
     public <T> boolean setFieldValue(Class<T> type, String name, T value){
         verifyConstructed();
         return helper.setFieldValue(type,name,value);
@@ -149,6 +165,9 @@ public class InstanceTester<C> {
         }
     }
 
+    /**
+     * Allows for custom logic in the event a test for an instance (e.g., its methods or field value) fails
+     */
     public interface EventHandler {
 
         void cannotConstructWithArgs(String className, Object[] args);

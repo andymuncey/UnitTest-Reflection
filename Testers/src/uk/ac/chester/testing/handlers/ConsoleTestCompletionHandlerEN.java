@@ -3,6 +3,9 @@ package uk.ac.chester.testing.handlers;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.chester.testing.ConsoleTester;
 
+/**
+ * English language implementation of the ConsoleTester.EventHandler interface
+ */
 public class ConsoleTestCompletionHandlerEN implements ConsoleTester.CompletionHandler{
     @Override
     public void outputGenerated(String[] inputTokens, @NotNull String[] linesOfOutput) {

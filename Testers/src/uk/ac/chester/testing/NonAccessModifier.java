@@ -4,6 +4,9 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
+/**
+ * Represents the non-access modifiers of final, static, abstract, synchronised, volatile, transient, native and strictfp
+ */
 public enum NonAccessModifier {
 
     FINAL {
@@ -55,6 +58,11 @@ public enum NonAccessModifier {
         }
     };
 
+    /**
+     * Returns all non access modifiers for a member (e.g. field, method)
+     * @param member the class member to check
+     * @return a Set of access modifiers
+     */
     public static Set<NonAccessModifier> nonAccessModifiers(Member member) {
         Set<NonAccessModifier> nonAccessModifiers = new HashSet<>();
 

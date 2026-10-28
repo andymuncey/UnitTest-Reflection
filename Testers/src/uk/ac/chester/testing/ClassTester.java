@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Allows a class to be tested to meet certain requirements
+ * @param <T> The type of class that is being tested
+ */
 public class ClassTester<T> extends Tester {
 
     private final EventHandler handler;
@@ -188,6 +192,11 @@ public class ClassTester<T> extends Tester {
 
     }
 
+    /**
+     * Interface to enable customisation of events (e.g., unit test assertions) that occur when
+     * an aspect of a Class meets some criteria, such as having a method name that does not confirm
+     * to convention, or a public field
+     */
     public interface EventHandler {
 
         /**

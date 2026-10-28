@@ -3,6 +3,9 @@ package uk.ac.chester.testing.handlers;
 import static org.junit.jupiter.api.Assertions.fail;
 import uk.ac.chester.testing.PackageTester;
 
+/**
+ * English language implementation of the PackageTester.EventHandler interface
+ */
 public class PackageTestEventHandlerEN implements PackageTester.EventHandler {
     @Override
     public void notFound(String name) {

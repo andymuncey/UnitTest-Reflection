@@ -6,7 +6,7 @@ import uk.ac.chester.testing.MethodsTester;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * An English language implementation of the MethodsTester.EventHandler interface
+ * English language implementation of the MethodsTester.EventHandler interface
  */
 public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, ClassDescriber {
 

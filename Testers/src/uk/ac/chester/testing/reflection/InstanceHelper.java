@@ -1,7 +1,5 @@
 package uk.ac.chester.testing.reflection;
 
-import uk.ac.chester.testing.TestingExecutionException;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

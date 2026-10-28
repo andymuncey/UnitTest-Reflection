@@ -11,6 +11,8 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.*;
 
 /**
+ * Allows for testing of console input and output for the  main, and other static methods in a class
+ *
  * KNOWN ISSUES:
  *  * The first instance of Scanner for System.in used will consume all input tokens
  *  * using a single static scanner is advisable
@@ -242,6 +244,9 @@ public class ConsoleTester<C> {
         return null;
     }
 
+    /**
+     * Allows for customised actions to be performed when a method completes and generates output, or does not generate output
+     */
     public interface CompletionHandler {
 
         /**
@@ -258,6 +263,11 @@ public class ConsoleTester<C> {
 
     }
 
+    /**
+     * Allows for customised actions to be implemented if a method fails to complete
+     * This may be due to waiting for a token that shouldn't be required
+     * or due to a method running for longer than expected
+     */
     public interface NonCompletionHandler {
         /**
          * Called when the tokens provided should have resulted in the application terminating,
@@ -275,6 +285,10 @@ public class ConsoleTester<C> {
 
     }
 
+    /**
+     * Allows for custom logic when an exception is thrown
+     * Differentiates between the input being the wrong type and other exceptions
+     */
     public interface ExceptionHandler {
 
         /**

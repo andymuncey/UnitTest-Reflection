@@ -7,6 +7,11 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Allows for testing whether fields meet certain requirements
+ * Also allows for retrieval of a fields value, given an instance of the class
+ * @param <T> The class in which the fields to be tested reside
+ */
 public class FieldsTester<T> extends Tester {
 
     private final EventHandler handler;
@@ -117,7 +122,7 @@ public class FieldsTester<T> extends Tester {
                     }
                 }
                 break;
-            }
+            } //todo: add an else which checks if a field name with different casing matches, and add corresponding event handler
         }
         return null;
     }
@@ -140,6 +145,10 @@ public class FieldsTester<T> extends Tester {
         return fieldTypes;
     }
 
+    /**
+     * Allows for custom logic to be implemented if a field does not meet requirements
+     * For example, if it does not exist, has the wrong type or access modifier
+     */
     public interface EventHandler {
 
         /**

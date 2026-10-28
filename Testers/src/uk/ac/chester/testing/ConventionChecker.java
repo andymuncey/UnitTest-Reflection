@@ -2,6 +2,9 @@ package uk.ac.chester.testing;
 
 import java.util.Arrays;
 
+/**
+ * Allows for the expected conventions for naming variables, methods and class constants to be customised
+ */
 public interface ConventionChecker {
 
     /**
@@ -41,6 +44,7 @@ public interface ConventionChecker {
 
     /**
      * Determines if the first character of a String is lowercase
+     * method should be private, but not allowed in Java 8
      * @param text a string to check
      * @return true if the first letter is lowercase
      */

@@ -3,6 +3,9 @@ package uk.ac.chester.testing.handlers;
 import uk.ac.chester.testing.ClassTester;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * English language implementation of the ClassTester.EventHandler interface
+ */
 public class ClassTestEventHandlerEN implements ClassTester.EventHandler {
 
     @Override

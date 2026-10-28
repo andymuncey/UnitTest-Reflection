@@ -5,6 +5,9 @@ import uk.ac.chester.testing.ClassDescriber;
 import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.reflection.Utilities;
 
+/**
+ * English language implementation of the InstanceTester.EventHandler interface
+ */
 public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, ClassDescriber {
     @Override
     public void cannotConstructWithArgs(String className, Object[] args) {

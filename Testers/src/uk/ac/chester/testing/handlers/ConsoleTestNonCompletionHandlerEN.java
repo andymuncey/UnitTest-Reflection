@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
- * Implements generic failures methods for console tests where the testExistence is expected to finish normally
+ * English language implementation of the ConsoleTester.NonCompletionHandler interface
  */
 public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompletionHandler {
 

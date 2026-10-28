@@ -118,7 +118,10 @@ public class ConstructorsTester<T> extends Tester {
     }
 
 
-
+    /**
+     * Allows for custom logic to be implemented when a parameter does not meet requirements specified for a given test
+     * or when calling the constructor fails with a given set of input
+     */
     public interface EventHandler {
 
         /**
