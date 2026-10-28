@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Various utilities, mostly for dealing with boxing/unboxing types, but also for presenting lists of types
+ */
 public class Utilities {
 
 
