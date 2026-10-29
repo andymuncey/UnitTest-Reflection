@@ -12,7 +12,6 @@ import java.util.Set;
  */
 public class PackageTester extends Tester {
 
-
     private final EventHandler handler;
 
     public PackageTester(EventHandler handler){
@@ -52,10 +51,8 @@ public class PackageTester extends Tester {
                 handler.foundWrongCaseAndPackage(className, nameVariant, packageName, possiblesWithWrongName.iterator().next().getPackage().getName());            }
 
         }
-
         //not found at all
         handler.notFound(className);
-
     }
 
 
@@ -118,12 +115,5 @@ public class PackageTester extends Tester {
          * @param actualPackage the package the class was found in
          */
         void foundWrongCaseAndPackage(String name, String foundName, String desiredPackage, String actualPackage);
-
-
-
-
     }
-
-
-
 }

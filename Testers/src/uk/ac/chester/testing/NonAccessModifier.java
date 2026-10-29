@@ -91,7 +91,6 @@ public enum NonAccessModifier {
         if (Modifier.isVolatile(modifiers)) {
             nonAccessModifiers.add(VOLATILE);
         }
-
         return nonAccessModifiers;
     }
 

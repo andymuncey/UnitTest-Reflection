@@ -42,6 +42,7 @@ public class ClassTester<T> extends Tester {
 
 
     //region fields
+
     /*
     Run tests against all fields to check non-static fields are private,
     static fields are declared as final and names conform to convention
@@ -98,20 +99,27 @@ public class ClassTester<T> extends Tester {
         }
     }
 
+    /**
+     * Checks if a field is named serialVersionUID, as used for implementing Serializable
+     * @param field the field to check
+     * @return true if the name and type match, false otherwise
+     */
     private static boolean isSerialVersionUID(Field field) {
         return field.getName().equals("serialVersionUID") && field.getType() == long.class;
     }
 
     //endregion
 
+    //region methods
 
-
+    /**
+     * Check method and parameter names follow convention
+     */
     public void checkMethods(){
         checkMethodNames();
         checkMethodParameterNames();
     }
 
-    //region methods
     /**
      * verifies method names in a given class follow convention
      */

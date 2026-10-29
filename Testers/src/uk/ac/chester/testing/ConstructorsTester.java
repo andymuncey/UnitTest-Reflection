@@ -2,10 +2,8 @@ package uk.ac.chester.testing;
 
 import uk.ac.chester.testing.reflection.ConstructorsHelper;
 import uk.ac.chester.testing.reflection.Utilities;
-
 import java.lang.reflect.*;
 import java.util.Optional;
-
 
 /**
  * A class to test Constructors for a class

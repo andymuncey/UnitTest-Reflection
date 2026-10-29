@@ -12,7 +12,6 @@ import java.util.concurrent.*;
 
 /**
  * Allows for testing of console input and output for the  main, and other static methods in a class
- *
  * KNOWN ISSUES:
  *  * The first instance of Scanner for System.in used will consume all input tokens
  *  * using a single static scanner is advisable
@@ -37,10 +36,8 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
-
-
     /*todo: Currently only facilitates testing static methods,
-    consider inheriting from method tester so instance methods can be tested*/
+    consider using method tester so instance methods can be tested*/
 
     /**
      * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
@@ -150,10 +147,7 @@ public class ConsoleTester<C> {
             executor.shutdown();
         }
         return false;
-
     }
-
-
 
     /**
      * Tests the main method with an empty array of Strings

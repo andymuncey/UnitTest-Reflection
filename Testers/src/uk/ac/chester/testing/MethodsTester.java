@@ -218,9 +218,7 @@ public class MethodsTester<C> extends Tester {
     public boolean testExistenceForValues(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
         final Class<?>[] argTypes = Utilities.classesForArgs(args);
         return testExistence(allowAutoboxing,accessModifier,isStatic,returnType,methodName,argTypes);
-
     }
-
 
 
     /**
@@ -355,12 +353,14 @@ public class MethodsTester<C> extends Tester {
                     break;
                 }
             }
-
         }
         return getters;
     }
 
-
+    /**
+     * Returns a set of methods where the method name matches a field name (first letter capitalised) prefixed with 'set'
+     * @return a set of methods which, due to the type returned and the name, are likely to be setters
+     */
     public Set<Method> setters(){
         FieldsHelper<C> fieldshelper = new FieldsHelper<>(searchClass);
         Set<Field> fields = fieldshelper.fields();
@@ -376,7 +376,11 @@ public class MethodsTester<C> extends Tester {
         return setters;
     }
 
-
+    /**
+     * Capitalises the first letter of a String, or the only letter of a one-letter String
+     * @param word the String (e.g., a word)
+     * @return the String with the first letter capitalised
+     */
     private static String capitaliseFirstLetter(String word){
         if (word.isEmpty()) {
             return word;
@@ -448,14 +452,11 @@ public class MethodsTester<C> extends Tester {
          */
         void accessModifierIncorrect(String methodName, AccessModifier requiredModifier);
 
-
         /**
          * Correct parameters exist for the method, but it is either marked as static and shouldn't be or vice versa
          * @param methodName the name of the method
          * @param requiredStatic whether the method should be static
          */
         void staticDeclarationIncorrect(String methodName, boolean requiredStatic);
-
-
     }
 }
