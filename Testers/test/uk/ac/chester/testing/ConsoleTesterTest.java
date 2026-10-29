@@ -10,21 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConsoleTesterTest {
 
-
     private static class ConsoleApplication{
 
         public static void main(String[] args) {
             System.out.println(getUserInt());
         }
 
-
         private static int getUserInt(){
             Scanner scanner = new Scanner(System.in);
             return scanner.nextInt();
         }
-
     }
-
 
     private ConsoleTester<ConsoleApplication> tester;
 
@@ -45,6 +41,9 @@ class ConsoleTesterTest {
 
     @Test
     void methodCompletesWithNonNullResult() {
+        String[] tokens = {"6"};
+       boolean result = tester.methodCompletesWithNonNullResult(2,int.class,"getUserInt",tokens);
+       assertTrue(result);
     }
 
     @Test

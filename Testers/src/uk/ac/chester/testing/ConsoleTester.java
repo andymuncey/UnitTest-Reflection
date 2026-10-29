@@ -108,12 +108,28 @@ public class ConsoleTester<C> {
         executor.shutdown();
     }
 
+    /**
+     * Checks if a method completed within a specified time
+     * @param timeout how long in seconds
+     * @param returnType class of the return type of the method being called
+     * @param methodName the name of the method being called
+     * @param inputTokens tokens to be passed to the scanner
+     * @param args parameters passed to the method
+     * @return true if the method completes for the given input in the given time
+     * @param <T> the type of the method's return type
+     */
     public <T> boolean methodCompletesWithNonNullResult(int timeout, @NotNull Class<T> returnType, @NotNull String methodName, String[] inputTokens, Object... args ) {
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        final ByteArrayInputStream stream = streamFromStrings(inputTokens);
+        System.setIn(stream);
 
         //adapted from https://stackoverflow.com/questions/2275443/how-to-timeout-a-thread
         Callable<T> callable = () -> {
-            // test(inputTokens);
-            return helper.invokeStaticMethod(true,returnType,methodName,inputTokens,args);
+            T result = helper.invokeStaticMethod(true,returnType,methodName,args);
+            return result;
         };
 
         //noinspection resource - AutoCloseable not implemented until Java 19
