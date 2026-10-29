@@ -22,7 +22,6 @@ public class UtilitiesTest {
         for (Class<?> inferredClass: inferredIntClasses) {
             assertNotEquals(int.class, inferredClass, "Int should be represented as the Integer class");
         }
-
     }
 
     @Test
@@ -33,14 +32,11 @@ public class UtilitiesTest {
         assertNotEquals(Integer[].class, Utilities.classEquivalent(int[].class),"int[] and Integer[] are not the same");
     }
 
-
-
     @Test
     public void classEquivalents() {
         Class<?>[] primitives = {int.class, boolean.class, double.class, char.class, String.class};
         Class<?>[] expected = {Integer.class, Boolean.class, Double.class, Character.class, String.class};
         assertArrayEquals(expected, Utilities.classEquivalents(primitives));
-
     }
 
     @Test
@@ -56,14 +52,9 @@ public class UtilitiesTest {
 
     @Test
     void primitiveEquivalent() {
-
         assertEquals(int.class, Utilities.primitiveEquivalent(Integer.class));
         assertEquals(double.class, Utilities.primitiveEquivalent(Double.class));
-
         assertEquals(String.class, Utilities.primitiveEquivalent(String.class));
-
-
-        //todo: test Utilities.primitiveEquivalent
     }
 
 
@@ -94,7 +85,6 @@ public class UtilitiesTest {
         //Float and String are java.lang.Float and java.lang.String
         Class<?>[] expected = {double.class, float.class, int.class, Float.class, String.class};
         assertArrayEquals(expected,types);
-
     }
 
     @Test

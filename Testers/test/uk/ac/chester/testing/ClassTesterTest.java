@@ -14,12 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ClassTesterTest {
 
-
-
     @Test
     public void testPublicField() {
-
-
         Object x = new Object(){
             @SuppressWarnings("unused")
             public String publicField;
@@ -28,7 +24,6 @@ public class ClassTesterTest {
         ClassTester<?> t  = new ClassTester<>(x.getClass(), handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
         Assertions.assertEquals("fieldNotPrivate", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
-
     }
 
     @Test
@@ -44,7 +39,6 @@ public class ClassTesterTest {
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkFields);
         assertEquals("fieldNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
-
 
     private static class SerializableClass implements Serializable {
         @Serial
@@ -76,9 +70,7 @@ public class ClassTesterTest {
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethods);
         assertEquals("methodNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
-
     }
-
 
     @Test
     public void testMethodParamNameInvalid(){
@@ -90,9 +82,7 @@ public class ClassTesterTest {
         ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         AssertionFailedError thrown = assertThrows(AssertionFailedError.class, t::checkMethodParameterNames);
         assertEquals("methodParameterNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
-
     }
-
 
     private static class BadConstructorParamClass {
         @SuppressWarnings("unused")
@@ -106,10 +96,7 @@ public class ClassTesterTest {
         assertEquals("constructorParameterNameUnconventional", TestUtilities.firstNonTestingMethodName(thrown.getStackTrace()));
     }
 
-
     static class Book implements Serializable {}
-
-
 
     @Test
     void extendsSuperclass() {
@@ -128,7 +115,4 @@ public class ClassTesterTest {
         assertTrue(bookClassTester.implementsInterface(Serializable.class));
         assertFalse(bookClassTester.implementsInterface(Comparable.class));
     }
-
-
-
 }

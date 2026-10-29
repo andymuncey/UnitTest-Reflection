@@ -39,6 +39,7 @@ public class InstanceHelperTest {
     public void getFieldValue() throws TestingExecutionException {
         Integer result = h.fieldValue(int.class, "x");
         assertEquals(Integer.valueOf(2), result);
+        assertThrows(TestingExecutionException.class,() -> h.fieldValue(String.class, "doesNotExist"));
     }
 
 

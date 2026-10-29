@@ -27,7 +27,6 @@ public class MethodsHelperTest {
         h = null;
     }
 
-
     @Test
     public void typesForArgs() {
 
@@ -38,16 +37,13 @@ public class MethodsHelperTest {
 
         Class<?>[] primitiveTypes = {int.class, long.class, float.class, double.class, char.class, String.class};
         assertNotEquals(primitiveTypes, actualTypes);
-        //assertThat(primitiveTypes, IsNot.not(IsEqual.equalTo(actualTypes)));
     }
 
 
     @Test
     public void findMethods() {
-        //name and return type
         assertFalse(h.findMethods(int.class, "returnsPrimitiveInt").isEmpty(), "Primitive int type");
         assertTrue(h.findMethods(Integer.class, "returnsPrimitiveInt").isEmpty(), "Primitive int type");
-
         assertFalse(h.findMethods(Integer.class, "returnsInteger").isEmpty(), "Class Integer type");
         assertTrue(h.findMethods(int.class, "returnsInteger").isEmpty(), "Class Integer type");
     }
@@ -71,14 +67,13 @@ public class MethodsHelperTest {
         assertTrue(h.findMethod(false, void.class, "noReturn").isPresent());
         assertFalse(h.findMethod(false, Void.class, "noReturn").isPresent());
         assertTrue(h.findMethod(true, Void.class, "noReturn").isPresent());
-
     }
 
     @Test
     public void methodParamNames() {
-    String[] paramNames = {"p0", "p1"};
-    String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
-    assertArrayEquals(paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class), message);
+        String[] paramNames = {"p0", "p1"};
+        String message = "Ensure that the -parameters argument is passed to the compiler and check you;ve recompiled the project";
+        assertArrayEquals(paramNames,h.methodParamNames(void.class,"twoIntParams",int.class, int.class), message);
     }
 
     @Test
@@ -102,17 +97,13 @@ public class MethodsHelperTest {
             Optional<Method> optionalMethod = h.methodForParams(false, int.class, "returnsInteger");
             assert (optionalMethod.isEmpty());
         }
-
     }
-
 
     @Test
     void methodsWithSignature(){
         Set<Method> methods = h.methodsWithSignature(void.class, int.class, String.class);
         assertTrue(methods.stream().findFirst().isPresent());
         assertEquals("intParamStringParam",methods.stream().findFirst().get().getName());
-
     }
-
 
 }

@@ -272,7 +272,6 @@ public class MethodsHelper<C> {
      public <T> T invokeStaticMethod(boolean allowAutoboxing, Class<T> returnType, String methodName, Object... args) {
 
          final Optional<Method> optionalMethod = findMethod(allowAutoboxing, returnType,methodName, Utilities.classesForArgs(args));
-
          if (optionalMethod.isPresent()) {
              final Method m = optionalMethod.get();
             if (Modifier.isStatic(m.getModifiers())) {
