@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * Allows for the getting and setting of field values of an object as well as invoking methods
- * @param <C>
+ * @param <C> the class which the helper will introspect
  */
 public class InstanceHelper<C> {
 
@@ -17,24 +17,35 @@ public class InstanceHelper<C> {
     private final MethodsHelper<C> methodsHelper;
     private Object instance;
 
-    public InstanceHelper(Class<C> searchClass, Object... args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    /**
+     * Create an instance of {@link InstanceHelper}
+     * @param searchClass the class of which an instance of is being introspected
+     * @param args arguments to pass to the constructor
+     * @throws InstantiationException if the class is abstract
+     * @throws InvocationTargetException if the constructor throws an exception
+     */
+    public InstanceHelper(Class<C> searchClass, Object... args) throws InstantiationException, InvocationTargetException {
         fieldsHelper = new FieldsHelper<>(searchClass);
         constructorsHelper = new ConstructorsHelper<>(searchClass);
         methodsHelper = new MethodsHelper<>(searchClass);
         construct(args);
     }
 
-    private void construct(Object... args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void construct(Object... args) throws InvocationTargetException, InstantiationException {
         Optional<Constructor<C>> possibleConstructor = constructorsHelper.constructorForArgTypes(true, true, args);
         if (possibleConstructor.isPresent()) {
             Constructor<C> constructor = possibleConstructor.get();
             constructor.setAccessible(true); //ensures private classes can be tested
-            instance = constructor.newInstance(args);
+            try {
+                instance = constructor.newInstance(args);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Despite the constructor being set as accessible, an IllegalAccessException was thrown. Underlying error message: " + e.getMessage());
+            }
         }
     }
 
     /**
-     * determines whether there is a valid instance of type C to testExistence
+     * Determines whether there is a valid instance of type {@code C} to testExistence
      * @return true or false
      */
     public boolean hasValidInstance() {
@@ -44,6 +55,12 @@ public class InstanceHelper<C> {
 
     /**
      * Calls {@link #invokeMethod(boolean, Class, String, Object...)} with allowAutoboxing set to true
+     * @param returnType the expected return type of the method being invoked
+     * @param methodName the name of the method to invoke
+     * @param args arguments to pass to the method being invoked
+     * @return the result of invoking the method
+     * @param <T> the return type of the method
+     * @throws TestingExecutionException if the method being called throws an exception
      */
     public <T> T invokeMethod(Class<T> returnType, String methodName, Object... args) throws TestingExecutionException {
         return invokeMethod(true, returnType, methodName, args);
