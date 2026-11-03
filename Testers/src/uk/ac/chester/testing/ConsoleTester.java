@@ -216,8 +216,6 @@ public class ConsoleTester<C> {
     @Nullable
     public String[] outputGeneratedBeforeInputProcessed(){
 
-        //todo: should be able to use this approach to get the state of System.out after any number of tokens
-
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         Callable<Void> callable = () -> {
             System.setOut(new PrintStream(out));
