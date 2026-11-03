@@ -9,48 +9,56 @@ import java.util.*;
  */
 public enum NonAccessModifier {
 
+    /** Represents java's final non-access modifier, i.e. use of the final keyword */
     FINAL {
         @Override
         public String toString() {
             return "final";
         }
     },
+    /** Represents java's static non-access modifier, i.e. use of the static keyword */
     STATIC {
         @Override
         public String toString() {
             return "static";
         }
     },
+    /** Represents java's abstract non-access modifier, i.e. use of the abstract keyword */
     ABSTRACT {
         @Override
         public String toString() {
             return "abstract";
         }
     },
+    /** Represents java's synchronized non-access modifier, i.e. use of the synchronized keyword */
     SYNCHRONIZED {
         @Override
         public String toString() {
             return "synchronized";
         }
     },
+    /** Represents java's volatile non-access modifier, i.e. use of the volatile keyword */
     VOLATILE {
         @Override
         public String toString() {
             return "volatile";
         }
     },
+    /** Represents java's transient non-access modifier, i.e. use of the transient keyword */
     TRANSIENT {
         @Override
         public String toString() {
             return "transient";
         }
     },
+    /** Represents java's native non-access modifier, i.e. use of the native keyword */
     NATIVE {
         @Override
         public String toString() {
             return "native";
         }
     },
+    /** Represents java's strictfp non-access modifier, i.e. use of the strictfp keyword */
     STRICTFP {
         @Override
         public String toString() {

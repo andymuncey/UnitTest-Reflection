@@ -24,14 +24,26 @@ public class ConsoleTester<C> {
     private NonCompletionHandler nonCompletionHandler;
     private ExceptionHandler exceptionHandler;
 
+    /**
+     * Set an instance of {@link CompletionHandler} to use
+     * @param completionHandler an implementation of CompletionHandler
+     */
     public void setCompletionHandler(CompletionHandler completionHandler) {
         this.completionHandler = completionHandler;
     }
 
+    /**
+     * Set an instance of {@link nonCompletionHandler} to use
+     * @param nonCompletionHandler an implementation of CompletionHandler
+     */
     public void setNonCompletionHandler(NonCompletionHandler nonCompletionHandler) {
         this.nonCompletionHandler = nonCompletionHandler;
     }
 
+    /**
+     * Set an instance of {@link ExceptionHandler} to use
+     * @param exceptionHandler an implementation of ExceptionHandler
+     */
     public void setExceptionHandler(ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
     }

@@ -16,6 +16,11 @@ import static uk.ac.chester.testing.reflection.Utilities.classEquivalent;
 public class MethodsHelper<C> {
 
     final private Class<C> searchClass;
+
+    /**
+     * Create an instance of {@link MethodsHelper}
+     * @param searchClass the class to be introspected
+     */
     public MethodsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
@@ -230,7 +235,7 @@ public class MethodsHelper<C> {
 
      /**
       * Finds the parameter names for a method
-      * <important>Requires the compiler -parameters switch to be set</important>
+      * @apiNote the compiler -parameters switch to be set
       * @param returnType The return type of the method
       * @param name       the method name
       * @param paramTypes the types of the parameters the method should have
