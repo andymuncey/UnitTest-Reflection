@@ -98,4 +98,28 @@ public class UtilitiesTest {
         assertDoesNotThrow(() -> Utilities.unBox(int.class, 4));
     }
 
+    @Test
+    void commaSeparatedArgList() {
+        Object[] args = {1,"hello", 3.4};
+        String result =  Utilities.commaSeparatedArgList(args);
+        assertEquals("1, \"hello\", 3.4", result);
+
+        Object[] argsWithNull = {1,"hello", 3.4, null};
+        String resultWithNull =  Utilities.commaSeparatedArgList(argsWithNull);
+        assertEquals("1, \"hello\", 3.4, null", resultWithNull);
+
+        Integer one = 1;
+        Integer two = 2;
+        Object[] argsWithBoxedTypes = {one, two};
+        String resultWithBoxedTypes = Utilities.commaSeparatedArgList(argsWithBoxedTypes);
+        assertEquals("1, 2", resultWithBoxedTypes);
+
+        class Book {}
+        Book book = new Book();
+        Object[] testWithClass = {book};
+        String resultWithClass =  Utilities.commaSeparatedArgList(testWithClass);
+        assertEquals(book.toString(), resultWithClass);
+
+    }
+
 }

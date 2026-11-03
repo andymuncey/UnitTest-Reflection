@@ -91,7 +91,7 @@ public class Utilities {
 
     /**
      * Returns the parameter names for an executable, such as a method or constructor
-     * <important>Requires the compiler -parameters switch to be set</important>
+     * @apiNote Requires the compiler -parameters switch to be set
      * @param executable e.g. a method or constructor
      * @return an array of Strings with the parameter names
      */
@@ -152,6 +152,13 @@ public class Utilities {
     }
 
 
+    /**
+     * Creates a list of the values (or class name) separated by commas.
+     * Strings are surrounded by quotes
+     * Objects that are not Strings or a boxed type will be represented by their implementation of toString()
+     * @param args an array of values
+     * @return a String with the list of values
+     */
     public static String commaSeparatedArgList(Object[] args) {
         StringBuilder builder = new StringBuilder();
 
@@ -166,7 +173,11 @@ public class Utilities {
             if (arg instanceof String) {
                 builder.append("\"");
             }
-            builder.append(arg.toString());
+            if (arg == null) {
+                builder.append("null");
+            } else {
+                builder.append(arg.toString());
+            }
             if (arg instanceof String) {
                 builder.append("\"");
             }
