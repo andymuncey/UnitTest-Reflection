@@ -138,7 +138,7 @@ public class InstanceTester<C> {
      * @param type the class for the type of the field
      * @param name the field's name
      * @param value the value to set the field to
-     * @return true if successful, false otherwsie
+     * @return true if successful, false otherwise
      * @param <T> the type of the field
      */
     public <T> boolean setFieldValue(Class<T> type, String name, T value){
@@ -148,9 +148,9 @@ public class InstanceTester<C> {
 
 
     /**
-     * Verifies that all private fields are initialized after the class has been constructed
+     * Verifies that all private fields are initialised after the class has been constructed
      * Note that primitive types have default values (e.g. int defaults to 0),
-     * so this method does not check fields of primitive types are initialized
+     * so this method does not check fields of primitive types are initialised
      */
     public void verifyAllFieldsInitialised(){
         verifyConstructed();
