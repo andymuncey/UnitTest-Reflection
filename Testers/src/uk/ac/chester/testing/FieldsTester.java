@@ -21,7 +21,7 @@ public class FieldsTester<T> extends Tester {
     /**
      * Creates a FieldsTester for a specified class
      * @param theClass the class to testExistence the fields in
-     * @param handler An implementation of EventHandler, likely containing unit testExistence assertions
+     * @param handler An implementation of {@link EventHandler}, likely containing unit testExistence assertions
      */
     public FieldsTester(Class<T> theClass, EventHandler handler){
         FieldsHelper<T> helper = new FieldsHelper<>(theClass);
@@ -33,7 +33,7 @@ public class FieldsTester<T> extends Tester {
     /**
      * Tests a specific field - autoboxing is not permitted
      * @param desiredModifier the expected access modifier for the field
-     * @param name the name of the field to testExistence
+     * @param name the name of the field to test
      * @param desiredClass the type of the field
      */
     public void test(AccessModifier desiredModifier, Class<?> desiredClass, String name){
@@ -41,13 +41,19 @@ public class FieldsTester<T> extends Tester {
     }
 
 
-
+    /**
+     * Tests a specific field, ignores non-access modifiers
+     * @param desiredAccessModifier the expected access for the field
+     * @param desiredClass the type of the field
+     * @param name the name of the field
+     * @param allowAutoboxing whether the type can be considered equal to its boxed/unboxed counterpart
+     */
     public void test(AccessModifier desiredAccessModifier, Class<?> desiredClass, String name, boolean allowAutoboxing) {
         test(desiredAccessModifier, null, desiredClass,name,allowAutoboxing);
     }
 
         /**
-         * Tests a specific field
+         * Tests a specific field, and calls the appropriate function in the {@link EventHandler} interface
          * @param desiredAccessModifier the expected access modifier for the field
          *                              pass null if you don't care
          * @param desiredNonAccessModifiers any expected desired non access modifiers
@@ -122,7 +128,7 @@ public class FieldsTester<T> extends Tester {
                     }
                 }
                 break;
-            } //todo: add an else which checks if a field name with different casing matches, and add corresponding event handler
+            }
         }
         return null;
     }
@@ -172,7 +178,6 @@ public class FieldsTester<T> extends Tester {
          * @param actualModifier the actual modifier
          */
         void fieldHasIncorrectModifier(String name, AccessModifier desiredModifier, AccessModifier actualModifier);
-
 
         /**
          * Indicates that a field does not have the expected non-access modifier(s)
