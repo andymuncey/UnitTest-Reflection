@@ -28,14 +28,13 @@ public class UtilitiesTest {
     public void classEquivalent() {
         assertEquals(Integer.class, Utilities.classEquivalent(int.class));
         assertEquals(Double.class, Utilities.classEquivalent(Double.class), "Existing class data types unchanged");
-        assertEquals(int[].class, Utilities.classEquivalent(int[].class),"Arrays of primitive types are already objects");
-        assertNotEquals(Integer[].class, Utilities.classEquivalent(int[].class),"int[] and Integer[] are not the same");
+        assertEquals(Integer[].class, Utilities.classEquivalent(int[].class),"Arrays of primitive types are already objects");
     }
 
     @Test
     public void classEquivalents() {
-        Class<?>[] primitives = {int.class, boolean.class, double.class, char.class, String.class};
-        Class<?>[] expected = {Integer.class, Boolean.class, Double.class, Character.class, String.class};
+        Class<?>[] primitives = {int.class, boolean.class, double.class, char.class, String.class, int[].class};
+        Class<?>[] expected = {Integer.class, Boolean.class, Double.class, Character.class, String.class, Integer[].class};
         assertArrayEquals(expected, Utilities.classEquivalents(primitives));
     }
 
@@ -48,6 +47,9 @@ public class UtilitiesTest {
         assertFalse(Utilities.equivalentType(int.class, double.class));
         assertFalse(Utilities.equivalentType(Integer.class, Double.class));
         assertTrue(Utilities.equivalentType(String.class, String.class));
+        assertTrue(Utilities.equivalentType(Integer[].class, int[].class));
+        assertTrue(Utilities.equivalentType(Double[].class, double[].class));
+        assertTrue(Utilities.equivalentType(double[].class, Double[].class));
     }
 
     @Test
@@ -55,6 +57,7 @@ public class UtilitiesTest {
         assertEquals(int.class, Utilities.primitiveEquivalent(Integer.class));
         assertEquals(double.class, Utilities.primitiveEquivalent(Double.class));
         assertEquals(String.class, Utilities.primitiveEquivalent(String.class));
+        assertEquals(int[].class, Utilities.primitiveEquivalent(Integer[].class));
     }
 
 

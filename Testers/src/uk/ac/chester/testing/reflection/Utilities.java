@@ -27,8 +27,10 @@ public class Utilities {
         return params.toArray(new Class[args.length]);
     }
 
-    private static final Class<?>[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class}; //do not change order, must match below
-    private static final Class<?>[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class}; // do not change order, must match above
+    private static final Class<?>[] primitives = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class,
+            boolean[].class, byte[].class, char[].class, short[].class, int[].class, long[].class, float[].class, double[].class}; //do not change order, must match below
+    private static final Class<?>[] classes = {Boolean.class, Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class,
+            Boolean[].class, Byte[].class, Character[].class, Short[].class, Integer[].class, Long[].class, Float[].class, Double[].class}; // do not change order, must match above
 
 
     /**

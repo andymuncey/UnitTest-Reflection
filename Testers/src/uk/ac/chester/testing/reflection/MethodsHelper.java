@@ -16,11 +16,9 @@ import static uk.ac.chester.testing.reflection.Utilities.classEquivalent;
 public class MethodsHelper<C> {
 
     final private Class<C> searchClass;
-
     public MethodsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }
-
 
     //region method location
 
@@ -108,16 +106,12 @@ public class MethodsHelper<C> {
 
             Class<?> actualReturnType = !allowAutoboxing ? method.getReturnType() : classEquivalent(method.getReturnType());
 
-            //todo: handle boxing of arrays of primitives
             if (actualReturnType.equals(desiredReturnType)) {
-           // if (allowAutoboxing ? equivalentType(method.getReturnType(),desiredReturnType) : method.getReturnType().equals(desiredReturnType)) {
                 Class<?>[] actualParamTypes = !allowAutoboxing ? method.getParameterTypes() : Utilities.classEquivalents(method.getParameterTypes());
 
                 if (!matchParamOrder) {
                     Utilities.sortTypesByName(actualParamTypes);
                 }
-
-
 
                 if (Arrays.equals(actualParamTypes, desiredParamTypes)) {
                     methods.add(method);
@@ -164,7 +158,6 @@ public class MethodsHelper<C> {
         return Optional.empty();
     }
 
-
     /**
      * Finds a method matching specified criteria
      * @param allowAutoboxing set to false if the parameter types / return types must match exactly or true if primitive and boxed types can be used interchangeably
@@ -193,9 +186,6 @@ public class MethodsHelper<C> {
                             matchedParams = false;
                         }
                     }
-//                    if (desiredParamTypes[i] != (allowAutoboxing ?  classEquivalent(methodParamTypes[i]: methodParamTypes[i]))) {
-//                        matchedParams = false;
-//                    }
                 }
                 if (matchedParams) {
                     return Optional.of(m);
@@ -253,7 +243,6 @@ public class MethodsHelper<C> {
 
     //endregion
 
-
      //region static method execution
 
      /**
@@ -289,9 +278,5 @@ public class MethodsHelper<C> {
          }
          return null;
      }
-
      //endregion
-
-
-
 }
