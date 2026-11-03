@@ -36,9 +36,6 @@ public class ConsoleTester<C> {
         this.exceptionHandler = exceptionHandler;
     }
 
-    /*todo: Currently only facilitates testing static methods,
-    consider using method tester so instance methods can be tested*/
-
     /**
      * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
      * @param aClass the class to test (e.g. Main)

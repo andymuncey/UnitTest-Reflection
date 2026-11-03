@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class TestClass {
 
 
-
     public TestClass(){ }
 
     public TestClass(int intParam){}
