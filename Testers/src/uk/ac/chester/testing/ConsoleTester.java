@@ -124,10 +124,7 @@ public class ConsoleTester<C> {
         System.setIn(stream);
 
         //adapted from https://stackoverflow.com/questions/2275443/how-to-timeout-a-thread
-        Callable<T> callable = () -> {
-            T result = helper.invokeStaticMethod(true,returnType,methodName,args);
-            return result;
-        };
+        Callable<T> callable = () -> helper.invokeStaticMethod(true,returnType,methodName,args);
 
         //noinspection resource - AutoCloseable not implemented until Java 19
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -267,7 +264,6 @@ public class ConsoleTester<C> {
          * Calling the main method with the specified tokens has generated no output
          */
         void noOutputGenerated(String[] inputTokens);
-
     }
 
     /**
@@ -278,9 +274,9 @@ public class ConsoleTester<C> {
     public interface NonCompletionHandler {
         /**
          * Called when the tokens provided should have resulted in the application terminating,
-         * but the application would still be awaiting input
+         * but the application would still be awaiting input.
          * (When executed with System.in routed to a stream, it actually throws a NoSuchElementException as there are
-         * no more elements for the scanner to process)
+         * no more elements for the scanner to process.)
          * Be aware that input tokens will be consumed by the first instance of Scanner used, so limit instances of Scanner used to one!
          */
         void stillAwaitingInput(String[] inputTokens);
@@ -305,7 +301,6 @@ public class ConsoleTester<C> {
          */
         void wrongInputType(String[] inputTokens);
 
-
         /**
          * Some exception, other than an InputMismatchException or NoSuchElement has been thrown:
          * Typically indicates a bug in the application's code
@@ -315,6 +310,4 @@ public class ConsoleTester<C> {
         void otherException(String[] inputTokens, Exception e);
 
     }
-
-
 }
