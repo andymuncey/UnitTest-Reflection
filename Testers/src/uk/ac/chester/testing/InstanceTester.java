@@ -170,14 +170,39 @@ public class InstanceTester<C> {
      */
     public interface EventHandler {
 
+        /**
+         * It was not possible to construct an instance of the class using the supplied arguments
+         * @param className the name of the class for which construction failed
+         * @param args the arguments passed to the constructor
+         */
         void cannotConstructWithArgs(String className, Object[] args);
 
+        /**
+         * Called by {@link #verifyConstructed()}
+         * An instance of the class was not created
+         */
         void notConstructed();
 
+        /**
+         * Called by either {@link #executeMethod} or {@link #executeNonReturningMethod} if the method could not be invoked
+         * @param returnType the return type of the method
+         * @param name the name of the method
+         * @param args the type of the method
+         */
         void cannotInvokeMethod(Class<?> returnType, String name, Object[] args);
 
+        /**
+         * Called by {@link #getFieldValue} if a field's value cannot be retrieved
+         * @param type the type of the uninitialised field
+         * @param name the name of the uninitialised field
+         */
         void cannotRetrieveFieldValue(Class<?> type, String name);
 
+        /**
+         * Called by {@link #verifyAllFieldsInitialised()} if a (non-primitive) field does not have a value
+         * @param type the type of the uninitialised field
+         * @param name the name of the uninitialised field
+         */
         void fieldNotInitialized(Class<?> type, String name);
     }
 
