@@ -14,6 +14,10 @@ public class ConstructorsHelper<C> {
 
     final private Class<C> searchClass;
 
+    /**
+     * Constructs an instance of the ConstructorsHelper class
+     * @param searchClass The class in which to look for constructors
+     */
     public ConstructorsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }

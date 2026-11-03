@@ -12,6 +12,10 @@ abstract class Tester {
         return conventionChecker;
     }
 
+    /**
+     * Allows the convention checker to be changed from the default
+     * @param conventionChecker an implementation of {@link ConventionChecker}
+     */
     @SuppressWarnings("unused")
     public void setConventionChecker(ConventionChecker conventionChecker) {
         this.conventionChecker = conventionChecker;

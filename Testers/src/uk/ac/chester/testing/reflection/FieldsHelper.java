@@ -14,6 +14,10 @@ public class FieldsHelper<C> {
 
     final private Class<C> searchClass;
 
+    /**
+     * Constructs an instance of FieldsHelper
+     * @param searchClass the class the helper will introspect
+     */
     public FieldsHelper(Class<C> searchClass) {
         this.searchClass = searchClass;
     }

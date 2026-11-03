@@ -43,9 +43,9 @@ public class ClassTester<T> extends Tester {
 
     //region fields
 
-    /*
-    Run tests against all fields to check non-static fields are private,
-    static fields are declared as final and names conform to convention
+    /**
+    * Run tests against all fields to check non-static fields are private,
+    * static fields are declared as final and names conform to convention
      */
     public void checkFields(){
         checkNonStaticArePrivate();
@@ -222,6 +222,7 @@ public class ClassTester<T> extends Tester {
 
         /**
          *  Indicates when a non-static field is not declared as private
+         *  @param fieldName the name of the field
          */
         void fieldNotPrivate(String fieldName);
 

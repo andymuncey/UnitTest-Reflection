@@ -8,22 +8,29 @@ import java.lang.reflect.Modifier;
  * Note: PACKAGE_PRIVATE is represented by the absence of a modifier in code
  */
 public enum AccessModifier {
+    /** Represents java's private access modifier, i.e. use of the private keyword */
     PRIVATE{
         @Override
         public String toString() {
             return "private";
         }
-    }, PROTECTED{
+    },
+    /** Represents java's protected modifier, i.e. use of the protected keyword */
+    PROTECTED{
         @Override
         public String toString() {
             return "protected";
         }
-    }, PUBLIC {
+    },
+    /** Represents java's public access modifier, i.e. use of the public keyword */
+    PUBLIC {
         @Override
         public String toString() {
             return "public";
         }
-    }, PACKAGE_PRIVATE {
+    },
+    /** Represents java's package-private access modifier, i.e. omission of any access modifier keyword */
+    PACKAGE_PRIVATE {
         @Override
         public String toString() {
             return "package-private (i.e. no modifier)";

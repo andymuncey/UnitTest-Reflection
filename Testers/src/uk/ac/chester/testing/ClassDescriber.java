@@ -8,7 +8,7 @@ package uk.ac.chester.testing;
 public interface ClassDescriber {
 
     /**
-     * Returns class names in the form "String, Double, Object & Integer"
+     * Returns class names in the form 'String, Double, Object & Integer'
      * @param classes array of class objects
      * @return the names, separated by commas, with the final two separated by ampersand  */
     default String describe(Class<?>[] classes){

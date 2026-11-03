@@ -19,6 +19,12 @@ public interface ConventionChecker {
         return validThrowAwayVarName || (atLeastTwoChars && startsWithLowerChar(name));
     }
 
+    /**
+     * Used to determine what constitutes a valid method name
+     * The default implementation requires 2 characters, the first of which must be lowercase
+     * @param name a method name
+     * @return true if valid, false otherwise
+     */
     default boolean validMethodName(String name){
         return startsWithLowerChar(name) && name.length() >= 2;
     }

@@ -66,6 +66,7 @@ public class ConsoleTester<C> {
     }
 
     /**
+     * Run the main method
      * @param timeout seconds to wait for execution
      * @param inputTokens input for System.in
      */
@@ -168,7 +169,7 @@ public class ConsoleTester<C> {
     }
 
     /**
-     *
+     * Run a specified static method matching with the supplied console input and method arguments
      * @param returnType the class of the type the method to be called returns
      * @param methodName name of the method to call
      * @param args parameters passed to the method (use an empty array if none)
@@ -260,6 +261,7 @@ public class ConsoleTester<C> {
 
         /**
          * Calling the main method with the specified tokens has generated no output
+         * @param inputTokens the input supplied
          */
         void noOutputGenerated(String[] inputTokens);
     }
@@ -276,11 +278,14 @@ public class ConsoleTester<C> {
          * (When executed with System.in routed to a stream, it actually throws a NoSuchElementException as there are
          * no more elements for the scanner to process.)
          * Be aware that input tokens will be consumed by the first instance of Scanner used, so limit instances of Scanner used to one!
+         * @param inputTokens the tokens (i.e. console input) used
          */
         void stillAwaitingInput(String[] inputTokens);
 
         /**
          * Called when the application did not finish running in time
+         * @param inputTokens the tokens (i.e. console input) used
+         * @param seconds how long the timeout was set for
          */
         void timeout(String[] inputTokens, int seconds);
 

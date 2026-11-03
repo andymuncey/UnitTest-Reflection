@@ -10,6 +10,7 @@ import java.util.Optional;
  * Known issue:
  * * When using the test method to test a method that returns a primitive type will result in an object type being
  * * returned which has to be cast as a primitive in order to be used in an assertion
+ * @param <T> the class which the tester will test
  */
 public class ConstructorsTester<T> extends Tester {
 
@@ -106,6 +107,11 @@ public class ConstructorsTester<T> extends Tester {
         return helper.constructorForArgTypes(true, matchParamOrder, args).isPresent();
     }
 
+    /**
+     * checks is a constructor with no parameters exists
+     * @param includeNonPublic whether to look for private / protected / package-private constructors
+     * @return true if a matching constructor is found, false otherwise
+     */
     public boolean constructorWithNoArgsExists(boolean includeNonPublic){
         for (Constructor<T> constructor: helper.availableConstructors(includeNonPublic)){
             if (constructor.getParameterCount() == 0){
