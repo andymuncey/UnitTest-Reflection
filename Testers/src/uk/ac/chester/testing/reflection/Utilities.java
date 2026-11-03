@@ -91,7 +91,9 @@ public class Utilities {
 
     /**
      * Returns the parameter names for an executable, such as a method or constructor
-     * @apiNote Requires the compiler -parameters switch to be set
+     *
+     * <strong>Requires the compiler -parameters switch to be set</strong>
+     *
      * @param executable e.g. a method or constructor
      * @return an array of Strings with the parameter names
      */

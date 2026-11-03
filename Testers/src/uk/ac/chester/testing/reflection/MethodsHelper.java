@@ -235,7 +235,7 @@ public class MethodsHelper<C> {
 
      /**
       * Finds the parameter names for a method
-      * @apiNote the compiler -parameters switch to be set
+      * <strong>requires the compiler -parameters switch to be set</strong>
       * @param returnType The return type of the method
       * @param name       the method name
       * @param paramTypes the types of the parameters the method should have

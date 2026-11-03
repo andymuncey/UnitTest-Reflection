@@ -224,6 +224,16 @@ public class MethodsTester<C> extends Tester {
     }
 
 
+    /**
+     * Tests the existence of a method with a given name and return type, using values that could be passed as parameters
+     * @param allowAutoboxing whether to allow boxed/unboxed values to be used interchangeably
+     * @param accessModifier a specified access modifier, or null if this does not matter
+     * @param isStatic whether the method is static, or null if this does not matter
+     * @param returnType the return type of the method
+     * @param methodName the name of the method
+     * @param args args which could be passed to the method (actual values, not the types)
+     * @return true if a method exists which satisfies the criteria
+     */
     public boolean testExistenceForValues(boolean allowAutoboxing, @Nullable AccessModifier accessModifier, @Nullable Boolean isStatic, Class<?> returnType, String methodName, Object... args) {
         final Class<?>[] argTypes = Utilities.classesForArgs(args);
         return testExistence(allowAutoboxing,accessModifier,isStatic,returnType,methodName,argTypes);
@@ -439,6 +449,7 @@ public class MethodsTester<C> extends Tester {
         /**
          * A method has been found, but the parameters are not as required
          * @param methodName the name of the method
+         * @param requiredParamTypes the parameters that are required
          */
         void incorrectParameters(String methodName, Class<?>[] requiredParamTypes);
 

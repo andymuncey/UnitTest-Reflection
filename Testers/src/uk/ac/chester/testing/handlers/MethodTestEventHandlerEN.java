@@ -61,6 +61,11 @@ public class MethodTestEventHandlerEN implements MethodsTester.EventHandler, Cla
         fail("Method '" + methodName + "' " + should + " be marked as static but it " + isNot);
     }
 
+    /**
+     * Returns a list of types, separated by commas, using their simple names
+     * @param types a list of types
+     * @return a comma separated list
+     */
     public String typesToString(Class<?>[] types){
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < types.length; i++) {
