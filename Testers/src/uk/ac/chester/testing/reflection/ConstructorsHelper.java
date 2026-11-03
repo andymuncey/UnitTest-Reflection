@@ -31,7 +31,7 @@ public class ConstructorsHelper<C> {
         Set<Constructor<C>> constructors = availableConstructors(includeNonPublic);
 
         if (!matchParamOrder){
-            Utilities.sortTypesByName(params); //todo: investigate if this could fail if autoboxing enabled and order of params varies based on name
+            Utilities.sortTypesByName(params);
         }
 
         for (Constructor<C> c: constructors) {
