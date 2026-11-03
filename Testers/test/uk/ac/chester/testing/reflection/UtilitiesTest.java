@@ -92,10 +92,36 @@ public class UtilitiesTest {
 
     @Test
     void unBox() {
-        assertNotNull(Utilities.unBox(int.class, 42));
-        assertNull(Utilities.unBox(Integer.class,4.7));
-        assertNull(Utilities.unBox(String.class,"hello"));
+        assertEquals(Boolean.TRUE, Utilities.unBox(boolean.class, true));
+        assertEquals(Boolean.FALSE, Utilities.unBox(boolean.class, false));
+
+        Byte maxByte = Byte.MAX_VALUE;
+        assertEquals(Byte.MAX_VALUE, Utilities.unBox(byte.class, maxByte));
+
+        Character letter = 'c';
+        assertEquals('c', Utilities.unBox(char.class, letter));
+        assertEquals(23.4, Utilities.unBox(double.class, 23.4));
+        assertEquals(23.4f, Utilities.unBox(float.class, 23.4f));
+        assertEquals(42,Utilities.unBox(int.class, 42));
+        assertEquals(42L, Utilities.unBox(long.class, 42L));
+
+        Short maxShort = Short.MAX_VALUE;
+        assertEquals(Short.MAX_VALUE, Utilities.unBox(short.class, maxShort));
+
         assertDoesNotThrow(() -> Utilities.unBox(int.class, 4));
+
+        assertEquals(Boolean.TRUE, Utilities.unBox(boolean.class, true));
+        assertNotEquals(Boolean.TRUE, Utilities.unBox(boolean.class, Boolean.FALSE));
+
+        assertNull(Utilities.unBox(Boolean.class,true), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(Byte.class, maxByte), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(Character.class, 'c'), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(Double.class, 2.3), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(Float.class, 1.54F), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(Integer.class,4.7), "cannot unbox to a boxed type");
+        assertNull(Utilities.unBox(String.class,"hello"), "cannot unbox to a boxed type");
+
+
     }
 
     @Test
