@@ -14,17 +14,32 @@ public class PackageTester extends Tester {
 
     private final EventHandler handler;
 
+    /**
+     * Constructs the package tester
+     * @param handler an implementation of {@link EventHandler} to handle cases where a class is not found
+     */
     public PackageTester(EventHandler handler){
         this.handler = handler;
     }
 
+    /**
+     * Looks for, and returns if found, a class with a given name inside a package. Does not look inside subpackages
+     * @param className the name of the class
+     * @param packageName the name of the package
+     * @return The class, if found, null otherwise
+     */
     @Nullable
     public Class<?> getClass(String className, String packageName) {
         return PackageHelper.findClass(className, packageName).orElse(null);
     }
 
+    /**
+     * Checks if a class exists inside a package, calls functions in {@link EventHandler} if it's not found,
+     * found elsewhere, or found with the same name but different casing
+     * @param className the name of the class
+     * @param packageName the name of the package
+     */
     public void testClassExists(String className, String packageName) {
-
         Optional<Class<?>> result = PackageHelper.findClass(className, packageName);
         if (result.isPresent()) {
             return;
