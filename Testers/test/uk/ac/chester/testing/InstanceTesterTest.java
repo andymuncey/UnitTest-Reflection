@@ -93,9 +93,12 @@ public class InstanceTesterTest {
     }
 
     @Test
-    public void getX(){
+    public void getX(){ //named to allow test of method with same name
         Integer gotValue = tester.executeMethodMatchingCaller(int.class);
         assertEquals(5,gotValue);
+
+        Integer gotValueAgain = tester.executeMethod(int.class, null);
+        assertEquals(5,gotValueAgain);
     }
 
     @Test
@@ -115,10 +118,9 @@ public class InstanceTesterTest {
             int xValue = tester.getFieldValue(int.class, "x");
             assertEquals(number,xValue);
         }
-
-
-
     }
+
+
     //endregion
 
 }
