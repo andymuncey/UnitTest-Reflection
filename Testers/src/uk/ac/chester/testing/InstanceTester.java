@@ -11,9 +11,9 @@ import java.util.Optional;
  * Used to test method calls and field values and will use an instance of the class passed to the constructor
  * Can also be used to set field values
  * It is important that checks have already been made as to the:
- *      existence of a constructor that takes the required parameters
- *      existence of the methods called (e.g. by using the MethodsTester class)
- *      existence of the fields tested (e.g. by using FieldsTester class)
+ *      existence of a constructor that takes the required parameters (e.g. using {@link ConstructorsTester})
+ *      existence of the methods called (e.g. using {@link MethodsTester})
+ *      existence of the fields tested (e.g. using {@link FieldsTester})
  * Minimal error information is provided by this class if location of a method or field occurs
  * @param <C> The class (i.e. type) of the class with which to work
  */
@@ -26,7 +26,7 @@ public class InstanceTester<C> {
 
     /**
      * Creates an instance of {@link InstanceTester}
-     * @param searchClass The class from which an object will be created
+     * @param searchClass The {@link Class} from which an object will be created
      * @param handler An instance of {@link InstanceTester.EventHandler} to handle errors
      * @param constructorArgs The arguments to pass to the constructor for the class
      */

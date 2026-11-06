@@ -13,7 +13,8 @@ import java.util.*;
 /**
  * Tests methods which may not be implemented in a given class.
  * Known issues:
- *  * Passing an array as the only argument to the testExistence method is ambiguous as it could be inferred as an array object or varargs
+ * Passing an array as the only argument to the testExistence method is ambiguous
+ * as it could be inferred as an array object or varargs
  * @param <C> type of the class that's being tested
  */
 public class MethodsTester<C> extends Tester {
@@ -25,8 +26,8 @@ public class MethodsTester<C> extends Tester {
     /**
      * The type parameters should be the type of the class that's being tested,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
-     * @param clazz     the {@link Class) in which the method is expected to have been written
-     * @param handler         an {@link EventHandler} for handling non-existent methods
+     * @param clazz the {@link Class) in which the method is expected to have been written
+     * @param handler an {@link EventHandler} for handling non-existent methods
      */
     public MethodsTester(Class<C> clazz, EventHandler handler) {
         this.helper = new MethodsHelper<>(clazz);
