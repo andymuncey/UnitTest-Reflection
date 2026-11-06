@@ -1,5 +1,6 @@
 package uk.ac.chester.testing.validators;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
@@ -12,10 +13,16 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Demonstrates that a class, accessed only by reflection, can be tested at the member level
+ */
 public class TopDownValidator {
 
-    @Test
-    public void test(){
+    ClassTester<?> classTester;
+    Class<?> clazz;
+
+    @BeforeEach
+    public void setUp() throws Exception{
 
         //required to ensure TestClass is loaded
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
@@ -39,44 +46,60 @@ public class TopDownValidator {
         }
 
         //get only item
-        Class<?> aClass = classes.iterator().next();
+        clazz = classes.iterator().next();
 
         //generic class member tests
-        ClassTester<?> classTester = new ClassTester<>(aClass,new ClassTestEventHandlerEN());
+        classTester = new ClassTester<>(clazz,new ClassTestEventHandlerEN());
+    }
+
+
+    @Test
+    public void testFieldConventionsFollowed() {
         classTester.checkFields();
+    }
+
+    @Test
+    public void testMethodConventionsFollowed() {
         classTester.checkMethods();
+    }
+
+    @Test
+    public void testConstructorParams() {
         classTester.checkConstructorParameterNames();
+    }
 
-        //individual constructor tests
-        //construct it using no arg constructor
+
+    @Test
+    public void testConstructors() {
         ConstructorsTester.EventHandler constructorHandler = new ConstructorsTestEventHandlerEN();
+        ConstructorsTester<?> constructorsTester = new ConstructorsTester<>(clazz, constructorHandler);
 
-        ConstructorsTester<?> constructorsTester = new ConstructorsTester<>(aClass,constructorHandler);
         Object instance = constructorsTester.test(AccessModifier.PUBLIC);
         assertNotNull(instance);
 
         //construct it with arguments
-        Object instanceFromParams = constructorsTester.test(AccessModifier.PRIVATE,'a',"bc",'d');
+        Object instanceFromParams = constructorsTester.test(AccessModifier.PRIVATE, 'a', "bc", 'd');
         assertNotNull(instanceFromParams);
 
-        //testExistence specific fields
-
-
+    }
+    @Test
+    public void testFields() {
         FieldsTester.EventHandler fieldHandler = new FieldsTestEventHandlerEN();
+        FieldsTester<?> fieldsTester = new FieldsTester<>(clazz, fieldHandler);
 
-        FieldsTester<?> fieldsTester = new FieldsTester<>(aClass,fieldHandler);
         fieldsTester.test(AccessModifier.PRIVATE, int.class, "regularIvar", false);
         fieldsTester.test(AccessModifier.PUBLIC, int.class, "REGULAR_CONSTANT", false);
 
-        //testExistence specific methods
+    }
+    @Test
+    public void testMethods(){
         MethodsTester.EventHandler methodHandler = new MethodTestEventHandlerEN();
+        MethodsTester<?> methodsTester = new MethodsTester<>(clazz, methodHandler);
 
-        MethodsTester<?> methodsTester = new MethodsTester<>(aClass, methodHandler);
         boolean returnsPrimitiveIntExists = methodsTester.testExistenceForValues( int.class,"returnsPrimitiveInt");
         assertTrue(returnsPrimitiveIntExists);
 
-
-        MethodsTester<?> methodsTester2 = new MethodsTester<>(aClass, methodHandler);
+        MethodsTester<?> methodsTester2 = new MethodsTester<>(clazz, methodHandler);
         boolean anotherMethodExists = methodsTester2.testExistenceForValues(void.class, "intParamStringParam",1,"testExistence");
         assertTrue(anotherMethodExists);
     }
