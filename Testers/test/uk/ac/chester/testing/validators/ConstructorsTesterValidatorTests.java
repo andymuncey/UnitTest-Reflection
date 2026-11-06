@@ -7,6 +7,10 @@ import org.junit.Test;
 import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
+/**
+ *  Validates that the ConstructorsTester can be used to provide feedback
+ *  Some tests are expected to fail, to prove that the feedback is provided
+ */
 public class ConstructorsTesterValidatorTests {
 
     private ConstructorsTester<TestClass> t;

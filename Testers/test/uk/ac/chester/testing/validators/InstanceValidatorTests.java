@@ -7,6 +7,10 @@ import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
 
+/**
+ *  Validates that the InstanceTester can be used to provide feedback
+ *  Some tests are expected to fail, to prove that the feedback is provided
+ */
 public class InstanceValidatorTests {
 
 

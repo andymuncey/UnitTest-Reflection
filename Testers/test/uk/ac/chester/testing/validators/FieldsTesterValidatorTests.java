@@ -5,6 +5,10 @@ import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.FieldsTester;
 import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;
 
+/**
+ *  Validates that the FieldsTester can be used to provide feedback
+ *  Some tests are expected to fail, to prove that the feedback is provided
+ */
 public class FieldsTesterValidatorTests {
 
     //region failing tests - These tests are meant to fail!

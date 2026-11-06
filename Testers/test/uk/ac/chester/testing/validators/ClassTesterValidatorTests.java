@@ -5,7 +5,10 @@ import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 
-
+/**
+ *  Validates that the ClassTester can be used to provide feedback
+ *  Some tests are expected to fail, to prove that the feedback is provided
+ */
 public class ClassTesterValidatorTests {
 
     @Test

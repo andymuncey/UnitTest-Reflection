@@ -9,7 +9,10 @@ import uk.ac.chester.testing.MethodsTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
-
+/**
+ *  Validates that the MethodsTester can be used to provide feedback
+ *  Some tests are expected to fail, to prove that the feedback is provided
+ */
 public class MethodsTesterValidatorTests {
 
     private MethodsTester<TestClass> tester;

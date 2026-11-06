@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Demonstrates that a class, accessed only by reflection, can be tested at the member level
+ * Some tests are expected to fail, to prove that the feedback is provided
  */
 public class TopDownValidatorTests {
 
