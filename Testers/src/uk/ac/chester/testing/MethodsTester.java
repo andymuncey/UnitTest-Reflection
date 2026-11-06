@@ -25,13 +25,13 @@ public class MethodsTester<C> extends Tester {
     /**
      * The type parameters should be the type of the class that's being tested,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
-     * @param searchClass     the class in which the method should be written
+     * @param clazz     the class in which the method should be written
      * @param handler         an {@link EventHandler} for handling non-existent methods
      */
-    public MethodsTester(Class<C> searchClass, EventHandler handler) {
-        this.helper = new MethodsHelper<>(searchClass);
+    public MethodsTester(Class<C> clazz, EventHandler handler) {
+        this.helper = new MethodsHelper<>(clazz);
         this.handler = handler;
-        this.searchClass = searchClass;
+        this.searchClass = clazz;
     }
 
     /**

@@ -50,10 +50,10 @@ public class ConsoleTester<C> {
 
     /**
      * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
-     * @param aClass the class to test (e.g. Main)
+     * @param clazz the class to test (e.g. Main)
      */
-    public ConsoleTester(Class<C> aClass) {
-        this.helper = new MethodsHelper<>(aClass);
+    public ConsoleTester(Class<C> clazz) {
+        this.helper = new MethodsHelper<>(clazz);
     }
 
     private static boolean causedByNoSuchElementException(Throwable e) {
