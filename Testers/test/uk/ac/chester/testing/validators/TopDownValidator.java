@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TopDownValidator {
 
-    ClassTester<?> classTester;
-    Class<?> clazz;
+    private ClassTester<?> classTester;
+    private Class<?> clazz;
 
     @BeforeEach
     public void setUp() throws Exception{
