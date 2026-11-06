@@ -3,10 +3,7 @@ package uk.ac.chester.testing.validators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.chester.testing.*;
-import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
-import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
-import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;
-import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
+import uk.ac.chester.testing.handlers.*;
 import uk.ac.chester.testing.reflection.PackageHelper;
 
 import java.util.Set;
@@ -55,16 +52,19 @@ public class TopDownValidator {
 
     @Test
     public void testFieldConventionsFollowed() {
+        //should fail
         classTester.checkFields();
     }
 
     @Test
     public void testMethodConventionsFollowed() {
+        //should fail
         classTester.checkMethods();
     }
 
     @Test
     public void testConstructorParams() {
+        //should fail
         classTester.checkConstructorParameterNames();
     }
 
@@ -102,5 +102,13 @@ public class TopDownValidator {
         MethodsTester<?> methodsTester2 = new MethodsTester<>(clazz, methodHandler);
         boolean anotherMethodExists = methodsTester2.testExistenceForValues(void.class, "intParamStringParam",1,"testExistence");
         assertTrue(anotherMethodExists);
+    }
+
+    @Test
+    public void testMethodExecution(){
+        InstanceTester.EventHandler handler = new InstanceTestEventHandlerEN();
+        InstanceTester<?> instanceTester = new InstanceTester<>(clazz,handler);
+        int result = instanceTester.executeMethod(int.class, "returnsPrimitiveInt");
+        assertEquals(1,result);
     }
 }
