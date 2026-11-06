@@ -1,26 +1,15 @@
 package uk.ac.chester.testing.handlers;
 
-import org.jetbrains.annotations.NotNull;
 import uk.ac.chester.testing.ConsoleTester;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
- * English language implementation of the ConsoleTester.ExceptionHandler interface
+ * English language implementation of {@link ConsoleTester.ExceptionHandler}
+ * and {@link ConsoleTester.NonCompletionHandler} interfaces
  */
-public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler, ConsoleTester.CompletionHandler {
-
-    @Override
-    public void outputGenerated(String[] inputTokens, @NotNull String[] linesOfOutput) {
-        //we don't care about this
-    }
-
-
-    @Override
-    public void noOutputGenerated(String[] inputTokens) {
-        //we don't care about this
-    }
+public class ConsoleTestAwaitingInputHandlerEN implements ConsoleTester.ExceptionHandler, ConsoleTester.NonCompletionHandler {
 
     @Override
     public void stillAwaitingInput(String[] inputTokens) {

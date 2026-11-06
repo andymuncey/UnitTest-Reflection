@@ -8,7 +8,7 @@ import uk.ac.chester.testing.NonAccessModifier;
 import java.util.Set;
 
 /**
- * English language implementation of FieldsTester.EventHandler
+ * English language implementation of {@link FieldsTester.EventHandler}
  */
 public class FieldsTestEventHandlerEN implements FieldsTester.EventHandler {
 

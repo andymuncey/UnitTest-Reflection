@@ -6,7 +6,7 @@ import uk.ac.chester.testing.ConstructorsTester;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * English language implementation of ConstructorsTester.EventHandler
+ * English language implementation of {@link ConstructorsTester.EventHandler}
  */
 public class ConstructorsTestEventHandlerEN implements ConstructorsTester.EventHandler, ClassDescriber {
 

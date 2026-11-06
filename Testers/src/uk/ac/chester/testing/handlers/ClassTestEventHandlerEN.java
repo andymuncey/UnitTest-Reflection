@@ -4,7 +4,7 @@ import uk.ac.chester.testing.ClassTester;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * English language implementation of the ClassTester.EventHandler interface
+ * English language implementation of {@link ClassTester.EventHandler}
  */
 public class ClassTestEventHandlerEN implements ClassTester.EventHandler {
 

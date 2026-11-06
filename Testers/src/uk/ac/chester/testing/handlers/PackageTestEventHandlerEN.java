@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import uk.ac.chester.testing.PackageTester;
 
 /**
- * English language implementation of the PackageTester.EventHandler interface
+ * English language implementation of {@link PackageTester.EventHandler}
  */
 public class PackageTestEventHandlerEN implements PackageTester.EventHandler {
     @Override

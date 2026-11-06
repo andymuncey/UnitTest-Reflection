@@ -6,7 +6,7 @@ import uk.ac.chester.testing.InstanceTester;
 import uk.ac.chester.testing.reflection.Utilities;
 
 /**
- * English language implementation of the InstanceTester.EventHandler interface
+ * English language implementation of the {@link InstanceTester.EventHandler}
  */
 public class InstanceTestEventHandlerEN implements InstanceTester.EventHandler, ClassDescriber {
     @Override

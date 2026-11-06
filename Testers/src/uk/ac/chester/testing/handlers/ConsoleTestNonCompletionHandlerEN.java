@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
- * English language implementation of the ConsoleTester.NonCompletionHandler interface
+ * English language implementation of {@link ConsoleTester.NonCompletionHandler}
  */
 public class ConsoleTestNonCompletionHandlerEN implements ConsoleTester.NonCompletionHandler {
 

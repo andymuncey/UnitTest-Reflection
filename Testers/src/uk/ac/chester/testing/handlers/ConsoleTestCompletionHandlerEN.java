@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import uk.ac.chester.testing.ConsoleTester;
 
 /**
- * English language implementation of the ConsoleTester.EventHandler interface
+ * English language implementation of {@link ConsoleTester.CompletionHandler}
  */
 public class ConsoleTestCompletionHandlerEN implements ConsoleTester.CompletionHandler{
     @Override
