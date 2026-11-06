@@ -74,7 +74,7 @@ public class FieldsTesterValidator {
 
     /**
      * Tests that if autoboxing is permitted, a field of type Integer is acceptable
-     * when type int is requested, and vice-versa
+     * when type int is requested, and vice versa
      */
     @Test
     public void testFieldTypeBoxed(){
