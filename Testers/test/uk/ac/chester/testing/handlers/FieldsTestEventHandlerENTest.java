@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.NonAccessModifier;
 
 import java.util.HashSet;
@@ -32,11 +31,11 @@ class FieldsTestEventHandlerENTest {
         intendedNonAccessModifiers.add(NonAccessModifier.VOLATILE);
         intendedNonAccessModifiers.add(NonAccessModifier.FINAL);
 
-        Set<NonAccessModifier> actualnonAccessModifiers = new HashSet<>();
-        actualnonAccessModifiers.add(NonAccessModifier.SYNCHRONIZED);
+        Set<NonAccessModifier> actualAccessModifiers = new HashSet<>();
+        actualAccessModifiers.add(NonAccessModifier.SYNCHRONIZED);
 
         assertThrows(AssertionFailedError.class, ()->{
-            handler.fieldHasIncorrectNonAccessModifiers("fieldName",intendedNonAccessModifiers, actualnonAccessModifiers);
+            handler.fieldHasIncorrectNonAccessModifiers("fieldName",intendedNonAccessModifiers, actualAccessModifiers);
         });
 
 
