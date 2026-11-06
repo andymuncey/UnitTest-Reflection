@@ -9,6 +9,7 @@ import uk.ac.chester.testing.MethodsTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 public class MethodsTesterValidator {
@@ -59,8 +60,7 @@ public class MethodsTesterValidator {
 
     @Test
     public void nonExistentMethod() {
-        //noinspection ObviousNullCheck
-        Assert.assertNull(tester.testExistenceForValues(Void.class, "nonExistentMethod"));
+       tester.testExistenceForValues(Void.class, "nonExistentMethod");
     }
 
     @SuppressWarnings("SpellCheckingInspection")

@@ -15,7 +15,7 @@ public class FieldsTesterValidator {
             private String myString;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, int.class, "myString", true);
     }
 
@@ -26,7 +26,7 @@ public class FieldsTesterValidator {
             private String myString;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, String.class, "nonExistentField", true);
     }
 
@@ -40,7 +40,7 @@ public class FieldsTesterValidator {
             private Integer myInteger;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, int.class, "myInteger", false);
     }
 
@@ -50,7 +50,7 @@ public class FieldsTesterValidator {
             Integer myInteger;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, Integer.class, "myInteger", false);
     }
     //end region
@@ -67,7 +67,7 @@ public class FieldsTesterValidator {
             private String myString;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, String.class, "myString", false);
     }
 
@@ -83,7 +83,7 @@ public class FieldsTesterValidator {
             private int myInt;
         };
         FieldsTestEventHandlerEN handler = new FieldsTestEventHandlerEN();
-        FieldsTester t = new FieldsTester<>(x.getClass(), handler);
+        FieldsTester<?> t = new FieldsTester<>(x.getClass(), handler);
         t.test(AccessModifier.PRIVATE, int.class, "myInteger", true);
         t.test(AccessModifier.PRIVATE, Integer.class, "myInt", true);
     }

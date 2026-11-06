@@ -162,6 +162,7 @@ public class ClassTester<T> extends Tester {
         }
     }
 
+    //region inheritance
 
     /**
      * Determines whether the class being tested extends a specified superclass,
@@ -199,6 +200,8 @@ public class ClassTester<T> extends Tester {
         return Arrays.asList(clazz.getInterfaces()).contains(anInterface);
 
     }
+
+    //endregion
 
     /**
      * Interface to enable customisation of events (e.g., unit test assertions) that occur when

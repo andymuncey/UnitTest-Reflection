@@ -13,7 +13,7 @@ public class ClassTesterValidator {
             public String publicField;
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(x.getClass(), handler);
+        ClassTester<?> t  = new ClassTester<>(x.getClass(), handler);
         t.checkFields();
     }
 
@@ -23,14 +23,14 @@ public class ClassTesterValidator {
             private String MY_STRING;
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(x.getClass(),  handler);
+        ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         t.checkFields();
     }
 
     @Test
     public void testFieldStaticButNotFinal() {
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(TestClass.class,  handler);
+        ClassTester<?> t  = new ClassTester<>(TestClass.class,  handler);
         t.checkFields();
     }
 
@@ -40,7 +40,7 @@ public class ClassTesterValidator {
             private String BadMethodName(){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(x.getClass(),  handler);
+        ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         t.checkMethods();
     }
 
@@ -51,18 +51,18 @@ public class ClassTesterValidator {
             private String someMethod(String BadName){return "hello";}
         };
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(x.getClass(),  handler);
+        ClassTester<?> t  = new ClassTester<>(x.getClass(),  handler);
         t.checkMethodParameterNames();
     }
 
 
-    private class BadConstructorParamClass {
+    private static class BadConstructorParamClass {
         private BadConstructorParamClass(String BadConstructorParamName){ }
     }
     @Test
     public void testConstructorParamName(){
         ClassTestEventHandlerEN handler = new ClassTestEventHandlerEN();
-        ClassTester t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
+        ClassTester<?> t  = new ClassTester<>(BadConstructorParamClass.class,  handler);
         t.checkConstructorParameterNames();
     }
 
