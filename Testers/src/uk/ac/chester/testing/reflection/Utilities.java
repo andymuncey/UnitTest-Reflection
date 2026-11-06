@@ -91,7 +91,6 @@ public class Utilities {
 
     /**
      * Returns the parameter names for an executable, such as a method or constructor
-     *
      * <strong>Requires the compiler -parameters switch to be set</strong>
      *
      * @param executable e.g. a method or constructor
@@ -178,7 +177,7 @@ public class Utilities {
             if (arg == null) {
                 builder.append("null");
             } else {
-                builder.append(arg.toString());
+                builder.append(arg);
             }
             if (arg instanceof String) {
                 builder.append("\"");
