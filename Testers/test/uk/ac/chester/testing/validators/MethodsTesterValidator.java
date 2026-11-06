@@ -9,8 +9,6 @@ import uk.ac.chester.testing.MethodsTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 
 public class MethodsTesterValidator {
 
@@ -35,7 +33,7 @@ public class MethodsTesterValidator {
 
     @Test
     public void staticTest(){
-        int result = tester.executeStatic(int.class,"staticInt");
+        tester.executeStatic(int.class,"staticInt");
     }
 
     //endregion
@@ -103,7 +101,7 @@ public class MethodsTesterValidator {
 
     @Test
     public void paramConvention(){
-        tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3); //should indicate the the parameter doesn't follow naming convention
+        tester.testExistenceForValues(void.class, "paramNameNotLowerCamelCase",3); //should indicate the parameter doesn't follow naming convention
     }
 
     @Test
