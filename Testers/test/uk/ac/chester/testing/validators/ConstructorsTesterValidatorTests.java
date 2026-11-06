@@ -7,7 +7,7 @@ import org.junit.Test;
 import uk.ac.chester.testing.*;
 import uk.ac.chester.testing.handlers.ConstructorsTestEventHandlerEN;
 
-public class ConstructorsTesterValidator {
+public class ConstructorsTesterValidatorTests {
 
     private ConstructorsTester<TestClass> t;
 

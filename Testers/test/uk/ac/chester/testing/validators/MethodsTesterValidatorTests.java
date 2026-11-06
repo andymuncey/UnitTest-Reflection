@@ -10,7 +10,7 @@ import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.MethodTestEventHandlerEN;
 
 
-public class MethodsTesterValidator {
+public class MethodsTesterValidatorTests {
 
     private MethodsTester<TestClass> tester;
 

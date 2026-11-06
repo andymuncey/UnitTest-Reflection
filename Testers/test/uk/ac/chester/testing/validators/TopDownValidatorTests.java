@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Demonstrates that a class, accessed only by reflection, can be tested at the member level
  */
-public class TopDownValidator {
+public class TopDownValidatorTests {
 
     private ClassTester<?> classTester;
     private Class<?> clazz;

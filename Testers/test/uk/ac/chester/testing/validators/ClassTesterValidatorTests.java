@@ -5,7 +5,8 @@ import uk.ac.chester.testing.ClassTester;
 import uk.ac.chester.testing.testclasses.TestClass;
 import uk.ac.chester.testing.handlers.ClassTestEventHandlerEN;
 
-public class ClassTesterValidator {
+
+public class ClassTesterValidatorTests {
 
     @Test
     public void testPublicField() {

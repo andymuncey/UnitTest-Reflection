@@ -5,7 +5,7 @@ import uk.ac.chester.testing.AccessModifier;
 import uk.ac.chester.testing.FieldsTester;
 import uk.ac.chester.testing.handlers.FieldsTestEventHandlerEN;
 
-public class FieldsTesterValidator {
+public class FieldsTesterValidatorTests {
 
     //region failing tests - These tests are meant to fail!
 

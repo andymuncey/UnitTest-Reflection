@@ -7,7 +7,7 @@ import uk.ac.chester.testing.handlers.InstanceTestEventHandlerEN;
 import uk.ac.chester.testing.testclasses.PointTestClass;
 import uk.ac.chester.testing.testclasses.TestClass;
 
-public class InstanceValidator {
+public class InstanceValidatorTests {
 
 
     //region failing tests
