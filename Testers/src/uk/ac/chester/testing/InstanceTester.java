@@ -27,7 +27,7 @@ public class InstanceTester<C> {
     /**
      * Creates an instance of {@link InstanceTester}
      * @param searchClass The class from which an object will be created
-     * @param handler An instance of InstanceTester.EventHandler to handle errors
+     * @param handler An instance of {@link InstanceTester.EventHandler} to handle errors
      * @param constructorArgs The arguments to pass to the constructor for the class
      */
     public InstanceTester(Class<C> searchClass, EventHandler handler, Object... constructorArgs){

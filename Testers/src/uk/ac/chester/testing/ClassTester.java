@@ -21,7 +21,7 @@ public class ClassTester<T> extends Tester {
     /**
      * Creates a ClassTester for a specified class
      * @param theClass the class to testExistence the fields in
-     * @param handler An implementation of EventHandler, likely containing unit testExistence assertions
+     * @param handler An implementation of {@link ClassTester.EventHandler}, likely containing unit testExistence assertions
      */
     public ClassTester(Class<T> theClass, EventHandler handler){
         this.clazz = theClass;
