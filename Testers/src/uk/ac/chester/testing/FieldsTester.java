@@ -21,7 +21,7 @@ public class FieldsTester<T> extends Tester {
     /**
      * Creates a FieldsTester for a specified class
      * @param theClass the class to testExistence the fields in
-     * @param handler An implementation of {@link EventHandler}, likely containing unit testExistence assertions
+     * @param handler An implementation of {@link FieldsTester.EventHandler}, likely containing unit testExistence assertions
      */
     public FieldsTester(Class<T> theClass, EventHandler handler){
         FieldsHelper<T> helper = new FieldsHelper<>(theClass);

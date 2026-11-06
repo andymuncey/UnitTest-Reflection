@@ -50,7 +50,7 @@ public class ConsoleTester<C> {
 
     /**
      * Creates a ConsoleTester preconfigured to test a static void main(String[] args) method
-     * @param clazz the class to test (e.g. Main)
+     * @param clazz the {@link Class} to test (e.g. Main)
      */
     public ConsoleTester(Class<C> clazz) {
         this.helper = new MethodsHelper<>(clazz);

@@ -68,7 +68,7 @@ public enum NonAccessModifier {
 
     /**
      * Returns all non access modifiers for a member (e.g. field, method)
-     * @param member the class member to check
+     * @param member the class {@link Member} to check
      * @return a Set of access modifiers
      */
     public static Set<NonAccessModifier> nonAccessModifiers(Member member) {

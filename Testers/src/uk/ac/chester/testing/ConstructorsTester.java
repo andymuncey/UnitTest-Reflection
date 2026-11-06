@@ -19,7 +19,7 @@ public class ConstructorsTester<T> extends Tester {
 
     /**
      * Creates a ConstructorsTester for the provided class
-     * @param clazz the class to test the constructors of
+     * @param clazz the {@link Class} to test the constructors of
      * @param handler An implementation of {@link ConstructorsTester.EventHandler}, likely containing unit test assertions
      */
     public ConstructorsTester(Class<T> clazz, EventHandler handler) {

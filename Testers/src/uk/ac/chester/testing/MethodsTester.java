@@ -25,7 +25,7 @@ public class MethodsTester<C> extends Tester {
     /**
      * The type parameters should be the type of the class that's being tested,
      * and the reference type corresponding to type the tested method returns (e.g. for a return type of int, specify Integer)
-     * @param clazz     the class in which the method should be written
+     * @param clazz     the {@link Class) in which the method is expected to have been written
      * @param handler         an {@link EventHandler} for handling non-existent methods
      */
     public MethodsTester(Class<C> clazz, EventHandler handler) {
