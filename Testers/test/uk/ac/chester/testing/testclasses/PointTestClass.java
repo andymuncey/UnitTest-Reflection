@@ -1,6 +1,9 @@
 package uk.ac.chester.testing.testclasses;
 
-@SuppressWarnings("ALL")
+/**
+ * Class used for testing purposes.
+ * Designed to conform to convention
+ */
 public class PointTestClass {
 
     private int x;

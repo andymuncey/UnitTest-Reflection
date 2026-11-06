@@ -2,6 +2,11 @@ package uk.ac.chester.testing.testclasses;
 
 import java.util.ArrayList;
 
+/**
+ * This class is used for testing purposes
+ * It's designed to have some aspects which would be considered errors and aspects which don't follow convention
+ */
+
 @SuppressWarnings("ALL")
 public class TestClass {
 
